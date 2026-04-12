@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기도 편지 모음</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal-900: #0a3832; --teal-800: #0f4a42; --teal-700: #155c52;
+      --teal-400: #2d9e8e; --teal-100: #c4eae6; --teal-50: #edf4f2;
+      --blush-300: #f0bec4; --blush-200: #f7d8db; --blush-100: #fceef0;
+      --cream-50: #f4f7f5; --cream-100: #e6ede9; --cream-200: #cdd9d2;
+      --text-on-dark: #f0faf9; --text-muted-dark: rgba(240,250,249,0.65);
+      --text-primary: #1a2e2c; --text-secondary: #4a6560; --text-tertiary: #8aaba6;
+      --font-serif: 'Noto Serif KR', Georgia, serif;
+      --font-sans: 'Noto Sans KR', sans-serif;
+    }
+    html { font-size: clamp(14px, 1vw, 16px); }
+    body { font-family: var(--font-sans); background: var(--teal-800); color: var(--text-primary); min-height: 100vh; }
+
+    .bg-pattern { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-pattern::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cpath d='M100,300 Q200,100 300,300 Q400,500 500,300' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1.5'/%3E%3Cpath d='M0,200 Q150,50 300,200 Q450,350 600,200' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1'/%3E%3C/svg%3E");
+      background-size: 600px 600px;
+    }
+
+    header {
+      background: rgba(10,56,50,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-inner {
+      max-width: 860px; margin: 0 auto; padding: 0 5%;
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .cross { width: 22px; height: 22px; position: relative; }
+    .cross::before, .cross::after { content: ''; position: absolute; background: var(--blush-300); border-radius: 2px; }
+    .cross::before { width: 3px; height: 22px; left: 9.5px; top: 0; }
+    .cross::after { width: 22px; height: 3px; left: 0; top: 9.5px; }
+    .logo-text { font-family: var(--font-serif); font-size: 15px; color: var(--text-on-dark); }
+    .write-btn {
+      padding: 8px 20px;
+      background: var(--blush-300); color: var(--teal-900);
+      border: none; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.18s;
+    }
+    .write-btn:hover { background: var(--blush-200); }
+
+    main { max-width: 860px; margin: 0 auto; padding: 3rem 5% 5rem; position: relative; z-index: 1; }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(24px, 3vw, 36px);
+      color: var(--text-on-dark);
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+    .page-sub { font-size: 14px; color: var(--text-muted-dark); margin-bottom: 3rem; }
+
+    .year-group { margin-bottom: 2.5rem; }
+    .year-label {
+      font-size: 12px; font-weight: 500;
+      color: var(--text-muted-dark);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+    .letter-card {
+      background: var(--cream-50);
+      border: 1px solid var(--cream-200);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.18s, box-shadow 0.18s;
+      box-shadow: 0 2px 12px rgba(10,56,50,0.15);
+    }
+    .letter-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(10,56,50,0.25); }
+
+    .card-header {
+      background: var(--teal-800);
+      padding: 1.25rem 1.25rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-header::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='120'%3E%3Cpath d='M0,60 Q75,20 150,60 Q225,100 300,60' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-size: 300px 120px;
+    }
+    .card-cross { width: 14px; height: 14px; position: relative; margin: 0 auto 8px; z-index: 1; }
+    .card-cross::before, .card-cross::after { content: ''; position: absolute; background: var(--blush-300); border-radius: 1px; }
+    .card-cross::before { width: 2px; height: 14px; left: 6px; top: 0; }
+    .card-cross::after { width: 14px; height: 2px; left: 0; top: 6px; }
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 14px; font-weight: 500;
+      color: var(--text-on-dark);
+      position: relative; z-index: 1;
+      line-height: 1.4;
+    }
+    .card-date { font-size: 11px; color: var(--text-muted-dark); margin-top: 4px; position: relative; z-index: 1; }
+
+    .card-body { padding: 1rem 1.25rem 1.25rem; }
+    .card-preview {
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.7;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-footer {
+      display: flex; align-items: center; justify-content: flex-end;
+      margin-top: 0.75rem;
+      font-size: 12px; color: var(--teal-400);
+    }
+
+    .empty { text-align: center; padding: 4rem 0; color: var(--text-muted-dark); }
+    .empty-icon { font-size: 48px; margin-bottom: 1rem; opacity: 0.5; }
+
+    .loading { text-align: center; padding: 4rem 0; color: var(--text-muted-dark); }
+    .spinner {
+      width: 32px; height: 32px; margin: 0 auto 1rem;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-top-color: var(--blush-300);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .letter-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="cross"></div>
+      <span class="logo-text">기도 편지</span>
+    </a>
+    <a href="index.html" class="write-btn">편지 쓰기</a>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">기도 편지 모음</h1>
+  <p class="page-sub">Prayer Letters Archive</p>
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>불러오는 중...</p>
+    </div>
+  </div>
+</main>
+
+<script>
+const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF';
+
+async function loadLetters() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?select=*&order=date.desc,created_at.desc`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      }
+    });
+    const letters = await res.json();
+    renderLetters(letters);
+  } catch(e) {
+    document.getElementById('content').innerHTML = '<p class="empty">불러오기 실패. 잠시 후 다시 시도해 주세요.</p>';
+  }
+}
+
+function renderLetters(letters) {
+  const content = document.getElementById('content');
+  if (!letters.length) {
+    content.innerHTML = `<div class="empty"><div class="empty-icon">✉</div><p>아직 저장된 편지가 없어요.</p></div>`;
+    return;
+  }
+
+  const byYear = {};
+  letters.forEach(l => {
+    const year = l.date ? l.date.substring(0,4) : '날짜 없음';
+    if (!byYear[year]) byYear[year] = [];
+    byYear[year].push(l);
+  });
+
+  const years = Object.keys(byYear).sort((a,b) => b - a);
+  content.innerHTML = years.map(year => `
+    <div class="year-group">
+      <div class="year-label">${year}</div>
+      <div class="letter-grid">
+        ${byYear[year].map(l => letterCard(l)).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function letterCard(l) {
+  const blocks = l.body_blocks || [];
+  const preview = blocks.map(b => b.textKo || '').filter(Boolean).join(' ').substring(0, 100);
+  const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' }) : '';
+  return `
+    <a href="letter.html?id=${l.slug}" class="letter-card">
+      <div class="card-header">
+        <div class="card-cross"></div>
+        <div class="card-title">${l.title}</div>
+        <div class="card-date">${dateStr}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-preview">${preview || '내용 없음'}</div>
+        <div class="card-footer">읽기 →</div>
+      </div>
+    </a>`;
+}
+
+loadLetters();
+</script>
+</body>
+</html>
