@@ -698,6 +698,27 @@ function loadQuick(type) {
 }
 
 /* ═══════════════════════════════════════
+   Print & PDF
+═══════════════════════════════════════ */
+function printOnly() {
+  document.body.classList.add('print-only');
+  document.body.classList.remove('print-pdf');
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => document.body.classList.remove('print-only'), 1000);
+  }, 100);
+}
+
+function savePDF() {
+  document.body.classList.add('print-pdf');
+  document.body.classList.remove('print-only');
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => document.body.classList.remove('print-pdf'), 1000);
+  }, 100);
+}
+
+/* ═══════════════════════════════════════
    Email
 ═══════════════════════════════════════ */
 function sendEmail() {

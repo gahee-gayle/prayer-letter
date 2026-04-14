@@ -40,10 +40,10 @@
       height: 64px; display: flex; align-items: center; justify-content: space-between;
     }
     .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .cross { width: 22px; height: 22px; position: relative; }
+    .cross { width: 22px; height: 34px; position: relative; }
     .cross::before, .cross::after { content: ''; position: absolute; background: var(--blush-300); border-radius: 2px; }
-    .cross::before { width: 3px; height: 22px; left: 9.5px; top: 0; }
-    .cross::after { width: 22px; height: 3px; left: 0; top: 9.5px; }
+    .cross::before { width: 3px; height: 34px; left: 9.5px; top: 0; }
+    .cross::after { width: 22px; height: 3px; left: 0; top: 10px; }
     .logo-text { font-family: var(--font-serif); font-size: 15px; color: var(--text-on-dark); }
     .write-btn {
       padding: 8px 20px;
@@ -93,10 +93,19 @@
 
     .card-header {
       background: var(--teal-800);
+      background-image: url('letter_header.png');
+      background-size: cover;
+      background-position: center 60%;
       padding: 1.25rem 1.25rem 1rem;
       text-align: center;
       position: relative;
       overflow: hidden;
+    }
+    .card-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(10,50,45,0.35);
+      z-index: 0;
     }
     .card-header::after {
       content: '';
@@ -104,18 +113,19 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='120'%3E%3Cpath d='M0,60 Q75,20 150,60 Q225,100 300,60' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1.5'/%3E%3C/svg%3E");
       background-size: 300px 120px;
     }
-    .card-cross { width: 14px; height: 14px; position: relative; margin: 0 auto 8px; z-index: 1; }
+    .card-cross { width: 14px; height: 22px; position: relative; margin: 0 auto 8px; z-index: 2; }
     .card-cross::before, .card-cross::after { content: ''; position: absolute; background: var(--blush-300); border-radius: 1px; }
-    .card-cross::before { width: 2px; height: 14px; left: 6px; top: 0; }
-    .card-cross::after { width: 14px; height: 2px; left: 0; top: 6px; }
+    .card-cross::before { width: 2px; height: 22px; left: 6px; top: 0; }
+    .card-cross::after { width: 14px; height: 2px; left: 0; top: 7px; }
     .card-title {
       font-family: var(--font-serif);
       font-size: 14px; font-weight: 500;
       color: var(--text-on-dark);
-      position: relative; z-index: 1;
+      position: relative; z-index: 2;
       line-height: 1.4;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.3);
     }
-    .card-date { font-size: 11px; color: var(--text-muted-dark); margin-top: 4px; position: relative; z-index: 1; }
+    .card-date { font-size: 12px; color: rgba(240,250,249,0.9); margin-top: 4px; position: relative; z-index: 2; }
 
     .card-body { padding: 1rem 1.25rem 1.25rem; }
     .card-preview {
@@ -155,7 +165,10 @@
   <div class="header-inner">
     <a href="index.html" class="logo">
       <div class="cross"></div>
-      <span class="logo-text">기도 편지</span>
+      <div style="display:flex;flex-direction:column;line-height:1.25;align-items:center;">
+        <span style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--text-on-dark);letter-spacing:0.18em;text-transform:uppercase;">Abigail's</span>
+        <span style="font-size:9.5px;color:var(--text-muted-dark);letter-spacing:0.28em;text-transform:uppercase;">Prayer Letter</span>
+      </div>
     </a>
     <a href="index.html" class="write-btn">편지 쓰기</a>
   </div>
