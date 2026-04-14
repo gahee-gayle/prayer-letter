@@ -190,7 +190,7 @@
     <div>
       <h1 class="page-title">Abigail's Prayer Letters</h1>
     </div>
-    <div id="admin-bar">
+    <div id="admin-bar" style="display:none;">
       <button id="admin-btn" onclick="toggleAdmin()" style="
         padding:8px 18px; border-radius:999px;
         font-family:var(--font-sans); font-size:13px;
@@ -344,6 +344,10 @@ async function deleteLetter(slug, title) {
 }
 
 loadLetters();
+
+if (sessionStorage.getItem('pl_auth') === '1') {
+  document.getElementById('admin-bar').style.display = 'block';
+}
 </script>
 </body>
 </html>
