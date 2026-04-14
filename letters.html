@@ -36,7 +36,7 @@
       position: sticky; top: 0; z-index: 100;
     }
     .header-inner {
-      max-width: 860px; margin: 0 auto; padding: 0 5%;
+      max-width: none; margin: 0 auto; padding: 0 15%;
       height: 64px; display: flex; align-items: center; justify-content: space-between;
     }
     .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
@@ -55,7 +55,7 @@
     }
     .write-btn:hover { background: var(--blush-200); }
 
-    main { max-width: 860px; margin: 0 auto; padding: 3rem 5% 5rem; position: relative; z-index: 1; }
+    main { max-width: none; margin: 0 auto; padding: 3rem 15% 5rem; position: relative; z-index: 1; }
 
     .page-title {
       font-family: var(--font-serif);
@@ -76,7 +76,13 @@
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
-    .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .letter-card { box-shadow: 0 2px 16px rgba(10,56,50,0.18); }
+    .card-header { padding: 2rem 1.5rem 1.75rem; }
+    .card-title { font-size: 16px; }
+    .card-date { font-size: 13px; }
+    .card-body { padding: 1.25rem 1.5rem 1.5rem; }
+    .card-preview { font-size: 14px; line-height: 1.75; -webkit-line-clamp: 4; }
 
     .letter-card {
       background: var(--cream-50);
