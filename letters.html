@@ -135,10 +135,21 @@
       overflow: hidden;
     }
     .card-footer {
-      display: flex; align-items: center; justify-content: flex-end;
+      display: flex; align-items: center; justify-content: space-between;
       margin-top: 0.75rem;
       font-size: 12px; color: var(--teal-400);
     }
+    .admin-btns { display: flex; gap: 6px; }
+    .admin-edit-btn, .admin-del-btn {
+      padding: 4px 10px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 11px;
+      cursor: pointer; border: none; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .admin-edit-btn { background: var(--teal-100); color: var(--teal-800); }
+    .admin-edit-btn:hover { background: var(--teal-200); }
+    .admin-del-btn { background: #fde8e8; color: #c0392b; }
+    .admin-del-btn:hover { background: #fac8c8; }
 
     .empty { text-align: center; padding: 4rem 0; color: var(--text-muted-dark); }
     .empty-icon { font-size: 48px; margin-bottom: 1rem; opacity: 0.5; }
@@ -175,8 +186,37 @@
 </header>
 
 <main>
-  <h1 class="page-title">기도 편지 모음</h1>
-  <p class="page-sub">Prayer Letters Archive</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2rem;">
+    <div>
+      <h1 class="page-title">Abigail's Prayer Letters</h1>
+    </div>
+    <div id="admin-bar">
+      <button id="admin-btn" onclick="toggleAdmin()" style="
+        padding:8px 18px; border-radius:999px;
+        font-family:var(--font-sans); font-size:13px;
+        cursor:pointer; border:1px solid rgba(255,255,255,0.2);
+        background:transparent; color:rgba(240,250,249,0.6);
+        transition:all 0.15s;
+      ">관리</button>
+    </div>
+  </div>
+
+  <!-- 관리자 비밀번호 입력 -->
+  <div id="admin-pw-wrap" style="display:none;margin-bottom:1.5rem;">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input id="admin-pw" type="password" placeholder="비밀번호"
+        style="padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);
+        background:rgba(255,255,255,0.1);color:white;font-family:var(--font-sans);
+        font-size:14px;outline:none;letter-spacing:0.15em;width:160px;"
+        onkeydown="if(event.key==='Enter')checkAdminPW()">
+      <button onclick="checkAdminPW()" style="
+        padding:8px 18px;border-radius:999px;background:var(--blush-300);
+        color:var(--teal-900);border:none;font-family:var(--font-sans);
+        font-size:13px;font-weight:600;cursor:pointer;">확인</button>
+      <span id="admin-pw-err" style="font-size:13px;color:#f0bec4;display:none;">틀렸어요</span>
+    </div>
+  </div>
+
   <div id="content">
     <div class="loading">
       <div class="spinner"></div>
@@ -188,17 +228,16 @@
 <script>
 const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF';
+let isAdmin = false;
+let allLetters = [];
 
 async function loadLetters() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?select=*&order=date.desc,created_at.desc`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
-    const letters = await res.json();
-    renderLetters(letters);
+    allLetters = await res.json();
+    renderLetters(allLetters);
   } catch(e) {
     document.getElementById('content').innerHTML = '<p class="empty">불러오기 실패. 잠시 후 다시 시도해 주세요.</p>';
   }
@@ -210,14 +249,12 @@ function renderLetters(letters) {
     content.innerHTML = `<div class="empty"><div class="empty-icon">✉</div><p>아직 저장된 편지가 없어요.</p></div>`;
     return;
   }
-
   const byYear = {};
   letters.forEach(l => {
     const year = l.date ? l.date.substring(0,4) : '날짜 없음';
     if (!byYear[year]) byYear[year] = [];
     byYear[year].push(l);
   });
-
   const years = Object.keys(byYear).sort((a,b) => b - a);
   content.innerHTML = years.map(year => `
     <div class="year-group">
@@ -232,6 +269,11 @@ function letterCard(l) {
   const blocks = l.body_blocks || [];
   const preview = blocks.map(b => b.textKo || '').filter(Boolean).join(' ').substring(0, 100);
   const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' }) : '';
+  const adminBtns = isAdmin ? `
+    <div class="admin-btns" onclick="event.preventDefault()">
+      <button class="admin-edit-btn" onclick="editLetter('${l.slug}')">편집</button>
+      <button class="admin-del-btn" onclick="deleteLetter('${l.slug}', '${l.title}')">삭제</button>
+    </div>` : '';
   return `
     <a href="letter.html?id=${l.slug}" class="letter-card">
       <div class="card-header">
@@ -241,9 +283,64 @@ function letterCard(l) {
       </div>
       <div class="card-body">
         <div class="card-preview">${preview || '내용 없음'}</div>
-        <div class="card-footer">읽기 →</div>
+        <div class="card-footer">
+          <span>읽기 →</span>
+          ${adminBtns}
+        </div>
       </div>
     </a>`;
+}
+
+function toggleAdmin() {
+  if (isAdmin) {
+    isAdmin = false;
+    document.getElementById('admin-btn').textContent = '관리';
+    document.getElementById('admin-btn').style.color = 'rgba(240,250,249,0.6)';
+    document.getElementById('admin-pw-wrap').style.display = 'none';
+    renderLetters(allLetters);
+    return;
+  }
+  const wrap = document.getElementById('admin-pw-wrap');
+  wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+}
+
+function checkAdminPW() {
+  const val = document.getElementById('admin-pw').value;
+  if (val === '7922') {
+    isAdmin = true;
+    document.getElementById('admin-pw-wrap').style.display = 'none';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-btn').textContent = '관리 중 ✓';
+    document.getElementById('admin-btn').style.color = '#f0bec4';
+    renderLetters(allLetters);
+  } else {
+    const err = document.getElementById('admin-pw-err');
+    err.style.display = 'inline';
+    document.getElementById('admin-pw').value = '';
+    setTimeout(() => err.style.display = 'none', 2000);
+  }
+}
+
+function editLetter(slug) {
+  window.location.href = `index.html?edit=${slug}`;
+}
+
+async function deleteLetter(slug, title) {
+  if (!confirm(`"${title}" 편지를 삭제할까요?\n이 작업은 되돌릴 수 없어요.`)) return;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}`, {
+      method: 'DELETE',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    if (res.ok) {
+      allLetters = allLetters.filter(l => l.slug !== slug);
+      renderLetters(allLetters);
+    } else {
+      alert('삭제 실패. 다시 시도해 주세요.');
+    }
+  } catch(e) {
+    alert('삭제 실패. 다시 시도해 주세요.');
+  }
 }
 
 loadLetters();
