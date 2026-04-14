@@ -159,6 +159,14 @@
     }
     .share-btn:hover { background: rgba(255,255,255,0.15); }
     .share-btn.copied { background: var(--teal-700); border-color: var(--teal-700); }
+    .donate-btn-inline {
+      display: inline-block; padding: 8px 20px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+      text-decoration: none; cursor: pointer; border: none;
+      background: var(--blush-300); color: var(--teal-900);
+      transition: background 0.15s;
+    }
+    .donate-btn-inline:hover { background: var(--blush-400); }
 
     /* ── Support Footer ── */
     .support-footer {
@@ -312,6 +320,7 @@ function renderLetter() {
     <div class="share-bar">
       <span class="share-label">이 편지 공유하기</span>
       <button class="share-btn" onclick="copyLink(this)">링크 복사</button>
+      <a href="donate.html" class="donate-btn-inline">🙏 후원하기</a>
     </div>
     <div class="support-footer">
       <div class="support-footer-label">${isEn ? 'Support the Mission' : '사역 후원'}</div>

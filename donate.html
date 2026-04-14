@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>후원하기 · Abigail's Prayer Letter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal-900: #0a3832; --teal-800: #0f4a42; --teal-700: #155c52;
+      --teal-400: #2d9e8e; --teal-100: #c4eae6; --teal-50: #edf4f2;
+      --blush-400: #e8a0a8; --blush-300: #f0bec4; --blush-200: #f7d8db;
+      --cream-50: #f4f7f5; --cream-100: #e6ede9; --cream-200: #cdd9d2;
+      --text-on-dark: #f0faf9; --text-muted-dark: rgba(240,250,249,0.65);
+      --text-primary: #1a2e2c; --text-secondary: #4a6560;
+      --font-serif: 'Noto Serif KR', Georgia, serif;
+      --font-sans: 'Noto Sans KR', sans-serif;
+    }
+    body { font-family: var(--font-sans); background: var(--teal-800); color: var(--text-primary); min-height: 100vh; }
+
+    .bg-pattern { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-pattern::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cpath d='M100,300 Q200,100 300,300 Q400,500 500,300' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-size: 600px 600px;
+    }
+
+    header {
+      background: rgba(10,56,50,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-inner {
+      max-width: none; margin: 0 auto; padding: 0 15%;
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo-link { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .cross-icon { width: 22px; height: 34px; position: relative; flex-shrink: 0; }
+    .cross-icon span { position: absolute; background: var(--blush-300); border-radius: 2px; }
+    .cross-v { width: 3px; height: 34px; left: 9.5px; top: 0; }
+    .cross-h { width: 22px; height: 3px; left: 0; top: 10px; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.25; align-items: center; }
+    .logo-ko { font-family: var(--font-serif); font-size: 20px; font-weight: 500; color: var(--text-on-dark); letter-spacing: 0.18em; text-transform: uppercase; }
+    .logo-en { font-size: 9.5px; color: var(--text-muted-dark); letter-spacing: 0.28em; text-transform: uppercase; }
+    .back-link {
+      font-family: var(--font-sans); font-size: 13px;
+      color: var(--text-muted-dark); text-decoration: none;
+      padding: 7px 16px; border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px; transition: all 0.15s;
+    }
+    .back-link:hover { background: rgba(255,255,255,0.1); color: var(--text-on-dark); }
+
+    main {
+      max-width: none; margin: 0 auto;
+      padding: 3rem 15% 5rem;
+      position: relative; z-index: 1;
+    }
+
+    .page-title {
+      text-align: center; margin-bottom: 2.5rem;
+    }
+    .page-title h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 500; color: var(--text-on-dark);
+      margin-bottom: 8px;
+    }
+    .page-title p {
+      font-size: 14px; color: var(--text-muted-dark); line-height: 1.7;
+    }
+
+    .donate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 860px; margin: 0 auto;
+    }
+
+    .donate-card {
+      background: var(--cream-50);
+      border: 1px solid var(--cream-200);
+      border-radius: 18px;
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .donate-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(10,56,50,0.25);
+    }
+    .donate-card-top {
+      background: var(--teal-800);
+      padding: 2rem 1.5rem 1.5rem;
+    }
+    .donate-card-icon { font-size: 36px; margin-bottom: 10px; }
+    .donate-card-name {
+      font-family: var(--font-serif);
+      font-size: 18px; font-weight: 500;
+      color: var(--text-on-dark); margin-bottom: 4px;
+    }
+    .donate-card-tag {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-muted-dark);
+    }
+    .donate-card-body { padding: 1.5rem; }
+    .donate-card-desc {
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.7; margin-bottom: 1.25rem;
+    }
+    .donate-btn {
+      display: block; width: 100%;
+      padding: 11px 0; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 14px; font-weight: 600;
+      text-decoration: none; cursor: pointer; border: none;
+      background: var(--teal-800); color: var(--text-on-dark);
+      transition: background 0.15s;
+    }
+    .donate-btn:hover { background: var(--teal-700); }
+    .donate-btn.paypal {
+      background: var(--blush-300); color: var(--teal-900);
+    }
+    .donate-btn.paypal:hover { background: var(--blush-400); }
+
+    .footer-copy {
+      text-align: center; margin-top: 3rem;
+      font-size: 11px; color: rgba(240,250,249,0.3);
+    }
+
+    @media (max-width: 768px) {
+      .header-inner { padding: 0 5%; }
+      main { padding: 2rem 5% 4rem; }
+      .donate-grid { grid-template-columns: 1fr; max-width: 400px; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="letters.html" class="logo-link">
+      <div class="cross-icon">
+        <span class="cross-v"></span>
+        <span class="cross-h"></span>
+      </div>
+      <div class="logo-text">
+        <span class="logo-ko">ABIGAIL'S</span>
+        <span class="logo-en">PRAYER LETTER</span>
+      </div>
+    </a>
+    <a href="javascript:history.back()" class="back-link">← 돌아가기</a>
+  </div>
+</header>
+
+<main>
+  <div class="page-title">
+    <h1>사역을 함께해 주세요</h1>
+    <p>Abigail의 ETI 영어교육 선교를 후원해 주시는 모든 분들께 감사드립니다.<br>아래 방법으로 후원에 참여하실 수 있습니다.</p>
+  </div>
+
+  <div class="donate-grid">
+
+    <div class="donate-card">
+      <div class="donate-card-top">
+        <div class="donate-card-icon">🇰🇷</div>
+        <div class="donate-card-name">새누리 교회</div>
+        <div class="donate-card-tag">Korean Church</div>
+      </div>
+      <div class="donate-card-body">
+        <div class="donate-card-desc">교회를 통해 후원하시는 분들을 위한 방법입니다. 링크를 클릭해 주세요.</div>
+        <a href="#" class="donate-btn">후원하기 →</a>
+      </div>
+    </div>
+
+    <div class="donate-card">
+      <div class="donate-card-top">
+        <div class="donate-card-icon">🌎</div>
+        <div class="donate-card-name">GPUSA</div>
+        <div class="donate-card-tag">US Mission</div>
+      </div>
+      <div class="donate-card-body">
+        <div class="donate-card-desc">미국에서 후원하시는 분들을 위한 공식 선교 후원 채널입니다.</div>
+        <a href="#" class="donate-btn">Donate →</a>
+      </div>
+    </div>
+
+    <div class="donate-card">
+      <div class="donate-card-top">
+        <div class="donate-card-icon">💙</div>
+        <div class="donate-card-name">PayPal</div>
+        <div class="donate-card-tag">International</div>
+      </div>
+      <div class="donate-card-body">
+        <div class="donate-card-desc">해외 어디서나 간편하게 후원하실 수 있는 PayPal 결제입니다.</div>
+        <a href="#" class="donate-btn paypal">PayPal로 후원 →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-copy">© 2026 Abigail's Prayer Letter · All rights reserved</div>
+</main>
+
+</body>
+</html>
