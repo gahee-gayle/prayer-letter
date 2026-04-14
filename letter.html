@@ -160,73 +160,38 @@
     .share-btn:hover { background: rgba(255,255,255,0.15); }
     .share-btn.copied { background: var(--teal-700); border-color: var(--teal-700); }
 
-    /* ── Support Section ── */
-    .support-section {
-      margin-top: 2rem;
-      background: var(--cream-50);
-      border: 1px solid var(--cream-200);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 4px 32px rgba(10,56,50,0.12);
-    }
-    .support-header {
-      background: var(--teal-800);
-      padding: 1.25rem 2rem;
+    /* ── Support Footer ── */
+    .support-footer {
+      margin-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 1.25rem 0 0.5rem;
       text-align: center;
     }
-    .support-header-title {
-      font-family: var(--font-sans);
-      font-size: 11px; font-weight: 600;
-      color: rgba(240,250,249,0.7);
-      letter-spacing: 0.18em; text-transform: uppercase;
+    .support-footer-label {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(240,250,249,0.45); margin-bottom: 0.75rem;
     }
-    .support-header-sub {
-      font-family: var(--font-sans);
-      font-size: 16px; font-weight: 500;
-      color: var(--text-on-dark);
-      margin-top: 4px;
+    .support-footer-links {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; flex-wrap: wrap;
     }
-    .support-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-    }
-    .support-card {
-      padding: 1.5rem 1.25rem;
-      text-align: center;
-      border-right: 1px solid var(--cream-200);
-      transition: background 0.15s;
-    }
-    .support-card:last-child { border-right: none; }
-    .support-card:hover { background: var(--cream-100); }
-    .support-card-icon {
-      font-size: 28px; margin-bottom: 10px;
-    }
-    .support-card-name {
-      font-size: 13px; font-weight: 700;
-      color: var(--teal-800); margin-bottom: 4px;
-    }
-    .support-card-desc {
-      font-size: 11px; color: var(--text-secondary);
-      line-height: 1.5; margin-bottom: 14px;
-    }
-    .support-card-btn {
+    .support-footer-btn {
       display: inline-block;
-      padding: 7px 18px; border-radius: 999px;
-      font-family: var(--font-sans); font-size: 12px; font-weight: 600;
-      cursor: pointer; text-decoration: none;
-      background: var(--teal-800); color: var(--text-on-dark);
-      border: none; transition: background 0.15s;
+      padding: 6px 16px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 12px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.07); color: var(--text-on-dark);
+      transition: all 0.15s;
     }
-    .support-card-btn:hover { background: var(--teal-700); }
-    .support-card-btn.blush {
+    .support-footer-btn:hover { background: rgba(255,255,255,0.14); }
+    .support-footer-btn.paypal {
       background: var(--blush-300); color: var(--teal-900);
+      border-color: var(--blush-300);
     }
-    .support-card-btn.blush:hover { background: var(--blush-400); }
-    @media (max-width: 600px) {
-      .support-cards { grid-template-columns: 1fr; }
-      .support-card { border-right: none; border-bottom: 1px solid var(--cream-200); }
-      .support-card:last-child { border-bottom: none; }
+    .support-footer-btn.paypal:hover { background: var(--blush-400); }
+    .support-footer-divider {
+      color: rgba(255,255,255,0.2); font-size: 12px;
     }
 
     .loading { text-align: center; padding: 4rem 0; color: var(--text-muted-dark); }
@@ -347,30 +312,14 @@ function renderLetter() {
       <span class="share-label">이 편지 공유하기</span>
       <button class="share-btn" onclick="copyLink(this)">링크 복사</button>
     </div>
-    <div class="support-section">
-      <div class="support-header">
-        <div class="support-header-title">Support the Mission</div>
-        <div class="support-header-sub">${isEn ? 'Partner with Abigail in prayer and giving' : 'Abigail의 사역을 함께 후원해 주세요'}</div>
-      </div>
-      <div class="support-cards">
-        <div class="support-card">
-          <div class="support-card-icon">🇰🇷</div>
-          <div class="support-card-name">새누리 교회</div>
-          <div class="support-card-desc">${isEn ? 'Korean church giving' : '교회를 통한 후원'}</div>
-          <a href="#" class="support-card-btn">후원하기</a>
-        </div>
-        <div class="support-card">
-          <div class="support-card-icon">🌎</div>
-          <div class="support-card-name">GPUSA</div>
-          <div class="support-card-desc">${isEn ? 'US-based mission giving' : '미국 선교 후원'}</div>
-          <a href="#" class="support-card-btn">Donate</a>
-        </div>
-        <div class="support-card">
-          <div class="support-card-icon">💙</div>
-          <div class="support-card-name">PayPal</div>
-          <div class="support-card-desc">${isEn ? 'International giving' : '해외 후원자용'}</div>
-          <a href="#" class="support-card-btn blush">PayPal</a>
-        </div>
+    <div class="support-footer">
+      <div class="support-footer-label">${isEn ? 'Support the Mission' : '사역 후원'}</div>
+      <div class="support-footer-links">
+        <a href="#" class="support-footer-btn">새누리 교회</a>
+        <span class="support-footer-divider">·</span>
+        <a href="#" class="support-footer-btn">GPUSA</a>
+        <span class="support-footer-divider">·</span>
+        <a href="#" class="support-footer-btn paypal">PayPal</a>
       </div>
     </div>`;
 }
