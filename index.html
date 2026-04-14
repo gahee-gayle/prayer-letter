@@ -10,6 +10,69 @@
 </head>
 <body>
 
+<div id="lock-screen" style="
+  position:fixed; inset:0; z-index:9999;
+  background:var(--teal-800);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:1.5rem;
+">
+  <div style="position:fixed;inset:0;pointer-events:none;overflow:hidden;">
+    <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22600%22%3E%3Cpath d=%22M100,300 Q200,100 300,300 Q400,500 500,300%22 fill=%22none%22 stroke=%22rgba(255,255,255,0.04)%22 stroke-width=%221.5%22/%3E%3C/svg%3E');background-size:600px 600px;"></div>
+  </div>
+  <div style="text-align:center;position:relative;z-index:1;">
+    <div style="width:28px;height:44px;position:relative;margin:0 auto 16px;">
+      <span style="position:absolute;width:3px;height:44px;background:#f0bec4;border-radius:2px;left:12.5px;top:0;"></span>
+      <span style="position:absolute;width:28px;height:3px;background:#f0bec4;border-radius:2px;left:0;top:12px;"></span>
+    </div>
+    <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:500;color:#f0faf9;letter-spacing:0.18em;text-transform:uppercase;">Abigail's</div>
+    <div style="font-size:10px;color:rgba(240,250,249,0.6);letter-spacing:0.3em;text-transform:uppercase;margin-top:2px;">Prayer Letter</div>
+  </div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;">
+    <input id="pw-input" type="password" placeholder="비밀번호 입력"
+      style="
+        font-family:'Noto Sans KR',sans-serif;font-size:16px;
+        padding:12px 20px; border-radius:999px;
+        border:1.5px solid rgba(255,255,255,0.25);
+        background:rgba(255,255,255,0.1);
+        color:white; outline:none; text-align:center;
+        width:220px; letter-spacing:0.2em;
+      "
+      onkeydown="if(event.key==='Enter')checkPW()"
+    >
+    <button onclick="checkPW()" style="
+      padding:11px 32px; border-radius:999px;
+      background:#f0bec4; color:#0a3832;
+      border:none; font-family:'Noto Sans KR',sans-serif;
+      font-size:14px; font-weight:600; cursor:pointer;
+      transition:background 0.15s;
+    ">입력</button>
+    <div id="pw-error" style="font-size:13px;color:#f0bec4;opacity:0;transition:opacity 0.2s;">
+      비밀번호가 틀렸어요
+    </div>
+  </div>
+</div>
+
+<script>
+function checkPW() {
+  const val = document.getElementById('pw-input').value;
+  if (val === '7922') {
+    sessionStorage.setItem('pl_auth', '1');
+    document.getElementById('lock-screen').style.display = 'none';
+  } else {
+    const err = document.getElementById('pw-error');
+    err.style.opacity = '1';
+    document.getElementById('pw-input').value = '';
+    setTimeout(() => err.style.opacity = '0', 2000);
+  }
+}
+if (sessionStorage.getItem('pl_auth') === '1') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const lock = document.getElementById('lock-screen');
+    if (lock) lock.style.display = 'none';
+  });
+}
+</script>
+
 <div class="bg-pattern"></div>
 
 <header class="site-header">
