@@ -80,7 +80,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
-    .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px 20px; }
     .letter-card { box-shadow: 0 2px 16px rgba(10,56,50,0.18); }
     .card-header { padding: 2rem 1.5rem 1.75rem; }
     .card-title { font-size: 16px; }
@@ -91,7 +91,7 @@
     .letter-card {
       background: var(--cream-50);
       border: 1px solid var(--cream-200);
-      border-radius: 16px;
+      border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
       text-decoration: none;
@@ -106,10 +106,14 @@
       background-image: url('letter_header.png');
       background-size: cover;
       background-position: center 60%;
+      height: 200px;
       padding: 1.25rem 1.25rem 1rem;
       text-align: center;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
     }
     .card-header::before {
       content: '';
