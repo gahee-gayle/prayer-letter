@@ -82,10 +82,6 @@
 
     .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px 20px; }
     .letter-card { box-shadow: 0 2px 16px rgba(10,56,50,0.18); }
-    .card-header { padding: 2rem 1.5rem 1.75rem; }
-    .card-title { font-size: 16px; }
-    .card-date { font-size: 13px; }
-    .card-body { padding: 1.25rem 1.5rem 1.5rem; }
     .card-preview { font-size: 14px; line-height: 1.75; -webkit-line-clamp: 4; }
 
     .letter-card {
@@ -107,44 +103,22 @@
       background-size: cover;
       background-position: center 60%;
       height: 200px;
-      padding: 1.25rem 1.25rem 1rem;
-      text-align: center;
       position: relative;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
     }
-    .card-header::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: rgba(10,50,45,0.35);
-      z-index: 0;
+    .card-photo-overlay { display: none; }
+    .card-title-bar {
+      padding: 0.85rem 1.25rem 0.7rem;
+      background: var(--cream-50);
+      border-bottom: 1px solid var(--cream-200);
     }
-    .card-header::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='120'%3E%3Cpath d='M0,60 Q75,20 150,60 Q225,100 300,60' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1.5'/%3E%3C/svg%3E");
-      background-size: 300px 120px;
-    }
-    .card-photo-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(10,50,45,0.2), rgba(10,50,45,0.55));
-      z-index: 1;
-    }
-    .card-cross { width: 14px; height: 22px; position: relative; margin: 0 auto 8px; z-index: 2; }
-    .card-cross::before, .card-cross::after { content: ''; position: absolute; background: var(--blush-300); border-radius: 1px; }
-    .card-cross::before { width: 2px; height: 22px; left: 6px; top: 0; }
-    .card-cross::after { width: 14px; height: 2px; left: 0; top: 7px; }
     .card-title {
       font-family: var(--font-serif);
-      font-size: 14px; font-weight: 500;
-      color: var(--text-on-dark);
-      position: relative; z-index: 2;
+      font-size: 14px; font-weight: 600;
+      color: var(--text-primary);
       line-height: 1.4;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.4);
     }
-    .card-date { font-size: 12px; color: rgba(240,250,249,0.85); margin-top: 4px; position: relative; z-index: 2; text-shadow: 0 1px 6px rgba(0,0,0,0.3); }
+    .card-date { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
 
     .card-body { padding: 1rem 1.25rem 1.25rem; }
     .card-preview {
@@ -403,8 +377,8 @@ function letterCard(l, isEn, t) {
     : '';
   return `
     <a href="letter.html?id=${l.slug}${langParam}" class="letter-card">
-      <div class="card-header" style="${photoStyle}">
-        ${l.main_photo ? '<div class="card-photo-overlay"></div>' : ''}
+      <div class="card-header" style="${photoStyle}"></div>
+      <div class="card-title-bar">
         <div class="card-title">${title}</div>
         <div class="card-date">${dateStr}</div>
       </div>
