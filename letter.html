@@ -213,12 +213,18 @@
     /* ── Print / PDF logo ── */
     .print-logo { display: none; }
     @media print {
-      header, .breadcrumb, .share-bar, .lang-toggle { display: none !important; }
-      body { background: white !important; }
-      main { padding: 0 !important; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      header { display: none !important; }
+      .breadcrumb { display: none !important; }
+      .share-bar { display: none !important; }
+      .lang-toggle { display: none !important; }
+      .bg-pattern { display: none !important; }
+      body { background: white !important; margin: 0; }
+      main { padding: 1rem 5% !important; }
+      .letter-wrap { box-shadow: none !important; border: 1px solid #ddd !important; }
       .print-logo {
-        display: flex; align-items: center; gap: 8px;
-        position: fixed; top: 18px; right: 24px;
+        display: flex !important; align-items: center; gap: 8px;
+        position: fixed; top: 16px; right: 20px;
         z-index: 9999;
       }
       .print-cross {
