@@ -123,6 +123,11 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='120'%3E%3Cpath d='M0,60 Q75,20 150,60 Q225,100 300,60' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1.5'/%3E%3C/svg%3E");
       background-size: 300px 120px;
     }
+    .card-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,50,45,0.2), rgba(10,50,45,0.55));
+      z-index: 1;
+    }
     .card-cross { width: 14px; height: 22px; position: relative; margin: 0 auto 8px; z-index: 2; }
     .card-cross::before, .card-cross::after { content: ''; position: absolute; background: var(--blush-300); border-radius: 1px; }
     .card-cross::before { width: 2px; height: 22px; left: 6px; top: 0; }
@@ -133,9 +138,9 @@
       color: var(--text-on-dark);
       position: relative; z-index: 2;
       line-height: 1.4;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+      text-shadow: 0 1px 8px rgba(0,0,0,0.4);
     }
-    .card-date { font-size: 12px; color: rgba(240,250,249,0.9); margin-top: 4px; position: relative; z-index: 2; }
+    .card-date { font-size: 12px; color: rgba(240,250,249,0.85); margin-top: 4px; position: relative; z-index: 2; text-shadow: 0 1px 6px rgba(0,0,0,0.3); }
 
     .card-body { padding: 1rem 1.25rem 1.25rem; }
     .card-preview {
@@ -389,10 +394,13 @@ function letterCard(l, isEn, t) {
       <button class="admin-edit-btn" onclick="editLetter('${l.slug}')">${t.edit}</button>
       <button class="admin-del-btn" onclick="deleteLetter('${l.slug}', '${l.title}')">${t.del}</button>
     </div>` : '';
+  const photoStyle = l.main_photo
+    ? `background-image: url('${l.main_photo}'); background-size: cover; background-position: center;`
+    : '';
   return `
     <a href="letter.html?id=${l.slug}${langParam}" class="letter-card">
-      <div class="card-header">
-        <div class="card-cross"></div>
+      <div class="card-header" style="${photoStyle}">
+        ${l.main_photo ? '<div class="card-photo-overlay"></div>' : ''}
         <div class="card-title">${title}</div>
         <div class="card-date">${dateStr}</div>
       </div>

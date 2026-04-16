@@ -286,12 +286,21 @@ if (sessionStorage.getItem('pl_auth') === '1') {
     </div>
 
     <div class="letter-preview full" id="full-preview">
-      <div class="lp-header">
-        <div class="lp-cross large"><span></span><span></span></div>
+      <div class="lp-header" id="fv-header">
+        <div class="lp-logo">
+          <div class="lp-logo-cross"></div>
+          <div class="lp-logo-text">
+            <span class="lp-logo-name">Abigail's</span>
+            <span class="lp-logo-sub">Prayer Letter</span>
+          </div>
+        </div>
+        <img id="fv-main-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        <div class="lp-header-overlay" id="fv-header-overlay" style="display:none;"></div>
+      </div>
+      <div class="lp-title-bar">
         <div class="lp-title large" id="fv-title">제목을 입력해 주세요</div>
         <div class="lp-date" id="fv-date"></div>
       </div>
-      <img id="fv-main-img" src="" alt="" style="display:none;width:100%;max-height:340px;object-fit:cover;">
       <div class="lp-body">
         <div class="lp-greeting" id="fv-greeting"></div>
         <div id="fv-body-blocks"></div>
