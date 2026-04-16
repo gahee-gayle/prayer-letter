@@ -45,6 +45,16 @@
     .cross::before { width: 3px; height: 34px; left: 9.5px; top: 0; }
     .cross::after { width: 22px; height: 3px; left: 0; top: 10px; }
     .logo-text { font-family: var(--font-serif); font-size: 15px; color: var(--text-on-dark); }
+    .lang-toggle { display: flex; gap: 6px; }
+    .lang-btn {
+      padding: 6px 14px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 13px;
+      cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+      background: transparent; color: var(--text-muted-dark);
+      transition: all 0.15s;
+    }
+    .lang-btn.active { background: var(--blush-300); color: var(--teal-900); border-color: var(--blush-300); font-weight: 500; }
+    .lang-btn:hover:not(.active) { background: rgba(255,255,255,0.1); color: var(--text-on-dark); }
     .write-btn {
       padding: 8px 20px;
       background: var(--blush-300); color: var(--teal-900);
@@ -212,7 +222,11 @@
       </div>
     </a>
     <div style="display:flex;gap:8px;align-items:center;">
-      <a href="donate.html" style="font-family:var(--font-sans);font-size:13px;color:var(--teal-900);background:var(--blush-300);padding:7px 16px;border-radius:999px;text-decoration:none;font-weight:600;transition:background 0.15s;" onmouseover="this.style.background='#e8a0a8'" onmouseout="this.style.background='#f0bec4'">♥ 후원하기</a>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">한국어</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+      </div>
+      <a href="donate.html" id="donate-link" style="font-family:var(--font-sans);font-size:13px;color:var(--teal-900);background:var(--blush-300);padding:7px 16px;border-radius:999px;text-decoration:none;font-weight:600;transition:background 0.15s;" onmouseover="this.style.background='#e8a0a8'" onmouseout="this.style.background='#f0bec4'">♥ 후원하기</a>
       <a href="index.html" id="write-btn-header" class="write-btn" style="display:none;">편지 쓰기</a>
     </div>
   </div>
@@ -242,7 +256,7 @@
         background:rgba(255,255,255,0.1);color:white;font-family:var(--font-sans);
         font-size:14px;outline:none;letter-spacing:0.15em;width:160px;"
         onkeydown="if(event.key==='Enter')checkAdminPW()">
-      <button onclick="checkAdminPW()" style="
+      <button id="admin-pw-confirm" onclick="checkAdminPW()" style="
         padding:8px 18px;border-radius:999px;background:var(--blush-300);
         color:var(--teal-900);border:none;font-family:var(--font-sans);
         font-size:13px;font-weight:600;cursor:pointer;">확인</button>
@@ -267,8 +281,58 @@ const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF';
 let isAdmin = false;
 let allLetters = [];
+let currentLang = sessionStorage.getItem('pl_lang') || 'ko';
+
+const T = {
+  ko: {
+    donate: '♥ 후원하기', write: '편지 쓰기',
+    manage: '관리', managing: '관리 중 ✓',
+    loading: '불러오는 중...', loadFail: '불러오기 실패. 잠시 후 다시 시도해 주세요.',
+    empty: '아직 저장된 편지가 없어요.',
+    noDate: '날짜 없음', noContent: '내용 없음',
+    edit: '편집', del: '삭제',
+    pwPlaceholder: '비밀번호', pwConfirm: '확인', pwWrong: '틀렸어요',
+    delConfirm: (title) => `"${title}" 편지를 삭제할까요?\n이 작업은 되돌릴 수 없어요.`,
+    delFail: '삭제 실패. 다시 시도해 주세요.',
+  },
+  en: {
+    donate: '♥ Support', write: 'Write Letter',
+    manage: 'Manage', managing: 'Managing ✓',
+    loading: 'Loading...', loadFail: 'Failed to load. Please try again.',
+    empty: 'No letters yet.',
+    noDate: 'No date', noContent: 'No content',
+    edit: 'Edit', del: 'Delete',
+    pwPlaceholder: 'Password', pwConfirm: 'OK', pwWrong: 'Incorrect',
+    delConfirm: (title) => `Delete "${title}"?\nThis action cannot be undone.`,
+    delFail: 'Failed to delete. Please try again.',
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  sessionStorage.setItem('pl_lang', lang);
+  document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  const t = T[lang];
+  // update header texts
+  const donateLink = document.getElementById('donate-link');
+  if (donateLink) {
+    donateLink.textContent = t.donate;
+    donateLink.href = lang === 'en' ? 'donate.html?lang=en' : 'donate.html';
+  }
+  const wb = document.getElementById('write-btn-header');
+  if (wb) wb.textContent = t.write;
+  const adminBtn = document.getElementById('admin-btn');
+  if (adminBtn) adminBtn.textContent = isAdmin ? t.managing : t.manage;
+  const pwInput = document.getElementById('admin-pw');
+  if (pwInput) pwInput.placeholder = t.pwPlaceholder;
+  const pwConfirmBtn = document.getElementById('admin-pw-confirm');
+  if (pwConfirmBtn) pwConfirmBtn.textContent = t.pwConfirm;
+  renderLetters(allLetters);
+}
 
 async function loadLetters() {
+  const t = T[currentLang];
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?select=*&order=date.desc,created_at.desc`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -276,19 +340,21 @@ async function loadLetters() {
     allLetters = await res.json();
     renderLetters(allLetters);
   } catch(e) {
-    document.getElementById('content').innerHTML = '<p class="empty">불러오기 실패. 잠시 후 다시 시도해 주세요.</p>';
+    document.getElementById('content').innerHTML = `<p class="empty">${t.loadFail}</p>`;
   }
 }
 
 function renderLetters(letters) {
+  const t = T[currentLang];
+  const isEn = currentLang === 'en';
   const content = document.getElementById('content');
   if (!letters.length) {
-    content.innerHTML = `<div class="empty"><div class="empty-icon">✉</div><p>아직 저장된 편지가 없어요.</p></div>`;
+    content.innerHTML = `<div class="empty"><div class="empty-icon">✉</div><p>${t.empty}</p></div>`;
     return;
   }
   const byYear = {};
   letters.forEach(l => {
-    const year = l.date ? l.date.substring(0,4) : '날짜 없음';
+    const year = l.date ? l.date.substring(0,4) : t.noDate;
     if (!byYear[year]) byYear[year] = [];
     byYear[year].push(l);
   });
@@ -297,29 +363,34 @@ function renderLetters(letters) {
     <div class="year-group">
       <div class="year-label">${year}</div>
       <div class="letter-grid">
-        ${byYear[year].map(l => letterCard(l)).join('')}
+        ${byYear[year].map(l => letterCard(l, isEn, t)).join('')}
       </div>
     </div>`).join('');
 }
 
-function letterCard(l) {
+function letterCard(l, isEn, t) {
   const blocks = l.body_blocks || [];
-  const preview = blocks.map(b => b.textKo || '').filter(Boolean).join(' ').substring(0, 100);
-  const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' }) : '';
+  const preview = isEn
+    ? blocks.map(b => b.textEn || b.textKo || '').filter(Boolean).join(' ').substring(0, 100)
+    : blocks.map(b => b.textKo || '').filter(Boolean).join(' ').substring(0, 100);
+  const title = isEn && l.title_en ? l.title_en : l.title;
+  const locale = isEn ? 'en-US' : 'ko-KR';
+  const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' }) : '';
+  const langParam = isEn ? '?lang=en' : '';
   const adminBtns = isAdmin ? `
     <div class="admin-btns" onclick="event.preventDefault()">
-      <button class="admin-edit-btn" onclick="editLetter('${l.slug}')">편집</button>
-      <button class="admin-del-btn" onclick="deleteLetter('${l.slug}', '${l.title}')">삭제</button>
+      <button class="admin-edit-btn" onclick="editLetter('${l.slug}')">${t.edit}</button>
+      <button class="admin-del-btn" onclick="deleteLetter('${l.slug}', '${l.title}')">${t.del}</button>
     </div>` : '';
   return `
-    <a href="letter.html?id=${l.slug}" class="letter-card">
+    <a href="letter.html?id=${l.slug}${langParam}" class="letter-card">
       <div class="card-header">
         <div class="card-cross"></div>
-        <div class="card-title">${l.title}</div>
+        <div class="card-title">${title}</div>
         <div class="card-date">${dateStr}</div>
       </div>
       <div class="card-body">
-        <div class="card-preview">${preview || '내용 없음'}</div>
+        <div class="card-preview">${preview || t.noContent}</div>
         <div class="card-footer">
           ${adminBtns}
         </div>
@@ -328,9 +399,10 @@ function letterCard(l) {
 }
 
 function toggleAdmin() {
+  const t = T[currentLang];
   if (isAdmin) {
     isAdmin = false;
-    document.getElementById('admin-btn').textContent = '관리';
+    document.getElementById('admin-btn').textContent = t.manage;
     document.getElementById('admin-btn').style.color = 'rgba(240,250,249,0.6)';
     document.getElementById('admin-pw-wrap').style.display = 'none';
     renderLetters(allLetters);
@@ -341,17 +413,19 @@ function toggleAdmin() {
 }
 
 function checkAdminPW() {
+  const t = T[currentLang];
   const val = document.getElementById('admin-pw').value;
   if (val === '7922') {
     isAdmin = true;
     document.getElementById('admin-pw-wrap').style.display = 'none';
     document.getElementById('admin-pw').value = '';
-    document.getElementById('admin-btn').textContent = '관리 중 ✓';
+    document.getElementById('admin-btn').textContent = t.managing;
     document.getElementById('admin-btn').style.color = '#f0bec4';
     renderLetters(allLetters);
   } else {
     const err = document.getElementById('admin-pw-err');
     err.style.display = 'inline';
+    err.textContent = t.pwWrong;
     document.getElementById('admin-pw').value = '';
     setTimeout(() => err.style.display = 'none', 2000);
   }
@@ -362,7 +436,8 @@ function editLetter(slug) {
 }
 
 async function deleteLetter(slug, title) {
-  if (!confirm(`"${title}" 편지를 삭제할까요?\n이 작업은 되돌릴 수 없어요.`)) return;
+  const t = T[currentLang];
+  if (!confirm(t.delConfirm(title))) return;
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}`, {
       method: 'DELETE',
@@ -372,18 +447,33 @@ async function deleteLetter(slug, title) {
       allLetters = allLetters.filter(l => l.slug !== slug);
       renderLetters(allLetters);
     } else {
-      alert('삭제 실패. 다시 시도해 주세요.');
+      alert(t.delFail);
     }
   } catch(e) {
-    alert('삭제 실패. 다시 시도해 주세요.');
+    alert(t.delFail);
   }
 }
+
+// apply initial lang state
+(function() {
+  const t = T[currentLang];
+  document.getElementById('btn-ko').classList.toggle('active', currentLang === 'ko');
+  document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+  const donateLink = document.getElementById('donate-link');
+  if (donateLink) {
+    donateLink.textContent = t.donate;
+    donateLink.href = currentLang === 'en' ? 'donate.html?lang=en' : 'donate.html';
+  }
+})();
 
 loadLetters();
 
 if (sessionStorage.getItem('pl_auth') === '1') {
   const wb = document.getElementById('write-btn-header');
-  if (wb) wb.style.display = 'inline-block';
+  if (wb) {
+    wb.style.display = 'inline-block';
+    wb.textContent = T[currentLang].write;
+  }
   document.getElementById('admin-bar').style.display = 'block';
 }
 </script>
