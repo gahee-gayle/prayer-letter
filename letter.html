@@ -254,7 +254,7 @@
 </header>
 
 <div class="breadcrumb" id="breadcrumb" style="display:none;">
-  <a href="letters.html">목록</a>
+  <a href="letters.html" id="breadcrumb-link">목록</a>
   <span class="breadcrumb-sep">›</span>
   <span class="breadcrumb-current" id="breadcrumb-title">편지</span>
 </div>
@@ -327,8 +327,10 @@ function renderLetter() {
 
   // Update breadcrumb
   const bc = document.getElementById('breadcrumb');
+  const bcLink = document.getElementById('breadcrumb-link');
   const bcTitle = document.getElementById('breadcrumb-title');
   if (bc) bc.style.display = 'flex';
+  if (bcLink) bcLink.textContent = isEn ? 'Letters' : '목록';
   if (bcTitle) bcTitle.textContent = title;
 
   document.getElementById('content').innerHTML = `
