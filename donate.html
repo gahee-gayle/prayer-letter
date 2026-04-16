@@ -167,7 +167,7 @@
     <div class="donate-card">
       <div class="donate-card-top">
         <div class="donate-card-icon">🇰🇷</div>
-        <div class="donate-card-name">새누리 교회</div>
+        <div class="donate-card-name" id="card1-name">새누리 교회</div>
         <div class="donate-card-tag">New Community Baptist Church</div>
       </div>
       <div class="donate-card-body">
@@ -218,10 +218,7 @@
     document.getElementById('pageDesc').innerHTML =
       'Thank you for supporting Abigail\'s ETI English education mission.<br>Choose one of the options below to give.';
 
-    // Hide 새누리교회 card (Korean church only)
-    document.getElementById('desc1').closest('.donate-card').style.display = 'none';
-    document.querySelector('.donate-grid').style.gridTemplateColumns = 'repeat(2, 1fr)';
-    document.querySelector('.donate-grid').style.maxWidth = '600px';
+    document.getElementById('card1-name').textContent = 'New Community Baptist Church';
 
     document.getElementById('desc2').innerHTML =
       'Give through GPUSA, the official mission channel.<br>Please write <strong>Gahee Kuk</strong> in the note field.';
