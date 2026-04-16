@@ -4,19 +4,72 @@
 const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF';
 
+let editSlug = null; // 편집 모드일 때 기존 slug 저장
+
 function generateSlug() {
   return Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+}
+
+// 페이지 로드 시 ?edit=slug 파라미터 확인 후 편지 불러오기
+async function checkEditMode() {
+  const params = new URLSearchParams(location.search);
+  const slug = params.get('edit');
+  if (!slug) return;
+  editSlug = slug;
+
+  // 저장 버튼 텍스트 변경
+  const btn = document.getElementById('save-btn');
+  if (btn) btn.textContent = '업데이트';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=*`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const data = await res.json();
+    if (!data.length) return;
+    const l = data[0];
+
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+    setVal('title',       l.title);
+    setVal('title-en',    l.title_en);
+    setVal('date',        l.date);
+    setVal('greeting',    l.greeting);
+    setVal('greeting-en', l.greeting_en);
+    setVal('closing',     l.closing);
+    setVal('closing-en',  l.closing_en);
+
+    bodyBlocks = l.body_blocks || [{ textKo:'', textEn:'', photos:[] }];
+    renderBlockEditor();
+
+    prayerItems = l.prayer_items || [{ko:'',en:''},{ko:'',en:''},{ko:'',en:''}];
+    renderPrayerEditor();
+
+    mainPhoto = l.main_photo || null;
+    const thumb = document.getElementById('main-photo-thumb');
+    const ph    = document.getElementById('main-photo-placeholder');
+    const pv    = document.getElementById('main-photo-preview');
+    const badge = document.getElementById('main-photo-badge');
+    if (mainPhoto) {
+      if (thumb) thumb.src = mainPhoto;
+      if (ph)    ph.style.display = 'none';
+      if (pv)    pv.style.display = 'block';
+      if (badge) badge.style.display = 'inline';
+    }
+
+    syncAll();
+    goTab('edit');
+  } catch(e) {
+    console.error('편지 불러오기 실패', e);
+  }
 }
 
 async function saveToCloud() {
   const d = getHeaderData();
   const btn = document.getElementById('save-btn');
-  btn.textContent = '저장 중...';
+  btn.textContent = editSlug ? '업데이트 중...' : '저장 중...';
   btn.disabled = true;
 
-  const slug = generateSlug();
   const payload = {
-    slug,
     title:        d.title,
     title_en:     d.titleEn || null,
     date:         d.date || null,
@@ -30,30 +83,49 @@ async function saveToCloud() {
   };
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(payload)
-    });
+    let res, slug;
+
+    if (editSlug) {
+      // 기존 편지 업데이트 (PATCH)
+      slug = editSlug;
+      res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      // 새 편지 저장 (POST)
+      slug = generateSlug();
+      res = await fetch(`${SUPABASE_URL}/rest/v1/letters`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({ slug, ...payload })
+      });
+    }
 
     if (res.ok) {
       const shareUrl = `${location.origin}${location.pathname.replace('index.html','').replace(/\/$/, '')}/letter.html?id=${slug}`;
       showSaveSuccess(shareUrl);
-      saveToLocalTemplates(d, slug);
+      if (!editSlug) saveToLocalTemplates(d, slug);
     } else {
       const err = await res.json();
       console.error(err);
-      btn.textContent = '저장 실패';
-      setTimeout(() => { btn.textContent = '저장'; btn.disabled = false; }, 2000);
+      btn.textContent = editSlug ? '업데이트 실패' : '저장 실패';
+      setTimeout(() => { btn.textContent = editSlug ? '업데이트' : '저장'; btn.disabled = false; }, 2000);
     }
   } catch(e) {
-    btn.textContent = '저장 실패';
-    setTimeout(() => { btn.textContent = '저장'; btn.disabled = false; }, 2000);
+    btn.textContent = editSlug ? '업데이트 실패' : '저장 실패';
+    setTimeout(() => { btn.textContent = editSlug ? '업데이트' : '저장'; btn.disabled = false; }, 2000);
   }
 }
 
