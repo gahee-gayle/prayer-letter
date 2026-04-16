@@ -167,7 +167,7 @@
     <div class="donate-card">
       <div class="donate-card-top">
         <div class="donate-card-name" id="card1-name">새누리 교회</div>
-        <div class="donate-card-tag">New Community Baptist Church</div>
+        <div class="donate-card-tag" id="card1-tag">Korean Church</div>
       </div>
       <div class="donate-card-body">
         <div class="donate-card-desc" id="desc1">교회를 통해 후원하시는 분들을 위한 방법입니다.<br><strong>국가희 (Gahee Kuk) 선교사</strong> 앞으로 지정 헌금해 주세요.</div>
@@ -216,6 +216,10 @@
       'Thank you for supporting Abigail\'s ETI English education mission.<br>Choose one of the options below to give.';
 
     document.getElementById('card1-name').textContent = 'New Community Baptist Church';
+    document.getElementById('card1-tag').textContent = 'Korean Church';
+    document.getElementById('desc1').innerHTML =
+      'Give through New Community Baptist Church.<br><strong>Designated for Gahee Kuk (missionary)</strong>.';
+    document.getElementById('btn1').textContent = 'Give →';
 
     document.getElementById('desc2').innerHTML =
       'Give through GPUSA, the official mission channel.<br>Please write <strong>Gahee Kuk</strong> in the note field.';
