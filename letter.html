@@ -61,18 +61,44 @@
       box-shadow: 0 4px 32px rgba(10,56,50,0.2);
     }
 
+    /* ── Letter Header (photo hero) ── */
     .letter-header {
+      position: relative; overflow: hidden;
+      height: 420px;
+      background: var(--teal-800);
+    }
+    .lh-photo {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .lh-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,50,45,0.15), rgba(10,50,45,0.45));
+    }
+    /* 사진 없을 때 fallback */
+    .letter-header.no-photo {
       background: var(--teal-800);
       background-image: url('letter_header.png');
-      background-size: cover;
-      background-position: center 60%;
-      padding: 5rem 2rem 4rem;
+      background-size: cover; background-position: center 60%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .letter-header.no-photo::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(10,50,45,0.35); z-index: 0;
+    }
+    /* 제목/날짜 바 (사진 아래) */
+    .letter-title-bar {
+      background: var(--teal-800);
+      padding: 1.5rem 2rem 1.25rem;
       text-align: center;
-      position: relative; overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    /* 사진 없을 때 제목은 헤더 안에 */
+    .lh-title-inner {
+      position: relative; z-index: 2;
     }
     .lh-logo {
       position: absolute; top: 22px; right: 26px;
-      display: flex; align-items: center; gap: 12px; z-index: 2;
+      display: flex; align-items: center; gap: 12px; z-index: 3;
     }
     .lh-logo-cross { width: 26px; height: 42px; position: relative; flex-shrink: 0; }
     .lh-logo-cross::before, .lh-logo-cross::after {
@@ -89,28 +115,6 @@
       font-size: 11px; color: var(--text-muted-dark);
       letter-spacing: 0.26em; text-transform: uppercase;
     }
-    .letter-header::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: rgba(10,50,45,0.35);
-      z-index: 0;
-    }
-    .letter-header.has-bg { padding: 0; }
-    .letter-header.has-bg .header-bg {
-      width: 100%; max-height: 300px; object-fit: cover; display: block;
-    }
-    .letter-header.has-bg .header-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(10,56,50,0.3), rgba(10,56,50,0.7));
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: flex-end; padding: 2rem;
-    }
-    .letter-header::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cpath d='M0,100 Q100,40 200,100 Q300,160 400,100' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1.5'/%3E%3C/svg%3E");
-      background-size: 400px 200px; pointer-events: none;
-    }
     .lh-cross { width: 22px; height: 34px; position: relative; margin: 0 auto 12px; z-index: 2; }
     .lh-cross::before, .lh-cross::after { content: ''; position: absolute; background: var(--blush-300); border-radius: 2px; }
     .lh-cross::before { width: 3px; height: 34px; left: 9.5px; top: 0; }
@@ -119,10 +123,9 @@
       font-family: var(--font-serif);
       font-size: clamp(22px, 3vw, 32px);
       font-weight: 500; color: var(--text-on-dark);
-      position: relative; z-index: 2; line-height: 1.3;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+      line-height: 1.3;
     }
-    .lh-date { font-size: 15px; color: rgba(240,250,249,0.9); margin-top: 6px; position: relative; z-index: 2; }
+    .lh-date { font-size: 14px; color: rgba(240,250,249,0.7); margin-top: 6px; }
 
     .main-photo { width: 100%; height: 360px; object-fit: cover; display: block; }
 
@@ -383,7 +386,7 @@ function renderLetter() {
 
   document.getElementById('content').innerHTML = `
     <div class="letter-wrap">
-      <div class="letter-header">
+      <div class="letter-header ${l.main_photo ? '' : 'no-photo'}">
         <div class="lh-logo">
           <div class="lh-logo-cross"></div>
           <div class="lh-logo-text">
@@ -391,10 +394,12 @@ function renderLetter() {
             <span class="lh-logo-sub">Prayer Letter</span>
           </div>
         </div>
+        ${l.main_photo ? `<img class="lh-photo" src="${l.main_photo}" alt=""><div class="lh-overlay"></div>` : ''}
+      </div>
+      <div class="letter-title-bar">
         <div class="lh-title">${title}</div>
         <div class="lh-date">${dateStr}</div>
       </div>
-      ${l.main_photo ? `<img class="main-photo" src="${l.main_photo}" alt="">` : ''}
       <div class="letter-body">
         ${greeting ? `<div class="letter-greeting">${greeting}</div>` : ''}
         ${blocksHtml}
