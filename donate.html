@@ -61,79 +61,70 @@
     }
 
     .page-title {
-      text-align: center; margin-bottom: 2.5rem;
+      text-align: center; margin-bottom: 3rem;
     }
     .page-title h1 {
       font-family: var(--font-serif);
       font-size: clamp(22px, 3vw, 32px);
       font-weight: 500; color: #f5d4d8;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     .page-title p {
       font-size: 17px; color: var(--text-muted-dark); line-height: 1.7;
     }
 
-    .donate-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    /* ── List layout ── */
+    .donate-list {
+      max-width: 640px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .donate-row {
+      display: flex; align-items: center; justify-content: space-between;
       gap: 1.5rem;
-      max-width: 860px; margin: 0 auto;
+      padding: 1.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
     }
-
-    .donate-card {
-      background: var(--cream-50);
-      border: 1px solid var(--cream-200);
-      border-radius: 18px;
-      overflow: hidden;
-      text-align: center;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .donate-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(10,56,50,0.25);
-    }
-    .donate-card-top {
-      background: var(--teal-800);
-      padding: 2rem 1.5rem 1.5rem;
-    }
-    .donate-card-icon { font-size: 36px; margin-bottom: 10px; }
-    .donate-card-name {
+    .donate-row-info { flex: 1; }
+    .donate-row-name {
       font-family: var(--font-serif);
       font-size: 18px; font-weight: 500;
-      color: var(--text-on-dark); margin-bottom: 4px;
+      color: var(--text-on-dark);
+      margin-bottom: 4px;
     }
-    .donate-card-tag {
+    .donate-row-tag {
       font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--text-muted-dark);
+      color: var(--text-muted-dark); margin-bottom: 8px;
     }
-    .donate-card-body { padding: 1.5rem; }
-    .donate-card-desc {
-      font-size: 13px; color: var(--text-secondary);
-      line-height: 1.7; margin-bottom: 1.25rem;
+    .donate-row-desc {
+      font-size: 13px; color: var(--text-muted-dark); line-height: 1.7;
     }
-    .donate-btn {
-      display: block; width: 100%;
-      padding: 11px 0; border-radius: 999px;
-      font-family: var(--font-sans); font-size: 14px; font-weight: 600;
-      text-decoration: none; cursor: pointer; border: none;
-      background: var(--teal-800); color: var(--text-on-dark);
-      transition: background 0.15s;
+    .donate-row-desc strong { color: var(--blush-300); font-weight: 500; }
+    .donate-row-btn {
+      flex-shrink: 0;
+      display: inline-block;
+      padding: 10px 22px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+      text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.08); color: var(--text-on-dark);
+      transition: all 0.15s; white-space: nowrap;
     }
-    .donate-btn:hover { background: var(--teal-700); }
-    .donate-btn.paypal {
+    .donate-row-btn:hover { background: rgba(255,255,255,0.16); }
+    .donate-row-btn.paypal {
       background: var(--blush-300); color: var(--teal-900);
+      border-color: var(--blush-300);
     }
-    .donate-btn.paypal:hover { background: var(--blush-400); }
+    .donate-row-btn.paypal:hover { background: var(--blush-400); }
 
     .footer-copy {
       text-align: center; margin-top: 3rem;
       font-size: 11px; color: rgba(240,250,249,0.3);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .header-inner { padding: 0 5%; }
       main { padding: 2rem 5% 4rem; }
-      .donate-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .donate-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .donate-row-btn { width: 100%; text-align: center; }
     }
   </style>
 </head>
@@ -162,39 +153,33 @@
     <p id="pageDesc">Abigail의 ETI 영어교육 선교를 후원해 주시는 모든 분들께 감사드립니다.<br>아래 방법으로 후원에 참여하실 수 있습니다.</p>
   </div>
 
-  <div class="donate-grid">
+  <div class="donate-list">
 
-    <div class="donate-card">
-      <div class="donate-card-top">
-        <div class="donate-card-name" id="card1-name">새누리 교회</div>
-        <div class="donate-card-tag" id="card1-tag">Korean Church</div>
+    <div class="donate-row">
+      <div class="donate-row-info">
+        <div class="donate-row-name" id="card1-name">새누리 교회</div>
+        <div class="donate-row-tag" id="card1-tag">Korean Church</div>
+        <div class="donate-row-desc" id="desc1">교회를 통해 후원하시는 분들을 위한 방법입니다.<br><strong>국가희 (Gahee Kuk) 선교사</strong> 앞으로 지정 헌금해 주세요.</div>
       </div>
-      <div class="donate-card-body">
-        <div class="donate-card-desc" id="desc1">교회를 통해 후원하시는 분들을 위한 방법입니다.<br><strong>국가희 (Gahee Kuk) 선교사</strong> 앞으로 지정 헌금해 주세요.</div>
-        <a href="https://www.saenurifamily.com/bbs/page.php?tm_page=donation" target="_blank" class="donate-btn" id="btn1">후원하기 →</a>
-      </div>
+      <a href="https://www.saenurifamily.com/bbs/page.php?tm_page=donation" target="_blank" class="donate-row-btn" id="btn1">후원하기 →</a>
     </div>
 
-    <div class="donate-card">
-      <div class="donate-card-top">
-        <div class="donate-card-name">GPUSA</div>
-        <div class="donate-card-tag">US Mission</div>
+    <div class="donate-row">
+      <div class="donate-row-info">
+        <div class="donate-row-name">GPUSA</div>
+        <div class="donate-row-tag">US Mission</div>
+        <div class="donate-row-desc" id="desc2">미국에서 후원하시는 분들을 위한 공식 선교 후원 채널입니다.</div>
       </div>
-      <div class="donate-card-body">
-        <div class="donate-card-desc" id="desc2">미국에서 후원하시는 분들을 위한 공식 선교 후원 채널입니다.</div>
-        <a href="https://www.gpusa.org/give" target="_blank" class="donate-btn" id="btn2">Donate →</a>
-      </div>
+      <a href="https://www.gpusa.org/give" target="_blank" class="donate-row-btn" id="btn2">Donate →</a>
     </div>
 
-    <div class="donate-card">
-      <div class="donate-card-top">
-        <div class="donate-card-name">PayPal</div>
-        <div class="donate-card-tag">International</div>
+    <div class="donate-row">
+      <div class="donate-row-info">
+        <div class="donate-row-name">PayPal</div>
+        <div class="donate-row-tag">International</div>
+        <div class="donate-row-desc" id="desc3">해외 어디서나 간편하게 후원하실 수 있는 PayPal 결제입니다.</div>
       </div>
-      <div class="donate-card-body">
-        <div class="donate-card-desc" id="desc3">해외 어디서나 간편하게 후원하실 수 있는 PayPal 결제입니다.</div>
-        <a href="https://paypal.me/AbigailsMission" target="_blank" class="donate-btn paypal" id="btn3">PayPal로 후원 →</a>
-      </div>
+      <a href="https://paypal.me/AbigailsMission" target="_blank" class="donate-row-btn paypal" id="btn3">PayPal로 후원 →</a>
     </div>
 
   </div>
@@ -223,7 +208,6 @@
 
     document.getElementById('desc2').innerHTML =
       'Give through GPUSA, the official mission channel.<br>Please write <strong>Gahee Kuk</strong> in the note field.';
-    // btn2 already says "Donate →"
 
     document.getElementById('desc3').textContent =
       'Give easily from anywhere in the world via PayPal.';
