@@ -803,6 +803,11 @@ textarea { resize: vertical; line-height: 1.75; }
 .pv-block-photos.layout-grid { grid-template-columns: 1fr 1fr; }
 .pv-block-photos.layout-grid img { height: 220px !important; max-height: none !important; object-fit: cover; }
 
+@media (max-width: 600px) {
+  .pv-block-photos.layout-half img { width: 100% !important; }
+  .pv-block-photos.layout-grid { grid-template-columns: 1fr; }
+}
+
 /* layout picker in editor */
 .photo-layout-picker { display: flex; align-items: center; gap: 6px; margin: 8px 0 6px; }
 .photo-layout-picker .layout-label { font-size: 11px; color: var(--text-tertiary); }

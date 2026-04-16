@@ -145,6 +145,11 @@
     .pv-block-photos.layout-grid { grid-template-columns: 1fr 1fr; }
     .pv-block-photos.layout-grid img { height: 220px !important; max-height: none !important; object-fit: cover; }
 
+    @media (max-width: 600px) {
+      .pv-block-photos.layout-half img { width: 100% !important; }
+      .pv-block-photos.layout-grid { grid-template-columns: 1fr; }
+    }
+
     .prayer-box {
       margin-top: 1.5rem;
       background: var(--teal-50);
