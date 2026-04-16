@@ -474,11 +474,14 @@ async function deleteLetter(slug, title) {
 loadLetters();
 
 if (sessionStorage.getItem('pl_auth') === '1') {
+  // 로그인: 편지쓰기 보이고, 후원 버튼 숨김
   const wb = document.getElementById('write-btn-header');
   if (wb) {
     wb.style.display = 'inline-block';
     wb.textContent = T[currentLang].write;
   }
+  const donateLink = document.getElementById('donate-link');
+  if (donateLink) donateLink.style.display = 'none';
   document.getElementById('admin-bar').style.display = 'block';
 }
 </script>
