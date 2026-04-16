@@ -21,13 +21,7 @@
     html { font-size: clamp(14px, 1vw, 16px); }
     body { font-family: var(--font-sans); background: var(--teal-800); color: var(--text-primary); min-height: 100vh; }
 
-    .bg-pattern { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .bg-pattern::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cpath d='M100,300 Q200,100 300,300 Q400,500 500,300' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1.5'/%3E%3C/svg%3E");
-      background-size: 600px 600px;
-    }
+    .bg-pattern { display: none; }
 
     header {
       background: rgba(10,56,50,0.88);
