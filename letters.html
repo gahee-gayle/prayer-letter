@@ -45,11 +45,6 @@
     .cross::before { width: 3px; height: 34px; left: 9.5px; top: 0; }
     .cross::after { width: 22px; height: 3px; left: 0; top: 10px; }
     .logo-text { font-family: var(--font-serif); font-size: 15px; color: var(--text-on-dark); }
-    .lang-row {
-      display: flex; justify-content: flex-end; align-items: center;
-      padding-bottom: 8px; margin-bottom: 2.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
     .lang-toggle { display: flex; gap: 6px; }
     .lang-btn {
       padding: 5px 13px; border-radius: 999px;
@@ -349,7 +344,8 @@ function renderLetters(letters) {
   const content = document.getElementById('content');
   if (!letters.length) {
     content.innerHTML = `
-      <div class="lang-row">
+      <div class="year-label" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;">
+        <span></span>
         <div class="lang-toggle">
           <button class="lang-btn ${currentLang==='ko'?'active':''}" onclick="setLang('ko')">한국어</button>
           <button class="lang-btn ${currentLang==='en'?'active':''}" onclick="setLang('en')">English</button>
@@ -365,16 +361,17 @@ function renderLetters(letters) {
     byYear[year].push(l);
   });
   const years = Object.keys(byYear).sort((a,b) => b - a);
-  const langRow = `
-    <div class="lang-row">
-      <div class="lang-toggle">
-        <button class="lang-btn ${currentLang==='ko'?'active':''}" onclick="setLang('ko')">한국어</button>
-        <button class="lang-btn ${currentLang==='en'?'active':''}" onclick="setLang('en')">English</button>
-      </div>
+  const langToggle = `
+    <div class="lang-toggle">
+      <button class="lang-btn ${currentLang==='ko'?'active':''}" onclick="setLang('ko')">한국어</button>
+      <button class="lang-btn ${currentLang==='en'?'active':''}" onclick="setLang('en')">English</button>
     </div>`;
-  content.innerHTML = langRow + years.map(year => `
+  content.innerHTML = years.map((year, i) => `
     <div class="year-group">
-      <div class="year-label">${year}</div>
+      <div class="year-label" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${year}</span>
+        ${i === 0 ? langToggle : ''}
+      </div>
       <div class="letter-grid">
         ${byYear[year].map(l => letterCard(l, isEn, t)).join('')}
       </div>
