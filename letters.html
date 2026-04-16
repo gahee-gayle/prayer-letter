@@ -65,7 +65,7 @@
     }
     .write-btn:hover { background: var(--blush-200); }
 
-    main { max-width: none; margin: 0 auto; padding: 3rem 15% 5rem; position: relative; z-index: 1; }
+    main { max-width: none; margin: 0 auto; padding: 3rem 15% 6rem; position: relative; z-index: 1; }
 
     .page-title {
       font-family: var(--font-serif);
@@ -185,9 +185,12 @@
     }
     /* ── Support Footer ── */
     .support-footer {
-      margin-top: 3rem; padding: 1.25rem 0 2rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      text-align: center; position: relative; z-index: 1;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 0.75rem 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,56,50,0.88);
+      backdrop-filter: blur(16px);
+      text-align: center; z-index: 50;
     }
     .support-footer-copy { font-size: 13px; color: rgba(240,250,249,0.7); margin-bottom: 0.5rem; }
     .support-footer-label {
