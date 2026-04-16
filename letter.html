@@ -350,9 +350,9 @@ function renderLetter() {
       <div class="letter-footer">${closing || ''}</div>
     </div>
     <div class="share-bar">
-      <span class="share-label">이 편지 공유하기</span>
-      <button class="share-btn" onclick="copyLink(this)">링크 복사</button>
-      <a href="donate.html" class="donate-btn-inline">♥ 후원하기</a>
+      <span class="share-label">${isEn ? 'Share this letter' : '이 편지 공유하기'}</span>
+      <button class="share-btn" onclick="copyLink(this)">${isEn ? 'Copy Link' : '링크 복사'}</button>
+      <a href="donate.html" class="donate-btn-inline">♥ ${isEn ? 'Support' : '후원하기'}</a>
     </div>`;
 }
 
@@ -360,7 +360,7 @@ function copyLink(btn) {
   navigator.clipboard.writeText(location.href).then(() => {
     btn.textContent = '복사됨!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '링크 복사'; btn.classList.remove('copied'); }, 2000);
+    setTimeout(() => { btn.textContent = currentLang === 'en' ? 'Copy Link' : '링크 복사'; btn.classList.remove('copied'); }, 2000);
   });
 }
 
