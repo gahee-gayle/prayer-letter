@@ -340,7 +340,13 @@ function renderPrayerEditor() {
    Body Blocks — editor
 ═══════════════════════════════════════ */
 function addBodyBlock() {
-  bodyBlocks.push({ textKo: '', textEn: '', photos: [] });
+  bodyBlocks.push({ textKo: '', textEn: '', photos: [], photoLayout: 'full' });
+  renderBlockEditor();
+  syncAll();
+}
+
+function setBlockLayout(idx, layout) {
+  bodyBlocks[idx].photoLayout = layout;
   renderBlockEditor();
   syncAll();
 }
@@ -395,6 +401,13 @@ function renderBlockEditor() {
           style="display:none"
           onchange="loadBlockPhotos(event,${i})">
       </div>
+      ${block.photos.length ? `
+      <div class="photo-layout-picker">
+        <span class="layout-label">레이아웃</span>
+        <button class="layout-btn ${(block.photoLayout||'full')==='full'?'active':''}" onclick="setBlockLayout(${i},'full')">전체</button>
+        <button class="layout-btn ${(block.photoLayout||'full')==='half'?'active':''}" onclick="setBlockLayout(${i},'half')">1/2</button>
+        <button class="layout-btn ${(block.photoLayout||'full')==='grid'?'active':''}" onclick="setBlockLayout(${i},'grid')">그리드</button>
+      </div>` : ''}
     </div>`).join('');
 }
 
@@ -511,13 +524,11 @@ function renderBodyBlocksPreview(containerId, lang) {
   wrap.innerHTML = bodyBlocks.map(block => {
     const text = lang === 'en' ? block.textEn : block.textKo;
     const photos = block.photos;
-    const pClass = photos.length === 1 ? 'p1'
-                 : photos.length === 2 ? 'p2'
-                 : photos.length === 3 ? 'p3' : 'p4';
+    const layout = block.photoLayout || 'full';
     return `<div class="pv-block">
       ${text ? `<div class="pv-block-text">${escHtml(text)}</div>` : ''}
-      ${photos.length ? `<div class="pv-block-photos ${pClass}">
-        ${photos.slice(0,4).map(src => `<img src="${src}" alt="">`).join('')}
+      ${photos.length ? `<div class="pv-block-photos layout-${layout}">
+        ${photos.map(src => `<img src="${src}" alt="">`).join('')}
       </div>` : ''}
     </div>`;
   }).join('');

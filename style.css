@@ -793,6 +793,26 @@ textarea { resize: vertical; line-height: 1.75; }
 .pv-block-photos.p3 img,
 .pv-block-photos.p4 img { height: 260px; object-fit: cover; }
 
+/* ── Photo layout options ── */
+.pv-block-photos.layout-full { grid-template-columns: 1fr; }
+.pv-block-photos.layout-full img { max-height: 520px; object-fit: cover; height: auto; }
+
+.pv-block-photos.layout-half { display: flex; flex-wrap: wrap; gap: 6px; }
+.pv-block-photos.layout-half img { width: calc(50% - 3px); height: 260px; object-fit: cover; border-radius: var(--radius-md); }
+
+.pv-block-photos.layout-grid { grid-template-columns: 1fr 1fr; }
+.pv-block-photos.layout-grid img { height: 220px; object-fit: cover; aspect-ratio: 1; }
+
+/* layout picker in editor */
+.photo-layout-picker { display: flex; align-items: center; gap: 6px; margin: 8px 0 6px; }
+.photo-layout-picker .layout-label { font-size: 11px; color: var(--text-tertiary); }
+.layout-btn {
+  padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--cream-200); background: white; color: var(--text-secondary);
+  cursor: pointer; transition: all 0.15s;
+}
+.layout-btn.active { background: var(--teal-800); color: white; border-color: var(--teal-800); }
+
 /* main photo */
 #fv-main-img {
   width: 100%; max-height: 560px;
