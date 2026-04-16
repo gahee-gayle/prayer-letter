@@ -218,12 +218,13 @@
     document.getElementById('pageDesc').innerHTML =
       'Thank you for supporting Abigail\'s ETI English education mission.<br>Choose one of the options below to give.';
 
-    document.getElementById('desc1').innerHTML =
-      'Give through New Community Baptist Church.<br><strong>Designated for Gahee Kuk (missionary)</strong>.';
-    document.getElementById('btn1').textContent = 'Give →';
+    // Hide 새누리교회 card (Korean church only)
+    document.getElementById('desc1').closest('.donate-card').style.display = 'none';
+    document.querySelector('.donate-grid').style.gridTemplateColumns = 'repeat(2, 1fr)';
+    document.querySelector('.donate-grid').style.maxWidth = '600px';
 
-    document.getElementById('desc2').textContent =
-      'The official mission giving channel for supporters in the United States.';
+    document.getElementById('desc2').innerHTML =
+      'Give through GPUSA, the official mission channel.<br>Please write <strong>Gahee Kuk</strong> in the note field.';
     // btn2 already says "Donate →"
 
     document.getElementById('desc3').textContent =
