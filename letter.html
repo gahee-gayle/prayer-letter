@@ -203,6 +203,23 @@
       color: rgba(255,255,255,0.2); font-size: 12px;
     }
 
+    .breadcrumb {
+      padding: 0.75rem 15%;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: rgba(240,250,249,0.5);
+      position: relative; z-index: 1;
+    }
+    .breadcrumb a {
+      color: rgba(240,250,249,0.5); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .breadcrumb a:hover { color: rgba(240,250,249,0.9); }
+    .breadcrumb-sep { font-size: 10px; }
+    .breadcrumb-current {
+      color: rgba(240,250,249,0.85);
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; max-width: 300px;
+    }
     .loading { text-align: center; padding: 4rem 0; color: var(--text-muted-dark); }
     .spinner { width: 32px; height: 32px; margin: 0 auto 1rem; border: 2px solid rgba(255,255,255,0.15); border-top-color: var(--blush-300); border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -235,6 +252,12 @@
     </div>
   </div>
 </header>
+
+<div class="breadcrumb" id="breadcrumb" style="display:none;">
+  <a href="letters.html">목록</a>
+  <span class="breadcrumb-sep">›</span>
+  <span class="breadcrumb-current" id="breadcrumb-title">편지</span>
+</div>
 
 <main>
   <div id="content">
@@ -301,6 +324,12 @@ function renderLetter() {
         return txt ? `<div class="prayer-item">${i+1}. ${txt}</div>` : '';
       }).filter(Boolean).join('')}
     </div>` : '';
+
+  // Update breadcrumb
+  const bc = document.getElementById('breadcrumb');
+  const bcTitle = document.getElementById('breadcrumb-title');
+  if (bc) bc.style.display = 'flex';
+  if (bcTitle) bcTitle.textContent = title;
 
   document.getElementById('content').innerHTML = `
     <div class="letter-wrap">
