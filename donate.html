@@ -152,14 +152,14 @@
         <span class="logo-en">PRAYER LETTER</span>
       </div>
     </a>
-    <a href="javascript:history.back()" class="back-link">← 돌아가기</a>
+    <a href="javascript:history.back()" class="back-link" id="backLink">← 돌아가기</a>
   </div>
 </header>
 
 <main>
   <div class="page-title">
-    <h1>사역을 함께해 주세요</h1>
-    <p>Abigail의 ETI 영어교육 선교를 후원해 주시는 모든 분들께 감사드립니다.<br>아래 방법으로 후원에 참여하실 수 있습니다.</p>
+    <h1 id="pageTitle">사역을 함께해 주세요</h1>
+    <p id="pageDesc">Abigail의 ETI 영어교육 선교를 후원해 주시는 모든 분들께 감사드립니다.<br>아래 방법으로 후원에 참여하실 수 있습니다.</p>
   </div>
 
   <div class="donate-grid">
@@ -171,8 +171,8 @@
         <div class="donate-card-tag">Korean Church</div>
       </div>
       <div class="donate-card-body">
-        <div class="donate-card-desc">교회를 통해 후원하시는 분들을 위한 방법입니다. 링크를 클릭해 주세요.</div>
-        <a href="#" class="donate-btn">후원하기 →</a>
+        <div class="donate-card-desc" id="desc1">교회를 통해 후원하시는 분들을 위한 방법입니다. 링크를 클릭해 주세요.</div>
+        <a href="#" class="donate-btn" id="btn1">후원하기 →</a>
       </div>
     </div>
 
@@ -183,8 +183,8 @@
         <div class="donate-card-tag">US Mission</div>
       </div>
       <div class="donate-card-body">
-        <div class="donate-card-desc">미국에서 후원하시는 분들을 위한 공식 선교 후원 채널입니다.</div>
-        <a href="#" class="donate-btn">Donate →</a>
+        <div class="donate-card-desc" id="desc2">미국에서 후원하시는 분들을 위한 공식 선교 후원 채널입니다.</div>
+        <a href="#" class="donate-btn" id="btn2">Donate →</a>
       </div>
     </div>
 
@@ -195,8 +195,8 @@
         <div class="donate-card-tag">International</div>
       </div>
       <div class="donate-card-body">
-        <div class="donate-card-desc">해외 어디서나 간편하게 후원하실 수 있는 PayPal 결제입니다.</div>
-        <a href="https://paypal.me/AbigailsMission" target="_blank" class="donate-btn paypal">PayPal로 후원 →</a>
+        <div class="donate-card-desc" id="desc3">해외 어디서나 간편하게 후원하실 수 있는 PayPal 결제입니다.</div>
+        <a href="https://paypal.me/AbigailsMission" target="_blank" class="donate-btn paypal" id="btn3">PayPal로 후원 →</a>
       </div>
     </div>
 
@@ -204,6 +204,33 @@
 
   <div class="footer-copy">© 2026 Abigail's Prayer Letter · All rights reserved</div>
 </main>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const isEn = params.get('lang') === 'en';
+
+  if (isEn) {
+    document.documentElement.lang = 'en';
+    document.title = 'Support · Abigail\'s Prayer Letter';
+
+    document.getElementById('backLink').textContent = '← Back';
+    document.getElementById('pageTitle').textContent = 'Partner in Ministry';
+    document.getElementById('pageDesc').innerHTML =
+      'Thank you for supporting Abigail\'s ETI English education mission.<br>Choose one of the options below to give.';
+
+    document.getElementById('desc1').textContent =
+      'For supporters giving through a Korean church. Click the link below.';
+    document.getElementById('btn1').textContent = 'Give →';
+
+    document.getElementById('desc2').textContent =
+      'The official mission giving channel for supporters in the United States.';
+    // btn2 already says "Donate →"
+
+    document.getElementById('desc3').textContent =
+      'Give easily from anywhere in the world via PayPal.';
+    document.getElementById('btn3').textContent = 'Give via PayPal →';
+  }
+</script>
 
 </body>
 </html>
