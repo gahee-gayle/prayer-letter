@@ -383,7 +383,7 @@ function letterCard(l, isEn, t) {
   const title = isEn && l.title_en ? l.title_en : l.title;
   const locale = isEn ? 'en-US' : 'ko-KR';
   const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' }) : '';
-  const langParam = isEn ? '?lang=en' : '';
+  const langParam = isEn ? '&lang=en' : '';
   const adminBtns = isAdmin ? `
     <div class="admin-btns" onclick="event.preventDefault()">
       <button class="admin-edit-btn" onclick="editLetter('${l.slug}')">${t.edit}</button>
