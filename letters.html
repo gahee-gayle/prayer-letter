@@ -45,16 +45,21 @@
     .cross::before { width: 3px; height: 34px; left: 9.5px; top: 0; }
     .cross::after { width: 22px; height: 3px; left: 0; top: 10px; }
     .logo-text { font-family: var(--font-serif); font-size: 15px; color: var(--text-on-dark); }
+    .lang-row {
+      display: flex; justify-content: flex-end; align-items: center;
+      padding-bottom: 8px; margin-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
     .lang-toggle { display: flex; gap: 6px; }
     .lang-btn {
-      padding: 6px 14px; border-radius: 999px;
-      font-family: var(--font-sans); font-size: 13px;
-      cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 13px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 12px;
+      cursor: pointer; border: 1px solid rgba(255,255,255,0.18);
       background: transparent; color: var(--text-muted-dark);
       transition: all 0.15s;
     }
-    .lang-btn.active { background: var(--blush-300); color: var(--teal-900); border-color: var(--blush-300); font-weight: 500; }
-    .lang-btn:hover:not(.active) { background: rgba(255,255,255,0.1); color: var(--text-on-dark); }
+    .lang-btn.active { background: rgba(45,158,142,0.25); color: var(--text-on-dark); border-color: var(--teal-400); font-weight: 500; }
+    .lang-btn:hover:not(.active) { background: rgba(255,255,255,0.08); color: var(--text-on-dark); }
     .write-btn {
       padding: 8px 20px;
       background: var(--blush-300); color: var(--teal-900);
@@ -222,10 +227,6 @@
       </div>
     </a>
     <div style="display:flex;gap:8px;align-items:center;">
-      <div class="lang-toggle">
-        <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">한국어</button>
-        <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
-      </div>
       <a href="donate.html" id="donate-link" style="font-family:var(--font-sans);font-size:13px;color:var(--teal-900);background:var(--blush-300);padding:7px 16px;border-radius:999px;text-decoration:none;font-weight:600;transition:background 0.15s;" onmouseover="this.style.background='#e8a0a8'" onmouseout="this.style.background='#f0bec4'">♥ 후원하기</a>
       <a href="index.html" id="write-btn-header" class="write-btn" style="display:none;">편지 쓰기</a>
     </div>
@@ -311,8 +312,6 @@ const T = {
 function setLang(lang) {
   currentLang = lang;
   sessionStorage.setItem('pl_lang', lang);
-  document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
-  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   const t = T[lang];
   // update header texts
   const donateLink = document.getElementById('donate-link');
@@ -349,7 +348,14 @@ function renderLetters(letters) {
   const isEn = currentLang === 'en';
   const content = document.getElementById('content');
   if (!letters.length) {
-    content.innerHTML = `<div class="empty"><div class="empty-icon">✉</div><p>${t.empty}</p></div>`;
+    content.innerHTML = `
+      <div class="lang-row">
+        <div class="lang-toggle">
+          <button class="lang-btn ${currentLang==='ko'?'active':''}" onclick="setLang('ko')">한국어</button>
+          <button class="lang-btn ${currentLang==='en'?'active':''}" onclick="setLang('en')">English</button>
+        </div>
+      </div>
+      <div class="empty"><div class="empty-icon">✉</div><p>${t.empty}</p></div>`;
     return;
   }
   const byYear = {};
@@ -359,7 +365,14 @@ function renderLetters(letters) {
     byYear[year].push(l);
   });
   const years = Object.keys(byYear).sort((a,b) => b - a);
-  content.innerHTML = years.map(year => `
+  const langRow = `
+    <div class="lang-row">
+      <div class="lang-toggle">
+        <button class="lang-btn ${currentLang==='ko'?'active':''}" onclick="setLang('ko')">한국어</button>
+        <button class="lang-btn ${currentLang==='en'?'active':''}" onclick="setLang('en')">English</button>
+      </div>
+    </div>`;
+  content.innerHTML = langRow + years.map(year => `
     <div class="year-group">
       <div class="year-label">${year}</div>
       <div class="letter-grid">
@@ -457,8 +470,6 @@ async function deleteLetter(slug, title) {
 // apply initial lang state
 (function() {
   const t = T[currentLang];
-  document.getElementById('btn-ko').classList.toggle('active', currentLang === 'ko');
-  document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
   const donateLink = document.getElementById('donate-link');
   if (donateLink) {
     donateLink.textContent = t.donate;
