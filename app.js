@@ -26,6 +26,7 @@ async function checkEditMode() {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const data = await res.json();
+    console.log('checkEditMode data:', slug, 'main_photo:', data[0]?.main_photo ? '있음('+data[0].main_photo.length+'자)' : '없음');
     if (!data.length) return;
     const l = data[0];
 
