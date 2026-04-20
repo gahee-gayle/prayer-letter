@@ -514,7 +514,7 @@ function renderBlockEditor() {
         ${block.photos.map((src, j) => `
           <div class="block-photo-wrap">
             <img src="${src}" alt="">
-            <button class="rm" onclick="removeBlockPhoto(${i},${j})">✕</button>
+            <button type="button" class="rm" onclick="removeBlockPhoto(${i},${j}); event.stopPropagation();">✕</button>
           </div>`).join('')}
         <button class="block-add-photo" onclick="triggerBlockPhoto(${i})" title="사진 추가">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
