@@ -22,7 +22,7 @@ async function checkEditMode() {
   if (btn) btn.textContent = '업데이트';
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=*`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=slug,title,title_en,date,greeting,greeting_en,body_blocks,prayer_items,closing,closing_en,main_photo`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const data = await res.json();
@@ -677,6 +677,8 @@ function saveToLocalStorage() {
 }
 
 function restoreFromLocalStorage() {
+  // 편집 모드일 때는 초안 복원 건너뜀 — checkEditMode가 DB에서 직접 불러옴
+  if (new URLSearchParams(location.search).get('edit')) return false;
   try {
     const raw = localStorage.getItem('prayerLetterDraft');
     if (!raw) return false;
