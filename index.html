@@ -91,6 +91,7 @@ if (sessionStorage.getItem('pl_auth') === '1') {
       <button class="tab-btn" data-tab="templates">템플릿</button>
     </nav>
     <div style="display:flex;gap:8px;align-items:center;">
+      <span id="autosave-indicator" style="font-family:var(--font-sans);font-size:12px;color:rgba(240,250,249,0.5);"></span>
       <a href="letters.html" style="font-family:var(--font-sans);font-size:13px;color:rgba(240,250,249,0.65);text-decoration:none;padding:7px 16px;border:1px solid rgba(255,255,255,0.15);border-radius:999px;transition:all 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">편지 목록</a>
       <button class="save-btn" id="save-btn">저장 & 공유</button>
     </div>

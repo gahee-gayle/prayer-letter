@@ -214,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPillGroups();
   setupToneCards();
   setupInputListeners();
+  restoreFromLocalStorage();
   syncAll();
 });
 
@@ -608,6 +609,59 @@ function removeMainPhoto(e) {
 function syncAll() {
   syncLivePreview();
   syncPreview();
+  saveToLocalStorage();
+}
+
+function saveToLocalStorage() {
+  try {
+    const data = {
+      title:      val('title'),
+      titleEn:    val('title-en'),
+      date:       val('date'),
+      greeting:   val('greeting'),
+      greetingEn: val('greeting-en'),
+      closing:    val('closing'),
+      closingEn:  val('closing-en'),
+      bodyBlocks: bodyBlocks.map(b => ({ textKo: b.textKo, textEn: b.textEn, photoLayout: b.photoLayout })),
+      prayerItems: prayerItems,
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem('prayerLetterDraft', JSON.stringify(data));
+    const indicator = document.getElementById('autosave-indicator');
+    if (indicator) {
+      indicator.textContent = '임시저장됨 ✓';
+      clearTimeout(indicator._t);
+      indicator._t = setTimeout(() => { indicator.textContent = ''; }, 2000);
+    }
+  } catch(e) {}
+}
+
+function restoreFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem('prayerLetterDraft');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+    setVal('title',       data.title);
+    setVal('title-en',    data.titleEn);
+    setVal('date',        data.date);
+    setVal('greeting',    data.greeting);
+    setVal('greeting-en', data.greetingEn);
+    setVal('closing',     data.closing);
+    setVal('closing-en',  data.closingEn);
+    if (data.bodyBlocks?.length) {
+      bodyBlocks = data.bodyBlocks.map(b => ({ textKo: b.textKo||'', textEn: b.textEn||'', photos: [], photoLayout: b.photoLayout||'full' }));
+    }
+    if (data.prayerItems?.length) prayerItems = data.prayerItems;
+    renderBlockEditor();
+    renderPrayerEditor();
+    syncAll();
+    if (data.savedAt) {
+      const t = new Date(data.savedAt).toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
+      const indicator = document.getElementById('autosave-indicator');
+      if (indicator) indicator.textContent = `마지막 저장: ${t}`;
+    }
+  } catch(e) {}
 }
 
 function syncLivePreview() {
