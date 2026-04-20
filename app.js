@@ -54,6 +54,8 @@ async function checkEditMode() {
       if (ph)    ph.style.display = 'none';
       if (pv)    pv.style.display = 'block';
       if (badge) badge.style.display = 'inline';
+      const input = document.getElementById('main-photo-input');
+      if (input) input.style.pointerEvents = 'none';
     }
 
     syncAll();
@@ -546,35 +548,44 @@ function triggerBlockPhoto(idx) {
   document.getElementById('block-file-' + idx).click();
 }
 
-async function uploadToStorage(file) {
-  const ext = file.name.split('.').pop() || 'jpg';
-  const filename = `${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`;
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/photos/${filename}`, {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': file.type,
-    },
-    body: file
+function compressImage(file, maxWidth = 1200, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        if (width > maxWidth) {
+          height = Math.round(height * maxWidth / width);
+          width = maxWidth;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
   });
-  if (!res.ok) throw new Error('Upload failed');
-  return `${SUPABASE_URL}/storage/v1/object/public/photos/${filename}`;
 }
 
 async function loadBlockPhotos(e, idx) {
   const files = Array.from(e.target.files).slice(0, 10 - bodyBlocks[idx].photos.length);
   if (!files.length) return;
   const btn = document.querySelector(`#block-${idx} .block-add-photo`);
-  if (btn) { btn.textContent = '업로드 중...'; btn.disabled = true; }
+  if (btn) { btn.textContent = '처리 중...'; btn.disabled = true; }
   try {
     for (const file of files) {
-      const url = await uploadToStorage(file);
-      bodyBlocks[idx].photos.push(url);
+      const dataUrl = await compressImage(file);
+      bodyBlocks[idx].photos.push(dataUrl);
     }
     renderBlockEditor(); syncAll();
   } catch(err) {
-    alert('사진 업로드 실패. 다시 시도해 주세요.');
+    alert('사진 처리 실패. 다시 시도해 주세요.');
   } finally {
     if (btn) { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>'; btn.disabled = false; }
   }
@@ -595,25 +606,29 @@ async function loadMainPhoto(e) {
   if (!file) return;
   const ph    = document.getElementById('main-photo-placeholder');
   const pv    = document.getElementById('main-photo-preview');
-  if (ph) ph.innerHTML = '<p style="padding:1rem;color:var(--teal-600)">업로드 중...</p>';
+  if (ph) ph.innerHTML = '<p style="padding:1rem;color:var(--teal-600)">처리 중...</p>';
   try {
-    const url = await uploadToStorage(file);
-    mainPhoto = url;
+    const dataUrl = await compressImage(file);
+    mainPhoto = dataUrl;
     const thumb = document.getElementById('main-photo-thumb');
     const badge = document.getElementById('main-photo-badge');
     if (thumb) thumb.src = mainPhoto;
     if (ph)    ph.style.display = 'none';
     if (pv)    pv.style.display = 'block';
     if (badge) badge.style.display = 'inline';
+    // 파일 input 비활성화 — 제거 버튼 클릭 방해 방지
+    const input = document.getElementById('main-photo-input');
+    if (input) input.style.pointerEvents = 'none';
     syncAll();
   } catch(err) {
-    alert('사진 업로드 실패. 다시 시도해 주세요.');
+    alert('사진 처리 실패. 다시 시도해 주세요.');
     if (ph) ph.style.display = 'flex';
   }
+  e.target.value = '';
 }
 
 function removeMainPhoto(e) {
-  if (e) e.preventDefault();
+  if (e) { e.preventDefault(); e.stopPropagation(); }
   mainPhoto = null;
   const thumb = document.getElementById('main-photo-thumb');
   const ph    = document.getElementById('main-photo-placeholder');
@@ -624,7 +639,7 @@ function removeMainPhoto(e) {
   if (ph)    ph.style.display = 'flex';
   if (pv)    pv.style.display = 'none';
   if (badge) badge.style.display = 'none';
-  if (input) input.value = '';
+  if (input) { input.value = ''; input.style.pointerEvents = 'auto'; }
   syncAll();
 }
 
