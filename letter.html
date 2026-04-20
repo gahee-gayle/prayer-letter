@@ -192,6 +192,54 @@
     }
     .donate-btn-inline:hover { background: var(--blush-400); }
 
+    /* ── Admin Modal ── */
+    .admin-modal-bg {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .admin-modal-bg.open { display: flex; }
+    .admin-modal {
+      background: var(--teal-800);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 2rem 2rem 1.5rem;
+      width: min(340px, 90vw);
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    .admin-modal-title {
+      font-family: var(--font-sans); font-size: 15px;
+      color: var(--text-on-dark); font-weight: 500;
+    }
+    .admin-modal-input {
+      width: 100%; padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1);
+      color: white; font-family: var(--font-sans); font-size: 15px;
+      letter-spacing: 0.2em; outline: none; text-align: center;
+    }
+    .admin-modal-input::placeholder { letter-spacing: 0.05em; color: rgba(255,255,255,0.4); }
+    .admin-modal-btns { display: flex; gap: 8px; width: 100%; }
+    .admin-modal-ok {
+      flex: 1; padding: 9px; border-radius: 999px;
+      background: var(--blush-300); color: var(--teal-900);
+      border: none; font-family: var(--font-sans); font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .admin-modal-ok:hover { background: var(--blush-400); }
+    .admin-modal-cancel {
+      flex: 1; padding: 9px; border-radius: 999px;
+      background: transparent; color: var(--text-muted-dark);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-family: var(--font-sans); font-size: 14px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .admin-modal-cancel:hover { background: rgba(255,255,255,0.08); }
+    .admin-modal-err { font-size: 13px; color: var(--blush-300); min-height: 18px; }
+
     /* ── Support Footer ── */
     .support-footer {
       margin-top: 2.5rem;
@@ -285,6 +333,21 @@
 </head>
 <body>
 <div class="bg-pattern"></div>
+
+<!-- 편집 비밀번호 모달 -->
+<div class="admin-modal-bg" id="admin-modal-bg" onclick="if(event.target===this)closeAdminModal()">
+  <div class="admin-modal">
+    <div class="admin-modal-title">✏️ 편집 — 비밀번호 확인</div>
+    <input class="admin-modal-input" type="password" id="admin-modal-pw"
+      placeholder="비밀번호 입력"
+      onkeydown="if(event.key==='Enter')confirmAdminPW()">
+    <div class="admin-modal-err" id="admin-modal-err"></div>
+    <div class="admin-modal-btns">
+      <button class="admin-modal-ok" onclick="confirmAdminPW()">확인</button>
+      <button class="admin-modal-cancel" onclick="closeAdminModal()">취소</button>
+    </div>
+  </div>
+</div>
 
 <div class="print-logo">
   <div class="print-cross"></div>
@@ -416,7 +479,7 @@ function renderLetter() {
     <div class="share-bar">
       <button class="share-btn" onclick="copyLink(this, ${isEn ? 'true' : 'false'})">${isEn ? 'Share Letter' : '편지 공유'}</button>
       <button class="share-btn" onclick="downloadPDF(${isEn ? 'true' : 'false'})">${isEn ? 'Save as PDF' : 'PDF 저장'}</button>
-      <a href="/?edit=${l.slug}" class="share-btn" style="text-decoration:none;">✏️ ${isEn ? 'Edit' : '편집'}</a>
+      <button class="share-btn" onclick="openAdminModal('${l.slug}')">✏️ ${isEn ? 'Edit' : '편집'}</button>
       <a href="donate.html${isEn ? '?lang=en' : ''}" class="donate-btn-inline">♥ ${isEn ? 'Support' : '후원하기'}</a>
     </div>`;
 }
@@ -466,6 +529,35 @@ function copyLink(btn, isEn) {
       btn.classList.remove('copied');
     }, 2000);
   });
+}
+
+let pendingEditSlug = null;
+
+function openAdminModal(slug) {
+  pendingEditSlug = slug;
+  document.getElementById('admin-modal-pw').value = '';
+  document.getElementById('admin-modal-err').textContent = '';
+  document.getElementById('admin-modal-bg').classList.add('open');
+  setTimeout(() => document.getElementById('admin-modal-pw').focus(), 50);
+}
+
+function closeAdminModal() {
+  document.getElementById('admin-modal-bg').classList.remove('open');
+  pendingEditSlug = null;
+}
+
+function confirmAdminPW() {
+  const pw = document.getElementById('admin-modal-pw').value;
+  if (pw === '7922') {
+    sessionStorage.setItem('pl_auth', '1');
+    closeAdminModal();
+    window.location.href = `index.html?edit=${pendingEditSlug}`;
+  } else {
+    const err = document.getElementById('admin-modal-err');
+    err.textContent = '비밀번호가 틀렸어요';
+    document.getElementById('admin-modal-pw').value = '';
+    setTimeout(() => { err.textContent = ''; }, 2000);
+  }
 }
 
 loadLetter();
