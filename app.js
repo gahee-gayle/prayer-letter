@@ -676,23 +676,23 @@ async function generateAI() {
   result.textContent = '생성 중...';
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const prompt =
+      `선교사 기도 편지 전문가. 아래로 기도 편지 작성.\n\n` +
+      `[제목] ${d.title}\n[본문KO] ${allKo || '없음'}\n[본문EN] ${allEn || '없음'}\n` +
+      `[기도제목] ${d.prayer || '없음'}\n[마무리] ${d.closing || '없음'}\n\n` +
+      `[톤] ${toneMap[aiTone]}\n[언어] ${langMap[aiLang]}\n\n` +
+      `ETI 영어교육 선교사(제주/해외). 인사→사역→감사→기도제목→마무리 순서. 따뜻하고 진심있게.`;
+
+    const resp = await fetch('https://aqgrnrhtqsxdrlljtsrk.supabase.co/functions/v1/translate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content:
-          `선교사 기도 편지 전문가. 아래로 기도 편지 작성.\n\n` +
-          `[제목] ${d.title}\n[본문KO] ${allKo || '없음'}\n[본문EN] ${allEn || '없음'}\n` +
-          `[기도제목] ${d.prayer || '없음'}\n[마무리] ${d.closing || '없음'}\n\n` +
-          `[톤] ${toneMap[aiTone]}\n[언어] ${langMap[aiLang]}\n\n` +
-          `ETI 영어교육 선교사(제주/해외). 인사→사역→감사→기도제목→마무리 순서. 따뜻하고 진심있게.`
-        }]
-      })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF'
+      },
+      body: JSON.stringify({ prompt })
     });
     const data = await resp.json();
-    result.textContent = (data.content || []).map(c => c.text || '').join('') || '오류가 발생했습니다.';
+    result.textContent = data.generated || '오류가 발생했습니다.';
   } catch {
     result.textContent = '오류가 발생했습니다. 다시 시도해 주세요.';
   }
