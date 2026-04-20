@@ -325,7 +325,7 @@
 
 <script>
 const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxZ3Jucmh0cXN4ZHJsbGp0c3JrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTY1NjUsImV4cCI6MjA5MTU3MjU2NX0.yeM2Biz1XWAfp9IRga3-SSiu2bokc3hpJT2QS86josk';
 let currentLang = 'ko';
 let letterData = null;
 
@@ -333,7 +333,7 @@ async function loadLetter() {
   const slug = new URLSearchParams(location.search).get('id');
   if (!slug) { document.getElementById('content').innerHTML = '<p style="color:white;text-align:center;padding:4rem">편지를 찾을 수 없어요.</p>'; return; }
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=slug,title,title_en,greeting,greeting_en,body_blocks,prayer_items,closing,closing_en,main_photo`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=slug,title,title_en,date,greeting,greeting_en,body_blocks,prayer_items,closing,closing_en,main_photo`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const data = await res.json();
@@ -341,6 +341,7 @@ async function loadLetter() {
     letterData = data[0];
     renderLetter();
   } catch(e) {
+    console.error('Letter load error:', e);
     document.getElementById('content').innerHTML = '<p style="color:white;text-align:center;padding:4rem">불러오기 실패.</p>';
   }
 }
@@ -415,7 +416,7 @@ function renderLetter() {
     <div class="share-bar">
       <button class="share-btn" onclick="copyLink(this, ${isEn ? 'true' : 'false'})">${isEn ? 'Share Letter' : '편지 공유'}</button>
       <button class="share-btn" onclick="downloadPDF(${isEn ? 'true' : 'false'})">${isEn ? 'Save as PDF' : 'PDF 저장'}</button>
-      <a href="/?edit=${slug}" class="share-btn" style="text-decoration:none;">✏️ ${isEn ? 'Edit' : '편집'}</a>
+      <a href="/?edit=${l.slug}" class="share-btn" style="text-decoration:none;">✏️ ${isEn ? 'Edit' : '편집'}</a>
       <a href="donate.html${isEn ? '?lang=en' : ''}" class="donate-btn-inline">♥ ${isEn ? 'Support' : '후원하기'}</a>
     </div>`;
 }
