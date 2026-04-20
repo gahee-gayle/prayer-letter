@@ -550,7 +550,8 @@ function copyLink(btn, isEn) {
 let pendingEditSlug = null;
 
 function openAdminModal(slug) {
-  pendingEditSlug = slug;
+  console.log('openAdminModal called with slug:', slug, '/ currentSlug:', currentSlug);
+  pendingEditSlug = slug || currentSlug;
   document.getElementById('admin-modal-pw').value = '';
   document.getElementById('admin-modal-err').textContent = '';
   document.getElementById('admin-modal-bg').classList.add('open');
