@@ -327,11 +327,16 @@ function renderPrayerEditor() {
         <input type="text"
           value="${escHtml(item.ko)}"
           placeholder="기도 제목 (한국어)"
+          id="prayer-ko-${i}"
           oninput="prayerItems[${i}].ko=this.value; syncAll()">
-        <input type="text"
-          value="${escHtml(item.en)}"
-          placeholder="Prayer request (English)"
-          oninput="prayerItems[${i}].en=this.value; syncAll()">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <input type="text" style="flex:1;"
+            value="${escHtml(item.en)}"
+            id="prayer-en-${i}"
+            placeholder="Prayer request (English)"
+            oninput="prayerItems[${i}].en=this.value; syncAll()">
+          <button class="translate-btn" onclick="translatePrayer(${i})">🔤</button>
+        </div>
       </div>
     </div>`).join('');
 }
@@ -351,6 +356,48 @@ function setBlockLayout(idx, layout) {
   syncAll();
 }
 
+async function callTranslateAPI(text) {
+  const res = await fetch('/api/translate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text })
+  });
+  const data = await res.json();
+  return data?.translated || null;
+}
+
+async function translateField(sourceId, targetId) {
+  const source = document.getElementById(sourceId);
+  const target = document.getElementById(targetId);
+  if (!source?.value.trim()) { alert('한국어를 먼저 입력해 주세요.'); return; }
+  const btn = target?.previousElementSibling?.querySelector('.translate-btn')
+           || target?.parentElement?.querySelector('.translate-btn');
+  if (btn) { btn.textContent = '...'; btn.disabled = true; }
+  try {
+    const translated = await callTranslateAPI(source.value);
+    if (translated) { target.value = translated; target.dispatchEvent(new Event('input')); }
+    else alert('번역 실패. 다시 시도해 주세요.');
+  } catch { alert('번역 중 오류가 발생했습니다.'); }
+  finally { if (btn) { btn.textContent = '🔤 번역'; btn.disabled = false; } }
+}
+
+async function translatePrayer(idx) {
+  const koInput = document.getElementById('prayer-ko-' + idx);
+  const enInput = document.getElementById('prayer-en-' + idx);
+  const btn = enInput?.parentElement?.querySelector('.translate-btn');
+  if (!koInput?.value.trim()) { alert('한국어를 먼저 입력해 주세요.'); return; }
+  if (btn) { btn.textContent = '...'; btn.disabled = true; }
+  try {
+    const translated = await callTranslateAPI(koInput.value);
+    if (translated) {
+      prayerItems[idx].en = translated;
+      if (enInput) enInput.value = translated;
+      syncAll();
+    } else alert('번역 실패. 다시 시도해 주세요.');
+  } catch { alert('번역 중 오류가 발생했습니다.'); }
+  finally { if (btn) { btn.textContent = '🔤'; btn.disabled = false; } }
+}
+
 async function translateBlock(idx) {
   const text = bodyBlocks[idx].textKo;
   if (!text || !text.trim()) { alert('한국어 텍스트를 먼저 입력해 주세요.'); return; }
@@ -358,13 +405,7 @@ async function translateBlock(idx) {
   const ta  = document.getElementById('block-en-' + idx);
   if (btn) { btn.textContent = '번역 중...'; btn.disabled = true; }
   try {
-    const res  = await fetch('/api/translate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
-    });
-    const data = await res.json();
-    const translated = data?.translated;
+    const translated = await callTranslateAPI(text);
     if (translated) {
       bodyBlocks[idx].textEn = translated;
       if (ta) ta.value = translated;

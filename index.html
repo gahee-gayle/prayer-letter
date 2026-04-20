@@ -117,7 +117,10 @@ if (sessionStorage.getItem('pl_auth') === '1') {
             </div>
           </div>
           <div class="field">
-            <label>제목 (English)</label>
+            <label style="display:flex;align-items:center;justify-content:space-between;">
+              <span>제목 (English)</span>
+              <button class="translate-btn" onclick="translateField('title','title-en')">🔤 번역</button>
+            </label>
             <input type="text" id="title-en" placeholder="April 2025 Prayer Letter" oninput="syncAll()">
           </div>
           <div class="form-row two-col">
@@ -126,7 +129,10 @@ if (sessionStorage.getItem('pl_auth') === '1') {
               <input type="text" id="greeting" placeholder="사랑하는 후원자님들께">
             </div>
             <div class="field">
-              <label>Greeting (English)</label>
+              <label style="display:flex;align-items:center;justify-content:space-between;">
+                <span>Greeting (English)</span>
+                <button class="translate-btn" onclick="translateField('greeting','greeting-en')">🔤 번역</button>
+              </label>
               <input type="text" id="greeting-en" placeholder="Dear friends and supporters,">
             </div>
           </div>
@@ -180,7 +186,10 @@ if (sessionStorage.getItem('pl_auth') === '1') {
               <input type="text" id="closing" placeholder="주님의 은혜 안에서, Abigail 드림" oninput="syncAll()">
             </div>
             <div class="field">
-              <label>Closing (English)</label>
+              <label style="display:flex;align-items:center;justify-content:space-between;">
+                <span>Closing (English)</span>
+                <button class="translate-btn" onclick="translateField('closing','closing-en')">🔤 번역</button>
+              </label>
               <input type="text" id="closing-en" placeholder="In His grace, Abigail" oninput="syncAll()">
             </div>
           </div>
