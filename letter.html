@@ -369,9 +369,20 @@
         <span style="font-size:9.5px;color:rgba(240,250,249,0.6);letter-spacing:0.28em;text-transform:uppercase;">Prayer Letter</span>
       </div>
     </a>
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('ko',this)">한국어</button>
-      <button class="lang-btn" onclick="setLang('en',this)">English</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="header-edit-btn" onclick="openAdminModal(currentSlug)" style="
+        display:none;
+        padding:7px 16px; border-radius:999px;
+        font-family:var(--font-sans); font-size:13px;
+        cursor:pointer; border:1px solid rgba(255,255,255,0.2);
+        background:transparent; color:rgba(240,250,249,0.6);
+        transition:all 0.15s;
+      " onmouseover="this.style.color='rgba(240,250,249,0.95)';this.style.background='rgba(255,255,255,0.1)'"
+         onmouseout="this.style.color='rgba(240,250,249,0.6)';this.style.background='transparent'">편집</button>
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('ko',this)">한국어</button>
+        <button class="lang-btn" onclick="setLang('en',this)">English</button>
+      </div>
     </div>
   </div>
 </header>
@@ -390,6 +401,7 @@
 const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxZ3Jucmh0cXN4ZHJsbGp0c3JrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTY1NjUsImV4cCI6MjA5MTU3MjU2NX0.yeM2Biz1XWAfp9IRga3-SSiu2bokc3hpJT2QS86josk';
 let currentLang = 'ko';
+let currentSlug = null;
 let letterData = null;
 
 async function loadLetter() {
@@ -402,6 +414,9 @@ async function loadLetter() {
     const data = await res.json();
     if (!data.length) { document.getElementById('content').innerHTML = '<p style="color:white;text-align:center;padding:4rem">편지를 찾을 수 없어요.</p>'; return; }
     letterData = data[0];
+    currentSlug = slug;
+    const editBtn = document.getElementById('header-edit-btn');
+    if (editBtn) editBtn.style.display = 'inline-block';
     renderLetter();
   } catch(e) {
     console.error('Letter load error:', e);
@@ -479,7 +494,6 @@ function renderLetter() {
     <div class="share-bar">
       <button class="share-btn" onclick="copyLink(this, ${isEn ? 'true' : 'false'})">${isEn ? 'Share Letter' : '편지 공유'}</button>
       <button class="share-btn" onclick="downloadPDF(${isEn ? 'true' : 'false'})">${isEn ? 'Save as PDF' : 'PDF 저장'}</button>
-      <button class="share-btn" onclick="openAdminModal('${l.slug}')">✏️ ${isEn ? 'Edit' : '편집'}</button>
       <a href="donate.html${isEn ? '?lang=en' : ''}" class="donate-btn-inline">♥ ${isEn ? 'Support' : '후원하기'}</a>
     </div>`;
 }
