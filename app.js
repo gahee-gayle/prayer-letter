@@ -488,14 +488,12 @@ function renderBlockEditor() {
           : ''}
       </div>
       <div class="field" style="margin-bottom:8px;">
-        <label style="display:flex;align-items:center;justify-content:space-between;">
-          <span>한국어</span>
-          <button class="translate-btn" id="refine-btn-${i}" onclick="refineBlock(${i})">✏️ 다듬기</button>
-        </label>
+        <label>한국어</label>
         <textarea rows="4"
           placeholder="사역 이야기 (한국어)..."
           oninput="bodyBlocks[${i}].textKo=this.value; syncAll()"
         >${escHtml(block.textKo)}</textarea>
+        <button class="translate-btn" id="refine-btn-${i}" onclick="refineBlock(${i})" style="margin-top:4px;">✏️ 다듬기</button>
       </div>
       <div class="field" style="margin-bottom:8px;">
         <label style="display:flex;align-items:center;justify-content:space-between;">
