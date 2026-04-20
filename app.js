@@ -365,8 +365,15 @@ async function callTranslateAPI(text) {
     },
     body: JSON.stringify({ text })
   });
-  const data = await res.json();
-  return data?.translated || null;
+  const raw = await res.text();
+  console.log('translate response:', res.status, raw);
+  try {
+    const data = JSON.parse(raw);
+    return data?.translated || null;
+  } catch(e) {
+    console.error('parse error:', e, raw);
+    return null;
+  }
 }
 
 async function translateField(sourceId, targetId) {
