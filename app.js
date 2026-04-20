@@ -207,14 +207,16 @@ let prayerItems = [{ko:'', en:''}, {ko:'', en:''}, {ko:'', en:''}];
 ═══════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('date').valueAsDate = new Date();
-  addBodyBlock();   // start with one block
-  renderPrayerEditor();
   renderSavedList();
   setupTabNav();
   setupPillGroups();
   setupToneCards();
   setupInputListeners();
-  restoreFromLocalStorage();
+  const restored = restoreFromLocalStorage();
+  if (!restored) {
+    addBodyBlock();   // only add empty block if no saved draft
+    renderPrayerEditor();
+  }
   syncAll();
 });
 
@@ -639,7 +641,7 @@ function saveToLocalStorage() {
 function restoreFromLocalStorage() {
   try {
     const raw = localStorage.getItem('prayerLetterDraft');
-    if (!raw) return;
+    if (!raw) return false;
     const data = JSON.parse(raw);
     const setVal = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
     setVal('title',       data.title);
@@ -661,7 +663,8 @@ function restoreFromLocalStorage() {
       const indicator = document.getElementById('autosave-indicator');
       if (indicator) indicator.textContent = `마지막 저장: ${t}`;
     }
-  } catch(e) {}
+    return true;
+  } catch(e) { return false; }
 }
 
 function syncLivePreview() {
