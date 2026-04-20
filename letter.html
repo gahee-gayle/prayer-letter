@@ -415,6 +415,7 @@ function renderLetter() {
     <div class="share-bar">
       <button class="share-btn" onclick="copyLink(this, ${isEn ? 'true' : 'false'})">${isEn ? 'Share Letter' : '편지 공유'}</button>
       <button class="share-btn" onclick="downloadPDF(${isEn ? 'true' : 'false'})">${isEn ? 'Save as PDF' : 'PDF 저장'}</button>
+      <a href="/?edit=${slug}" class="share-btn" style="text-decoration:none;">✏️ ${isEn ? 'Edit' : '편집'}</a>
       <a href="donate.html${isEn ? '?lang=en' : ''}" class="donate-btn-inline">♥ ${isEn ? 'Support' : '후원하기'}</a>
     </div>`;
 }
