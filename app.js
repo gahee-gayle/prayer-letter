@@ -357,9 +357,12 @@ function setBlockLayout(idx, layout) {
 }
 
 async function callTranslateAPI(text) {
-  const res = await fetch('/api/translate', {
+  const res = await fetch('https://aqgrnrhtqsxdrlljtsrk.supabase.co/functions/v1/translate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF'
+    },
     body: JSON.stringify({ text })
   });
   const data = await res.json();
