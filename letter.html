@@ -459,18 +459,6 @@ function renderLetter() {
 
   document.getElementById('content').innerHTML = `
     <div style="position:relative;">
-    <button onclick="openAdminModal('${l.slug}')" style="
-      position:absolute; top:12px; right:12px; z-index:10;
-      padding:6px 16px; border-radius:999px;
-      font-family:var(--font-sans); font-size:12px; font-weight:500;
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,0.25);
-      background:rgba(10,56,50,0.72);
-      color:rgba(240,250,249,0.75);
-      backdrop-filter:blur(8px);
-      transition:all 0.15s;
-      " onmouseover="this.style.color='rgba(240,250,249,1)';this.style.background='rgba(10,56,50,0.92)'"
-         onmouseout="this.style.color='rgba(240,250,249,0.75)';this.style.background='rgba(10,56,50,0.72)'">편집</button>
     <div class="letter-wrap">
       <div class="letter-header ${l.main_photo ? '' : 'no-photo'}">
         <div class="lh-logo">
@@ -482,9 +470,20 @@ function renderLetter() {
         </div>
         ${l.main_photo ? `<img class="lh-photo" src="${l.main_photo}" alt=""><div class="lh-overlay"></div>` : ''}
       </div>
-      <div class="letter-title-bar">
+      <div class="letter-title-bar" style="position:relative;">
         <div class="lh-title">${title}</div>
         <div class="lh-date">${dateStr}</div>
+        <button onclick="openAdminModal('${l.slug}')" style="
+          position:absolute; top:50%; right:1.25rem; transform:translateY(-50%);
+          padding:5px 14px; border-radius:999px;
+          font-family:var(--font-sans); font-size:12px; font-weight:500;
+          cursor:pointer;
+          border:1px solid var(--cream-200);
+          background:var(--cream-100);
+          color:var(--text-secondary);
+          transition:all 0.15s;
+        " onmouseover="this.style.background='var(--teal-100)';this.style.color='var(--teal-800)';this.style.borderColor='var(--teal-200)'"
+           onmouseout="this.style.background='var(--cream-100)';this.style.color='var(--text-secondary)';this.style.borderColor='var(--cream-200)'">편집</button>
       </div>
       <div class="letter-body">
         ${greeting ? `<div class="letter-greeting">${greeting}</div>` : ''}
