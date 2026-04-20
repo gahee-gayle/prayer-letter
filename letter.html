@@ -370,15 +370,6 @@
       </div>
     </a>
     <div style="display:flex;align-items:center;gap:8px;">
-      <button id="header-edit-btn" onclick="openAdminModal(currentSlug)" style="
-        display:none;
-        padding:7px 16px; border-radius:999px;
-        font-family:var(--font-sans); font-size:13px;
-        cursor:pointer; border:1px solid rgba(255,255,255,0.2);
-        background:transparent; color:rgba(240,250,249,0.6);
-        transition:all 0.15s;
-      " onmouseover="this.style.color='rgba(240,250,249,0.95)';this.style.background='rgba(255,255,255,0.1)'"
-         onmouseout="this.style.color='rgba(240,250,249,0.6)';this.style.background='transparent'">편집</button>
       <div class="lang-toggle">
         <button class="lang-btn active" onclick="setLang('ko',this)">한국어</button>
         <button class="lang-btn" onclick="setLang('en',this)">English</button>
@@ -415,8 +406,6 @@ async function loadLetter() {
     if (!data.length) { document.getElementById('content').innerHTML = '<p style="color:white;text-align:center;padding:4rem">편지를 찾을 수 없어요.</p>'; return; }
     letterData = data[0];
     currentSlug = slug;
-    const editBtn = document.getElementById('header-edit-btn');
-    if (editBtn) editBtn.style.display = 'inline-block';
     renderLetter();
   } catch(e) {
     console.error('Letter load error:', e);
@@ -469,6 +458,19 @@ function renderLetter() {
   if (bcLink) bcLink.textContent = isEn ? '← Back to Letters' : '← 목록으로 돌아가기';
 
   document.getElementById('content').innerHTML = `
+    <div style="position:relative;">
+    <button onclick="openAdminModal('${l.slug}')" style="
+      position:absolute; top:12px; right:12px; z-index:10;
+      padding:6px 16px; border-radius:999px;
+      font-family:var(--font-sans); font-size:12px; font-weight:500;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,0.25);
+      background:rgba(10,56,50,0.72);
+      color:rgba(240,250,249,0.75);
+      backdrop-filter:blur(8px);
+      transition:all 0.15s;
+      " onmouseover="this.style.color='rgba(240,250,249,1)';this.style.background='rgba(10,56,50,0.92)'"
+         onmouseout="this.style.color='rgba(240,250,249,0.75)';this.style.background='rgba(10,56,50,0.72)'">✏️ 편집</button>
     <div class="letter-wrap">
       <div class="letter-header ${l.main_photo ? '' : 'no-photo'}">
         <div class="lh-logo">
@@ -490,6 +492,7 @@ function renderLetter() {
         ${prayerHtml}
       </div>
       <div class="letter-footer">${closing || ''}</div>
+    </div>
     </div>
     <div class="share-bar">
       <button class="share-btn" onclick="copyLink(this, ${isEn ? 'true' : 'false'})">${isEn ? 'Share Letter' : '편지 공유'}</button>
