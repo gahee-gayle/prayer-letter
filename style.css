@@ -818,6 +818,15 @@ textarea { resize: vertical; line-height: 1.75; }
 }
 .layout-btn.active { background: var(--teal-800); color: white; border-color: var(--teal-800); }
 
+/* translate button */
+.translate-btn {
+  padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--teal-400); background: white; color: var(--teal-700);
+  cursor: pointer; transition: all 0.15s;
+}
+.translate-btn:hover { background: var(--teal-50); }
+.translate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* main photo */
 #fv-main-img {
   width: 100%; max-height: 560px;

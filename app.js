@@ -351,6 +351,32 @@ function setBlockLayout(idx, layout) {
   syncAll();
 }
 
+async function translateBlock(idx) {
+  const text = bodyBlocks[idx].textKo;
+  if (!text || !text.trim()) { alert('한국어 텍스트를 먼저 입력해 주세요.'); return; }
+  const btn = document.getElementById('trans-btn-' + idx);
+  const ta  = document.getElementById('block-en-' + idx);
+  if (btn) { btn.textContent = '번역 중...'; btn.disabled = true; }
+  try {
+    const url = 'https://api.mymemory.translated.net/get?q='
+      + encodeURIComponent(text) + '&langpair=ko|en';
+    const res  = await fetch(url);
+    const data = await res.json();
+    const translated = data?.responseData?.translatedText;
+    if (translated) {
+      bodyBlocks[idx].textEn = translated;
+      if (ta) ta.value = translated;
+      syncAll();
+    } else {
+      alert('번역 실패. 다시 시도해 주세요.');
+    }
+  } catch (e) {
+    alert('번역 중 오류가 발생했습니다.');
+  } finally {
+    if (btn) { btn.textContent = '🔤 번역'; btn.disabled = false; }
+  }
+}
+
 function removeBodyBlock(idx) {
   bodyBlocks.splice(idx, 1);
   renderBlockEditor();
@@ -377,8 +403,11 @@ function renderBlockEditor() {
         >${escHtml(block.textKo)}</textarea>
       </div>
       <div class="field" style="margin-bottom:8px;">
-        <label>English</label>
-        <textarea rows="4"
+        <label style="display:flex;align-items:center;justify-content:space-between;">
+          <span>English</span>
+          <button class="translate-btn" onclick="translateBlock(${i})" id="trans-btn-${i}">🔤 번역</button>
+        </label>
+        <textarea rows="4" id="block-en-${i}"
           placeholder="Ministry story (English)..."
           oninput="bodyBlocks[${i}].textEn=this.value; syncAll()"
         >${escHtml(block.textEn)}</textarea>
