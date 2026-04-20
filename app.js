@@ -358,11 +358,13 @@ async function translateBlock(idx) {
   const ta  = document.getElementById('block-en-' + idx);
   if (btn) { btn.textContent = '번역 중...'; btn.disabled = true; }
   try {
-    const url = 'https://api.mymemory.translated.net/get?q='
-      + encodeURIComponent(text) + '&langpair=ko|en';
-    const res  = await fetch(url);
+    const res  = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
     const data = await res.json();
-    const translated = data?.responseData?.translatedText;
+    const translated = data?.translated;
     if (translated) {
       bodyBlocks[idx].textEn = translated;
       if (ta) ta.value = translated;
