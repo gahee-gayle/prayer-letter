@@ -324,11 +324,14 @@ function renderPrayerEditor() {
           : ''}
       </div>
       <div class="prayer-item-fields">
-        <input type="text"
-          value="${escHtml(item.ko)}"
-          placeholder="기도 제목 (한국어)"
-          id="prayer-ko-${i}"
-          oninput="prayerItems[${i}].ko=this.value; syncAll()">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <input type="text" style="flex:1;"
+            value="${escHtml(item.ko)}"
+            placeholder="기도 제목 (한국어)"
+            id="prayer-ko-${i}"
+            oninput="prayerItems[${i}].ko=this.value; syncAll()">
+          <button class="translate-btn" id="refine-prayer-btn-${i}" onclick="refinePrayer(${i})">✏️</button>
+        </div>
         <div style="display:flex;align-items:center;gap:6px;">
           <input type="text" style="flex:1;"
             value="${escHtml(item.en)}"
@@ -356,24 +359,60 @@ function setBlockLayout(idx, layout) {
   syncAll();
 }
 
-async function callTranslateAPI(text) {
+async function callSupabase(payload) {
   const res = await fetch('https://aqgrnrhtqsxdrlljtsrk.supabase.co/functions/v1/translate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer sb_publishable_sSXz7XiLGhE8n4CbHFBX-A_bPndNsRF'
     },
-    body: JSON.stringify({ text })
+    body: JSON.stringify(payload)
   });
   const raw = await res.text();
-  console.log('translate response:', res.status, raw);
+  try { return JSON.parse(raw); }
+  catch(e) { console.error('parse error:', e, raw); return null; }
+}
+
+async function callTranslateAPI(text) {
+  const data = await callSupabase({ text });
+  return data?.translated || null;
+}
+
+async function callRefineAPI(text) {
+  const data = await callSupabase({ refine: text });
+  return data?.refined || null;
+}
+
+async function refineBlock(idx) {
+  const ta = document.querySelector(`#block-${idx} textarea`);
+  const btn = document.getElementById(`refine-btn-${idx}`);
+  if (!ta?.value.trim()) { alert('한국어를 먼저 입력해 주세요.'); return; }
+  if (btn) { btn.textContent = '...'; btn.disabled = true; }
   try {
-    const data = JSON.parse(raw);
-    return data?.translated || null;
-  } catch(e) {
-    console.error('parse error:', e, raw);
-    return null;
-  }
+    const refined = await callRefineAPI(ta.value);
+    if (refined) {
+      bodyBlocks[idx].textKo = refined;
+      ta.value = refined;
+      syncAll();
+    } else alert('다듬기 실패. 다시 시도해 주세요.');
+  } catch { alert('오류가 발생했습니다.'); }
+  finally { if (btn) { btn.textContent = '✏️ 다듬기'; btn.disabled = false; } }
+}
+
+async function refinePrayer(idx) {
+  const koInput = document.getElementById('prayer-ko-' + idx);
+  const btn = document.getElementById(`refine-prayer-btn-${idx}`);
+  if (!koInput?.value.trim()) { alert('한국어를 먼저 입력해 주세요.'); return; }
+  if (btn) { btn.textContent = '...'; btn.disabled = true; }
+  try {
+    const refined = await callRefineAPI(koInput.value);
+    if (refined) {
+      prayerItems[idx].ko = refined;
+      koInput.value = refined;
+      syncAll();
+    } else alert('다듬기 실패. 다시 시도해 주세요.');
+  } catch { alert('오류가 발생했습니다.'); }
+  finally { if (btn) { btn.textContent = '✏️'; btn.disabled = false; } }
 }
 
 async function translateField(sourceId, targetId) {
@@ -449,7 +488,10 @@ function renderBlockEditor() {
           : ''}
       </div>
       <div class="field" style="margin-bottom:8px;">
-        <label>한국어</label>
+        <label style="display:flex;align-items:center;justify-content:space-between;">
+          <span>한국어</span>
+          <button class="translate-btn" id="refine-btn-${i}" onclick="refineBlock(${i})">✏️ 다듬기</button>
+        </label>
         <textarea rows="4"
           placeholder="사역 이야기 (한국어)..."
           oninput="bodyBlocks[${i}].textKo=this.value; syncAll()"
