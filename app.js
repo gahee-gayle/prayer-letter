@@ -546,18 +546,38 @@ function triggerBlockPhoto(idx) {
   document.getElementById('block-file-' + idx).click();
 }
 
-function loadBlockPhotos(e, idx) {
-  const files = Array.from(e.target.files).slice(0, 10 - bodyBlocks[idx].photos.length);
-  let loaded = 0;
-  if (!files.length) return;
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      bodyBlocks[idx].photos.push(ev.target.result);
-      if (++loaded === files.length) { renderBlockEditor(); syncAll(); }
-    };
-    reader.readAsDataURL(file);
+async function uploadToStorage(file) {
+  const ext = file.name.split('.').pop() || 'jpg';
+  const filename = `${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`;
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/photos/${filename}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': file.type,
+    },
+    body: file
   });
+  if (!res.ok) throw new Error('Upload failed');
+  return `${SUPABASE_URL}/storage/v1/object/public/photos/${filename}`;
+}
+
+async function loadBlockPhotos(e, idx) {
+  const files = Array.from(e.target.files).slice(0, 10 - bodyBlocks[idx].photos.length);
+  if (!files.length) return;
+  const btn = document.querySelector(`#block-${idx} .block-add-photo`);
+  if (btn) { btn.textContent = '업로드 중...'; btn.disabled = true; }
+  try {
+    for (const file of files) {
+      const url = await uploadToStorage(file);
+      bodyBlocks[idx].photos.push(url);
+    }
+    renderBlockEditor(); syncAll();
+  } catch(err) {
+    alert('사진 업로드 실패. 다시 시도해 주세요.');
+  } finally {
+    if (btn) { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>'; btn.disabled = false; }
+  }
   e.target.value = '';
 }
 
@@ -570,23 +590,26 @@ function removeBlockPhoto(blockIdx, photoIdx) {
 /* ═══════════════════════════════════════
    Main photo
 ═══════════════════════════════════════ */
-function loadMainPhoto(e) {
+async function loadMainPhoto(e) {
   const file = e.target.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    mainPhoto = ev.target.result;
+  const ph    = document.getElementById('main-photo-placeholder');
+  const pv    = document.getElementById('main-photo-preview');
+  if (ph) ph.innerHTML = '<p style="padding:1rem;color:var(--teal-600)">업로드 중...</p>';
+  try {
+    const url = await uploadToStorage(file);
+    mainPhoto = url;
     const thumb = document.getElementById('main-photo-thumb');
-    const ph    = document.getElementById('main-photo-placeholder');
-    const pv    = document.getElementById('main-photo-preview');
     const badge = document.getElementById('main-photo-badge');
     if (thumb) thumb.src = mainPhoto;
     if (ph)    ph.style.display = 'none';
     if (pv)    pv.style.display = 'block';
     if (badge) badge.style.display = 'inline';
     syncAll();
-  };
-  reader.readAsDataURL(file);
+  } catch(err) {
+    alert('사진 업로드 실패. 다시 시도해 주세요.');
+    if (ph) ph.style.display = 'flex';
+  }
 }
 
 function removeMainPhoto(e) {
