@@ -167,8 +167,8 @@ function showSaveSuccess(shareUrl) {
   `;
   document.body.appendChild(toast);
   setTimeout(() => { btn.textContent = '저장'; }, 2000);
-  // 6초 후 토스트 자동 닫힘
-  setTimeout(() => { const t = document.getElementById('share-toast'); if (t) t.remove(); }, 6000);
+  // 3초 후 토스트 자동 닫힘
+  setTimeout(() => { const t = document.getElementById('share-toast'); if (t) t.remove(); }, 3000);
 }
 
 function copyShareUrl() {
