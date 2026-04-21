@@ -403,13 +403,14 @@ function restoreBlockSelection() {
 }
 
 function fmtBlock(idx, field, cmd) {
-  const el = document.getElementById(`block-${field}-${idx}`);
-  if (!el) return;
-  el.focus();
+  // el.focus() 는 의도적으로 호출하지 않음 — onmousedown preventDefault 가 selection 유지
   document.execCommand(cmd, false, null);
-  const key = field === 'ko' ? 'textKo' : 'textEn';
-  bodyBlocks[idx][key] = el.innerHTML;
-  syncAll();
+  const el = document.getElementById(`block-${field}-${idx}`);
+  if (el) {
+    const key = field === 'ko' ? 'textKo' : 'textEn';
+    bodyBlocks[idx][key] = el.innerHTML;
+    syncAll();
+  }
 }
 
 function colorBlock(idx, field, color) {
@@ -533,8 +534,7 @@ const PALETTE = [
 ];
 
 function makeBlockField(i, field, content, placeholder, actionBtn) {
-  const label = field === 'ko' ? '한국어' : 'English';
-  const key   = field === 'ko' ? 'textKo' : 'textEn';
+  const key = field === 'ko' ? 'textKo' : 'textEn';
   const swatches = PALETTE.map(s =>
     `<button class="color-swatch" style="background:${s.color}"
       onmousedown="saveBlockSelection();event.preventDefault()"
@@ -542,9 +542,9 @@ function makeBlockField(i, field, content, placeholder, actionBtn) {
       title="${s.title}"></button>`
   ).join('');
   return `
-    <div class="field" style="margin-bottom:8px;position:relative;">
-      <label style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;">
-        <span>${label}</span>
+    <div class="block-lang-section ${field}" style="position:relative;">
+      <div class="block-lang-label">
+        <span class="block-lang-tag">${field === 'ko' ? '한국어' : 'English'}</span>
         <div style="display:flex;gap:5px;align-items:center;">
           <div class="format-toolbar">
             <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'${field}','bold')" title="굵게"><b>B</b></button>
@@ -557,9 +557,9 @@ function makeBlockField(i, field, content, placeholder, actionBtn) {
           </div>
           ${actionBtn}
         </div>
-      </label>
+      </div>
       <input type="color" id="cpick-${i}-${field}" value="#2d9e8e"
-        style="position:absolute;opacity:0;width:1px;height:1px;top:0;left:0;pointer-events:none;"
+        style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none;"
         onchange="colorBlock(${i},'${field}',this.value)">
       <div class="block-editor"
         id="block-${field}-${i}"

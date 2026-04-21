@@ -668,16 +668,21 @@ textarea { resize: vertical; line-height: 1.75; }
    Body blocks editor
 ══════════════════════════════════════════ */
 .body-block {
-  border: 1px solid var(--cream-200);
+  border: 1px solid var(--teal-200);
   border-radius: var(--radius-md);
-  padding: 1.25rem;
+  overflow: hidden;
   margin-bottom: 10px;
-  background: var(--cream-50);
+  background: white;
   position: relative;
 }
 .body-block-header {
+  padding: 0.6rem 1rem;
+  background: var(--cream-100);
+  border-bottom: 1px solid var(--cream-200);
+}
+.body-block-header {
   display: flex; align-items: center;
-  justify-content: space-between; margin-bottom: 10px;
+  justify-content: space-between;
 }
 .body-block-num {
   font-size: 11px; font-weight: 500;
@@ -834,6 +839,43 @@ textarea { resize: vertical; line-height: 1.75; }
 .translate-btn:hover { background: var(--teal-50); }
 .translate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ── Block lang sections ── */
+.block-lang-section {
+  padding: 0.85rem 1rem;
+}
+.block-lang-section.ko {
+  background: var(--teal-50);
+  border-top: 1px solid var(--cream-200);
+}
+.block-lang-section.en {
+  background: var(--blush-100);
+  border-top: 1px solid var(--cream-200);
+}
+.block-lang-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.block-lang-tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.ko .block-lang-tag {
+  background: var(--teal-100);
+  color: var(--teal-800);
+}
+.en .block-lang-tag {
+  background: var(--blush-200);
+  color: #7a3040;
+}
+
 /* ── Format toolbar (B / I / U) ── */
 .format-toolbar {
   display: flex;
@@ -841,11 +883,11 @@ textarea { resize: vertical; line-height: 1.75; }
   align-items: center;
 }
 .fmt-btn {
-  padding: 2px 8px;
-  border-radius: 5px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.07);
-  color: var(--text-on-dark);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--cream-200);
+  background: white;
+  color: var(--text-secondary);
   cursor: pointer;
   font-family: var(--font-sans);
   font-size: 12px;
@@ -853,7 +895,7 @@ textarea { resize: vertical; line-height: 1.75; }
   transition: background 0.12s;
   user-select: none;
 }
-.fmt-btn:hover { background: rgba(255,255,255,0.16); }
+.fmt-btn:hover { background: var(--teal-50); color: var(--teal-800); }
 .fmt-btn b { font-weight: 700; }
 .fmt-btn i { font-style: italic; }
 .fmt-btn u { text-decoration: underline; }
@@ -865,7 +907,7 @@ textarea { resize: vertical; line-height: 1.75; }
   align-items: center;
 }
 .fmt-sep {
-  color: rgba(255,255,255,0.2);
+  color: var(--cream-200);
   font-size: 13px;
   padding: 0 1px;
   user-select: none;
@@ -874,7 +916,7 @@ textarea { resize: vertical; line-height: 1.75; }
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.22);
+  border: 2px solid rgba(0,0,0,0.15);
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
@@ -882,46 +924,40 @@ textarea { resize: vertical; line-height: 1.75; }
 }
 .color-swatch:hover {
   transform: scale(1.25);
-  border-color: rgba(255,255,255,0.65);
-}
-.color-picker-btn {
-  padding: 1px 6px;
-  font-size: 12px;
-  position: relative;
+  border-color: rgba(0,0,0,0.4);
 }
 .color-picker-input {
   position: absolute;
   opacity: 0;
-  width: 0;
-  height: 0;
+  width: 1px;
+  height: 1px;
   pointer-events: none;
 }
 
 /* ── Contenteditable block editor ── */
 .block-editor {
-  min-height: 90px;
-  max-height: 380px;
+  min-height: 80px;
+  max-height: 360px;
   overflow-y: auto;
   padding: 8px 10px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid var(--cream-200);
   border-radius: 8px;
-  background: rgba(255,255,255,0.06);
-  color: var(--text-on-dark);
+  background: white;
+  color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.8;
   word-break: break-word;
   outline: none;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s;
   margin-top: 4px;
 }
 .block-editor:focus {
   border-color: var(--teal-400);
-  background: rgba(255,255,255,0.09);
 }
 .block-editor:empty::before {
   content: attr(placeholder);
-  color: rgba(255,255,255,0.28);
+  color: var(--text-tertiary);
   pointer-events: none;
   display: block;
 }
