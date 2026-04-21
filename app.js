@@ -173,8 +173,11 @@ function copyShareUrl() {
   const url = document.getElementById('share-url').value;
   navigator.clipboard.writeText(url).then(() => {
     const btn = document.querySelector('#share-toast button');
-    btn.textContent = '복사됨!';
-    setTimeout(() => btn.textContent = '링크 복사', 2000);
+    if (btn) btn.textContent = '복사됨!';
+    setTimeout(() => {
+      const toast = document.getElementById('share-toast');
+      if (toast) toast.remove();
+    }, 2000);
   });
 }
 
