@@ -415,6 +415,7 @@ function fmtBlock(idx, field, cmd) {
 function colorBlock(idx, field, color) {
   const el = document.getElementById(`block-${field}-${idx}`);
   if (!el) return;
+  el.focus();
   restoreBlockSelection();
   document.execCommand('foreColor', false, color);
   const key = field === 'ko' ? 'textKo' : 'textEn';
@@ -533,6 +534,7 @@ const PALETTE = [
 
 function makeBlockField(i, field, content, placeholder, actionBtn) {
   const label = field === 'ko' ? '한국어' : 'English';
+  const key   = field === 'ko' ? 'textKo' : 'textEn';
   const swatches = PALETTE.map(s =>
     `<button class="color-swatch" style="background:${s.color}"
       onmousedown="saveBlockSelection();event.preventDefault()"
@@ -540,7 +542,7 @@ function makeBlockField(i, field, content, placeholder, actionBtn) {
       title="${s.title}"></button>`
   ).join('');
   return `
-    <div class="field" style="margin-bottom:8px;">
+    <div class="field" style="margin-bottom:8px;position:relative;">
       <label style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;">
         <span>${label}</span>
         <div style="display:flex;gap:5px;align-items:center;">
@@ -551,19 +553,19 @@ function makeBlockField(i, field, content, placeholder, actionBtn) {
             <span class="fmt-sep">|</span>
             <div class="color-palette">${swatches}</div>
             <span class="fmt-sep">|</span>
-            <button class="fmt-btn color-picker-btn" onmousedown="saveBlockSelection()" onclick="openColorPicker(${i},'${field}')" title="색 직접 선택">🎨
-              <input type="color" class="color-picker-input" id="cpick-${i}-${field}" value="#2d9e8e"
-                onchange="colorBlock(${i},'${field}',this.value)">
-            </button>
+            <button class="fmt-btn" onmousedown="saveBlockSelection()" onclick="openColorPicker(${i},'${field}')" title="색 직접 선택">🎨</button>
           </div>
           ${actionBtn}
         </div>
       </label>
+      <input type="color" id="cpick-${i}-${field}" value="#2d9e8e"
+        style="position:absolute;opacity:0;width:1px;height:1px;top:0;left:0;pointer-events:none;"
+        onchange="colorBlock(${i},'${field}',this.value)">
       <div class="block-editor"
         id="block-${field}-${i}"
         contenteditable="true"
         placeholder="${placeholder}"
-        oninput="bodyBlocks[${i}].${field==='ko'?'textKo':'textEn'}=this.innerHTML; syncAll()"
+        oninput="bodyBlocks[${i}].${key}=this.innerHTML; syncAll()"
       >${content}</div>
     </div>`;
 }
