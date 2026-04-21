@@ -960,7 +960,8 @@ textarea { resize: vertical; line-height: 1.75; }
   border: 1px solid var(--cream-200);
   border-radius: 8px;
   background: white;
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
+  caret-color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.8;
