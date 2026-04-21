@@ -497,9 +497,7 @@ textarea { resize: vertical; line-height: 1.75; }
 }
 .letter-preview.mini .lp-header { height: 160px; }
 .lp-header-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(10,50,45,0.15), rgba(10,50,45,0.45));
-  z-index: 1;
+  display: none;
 }
 /* 로고 */
 .lp-logo {
@@ -523,10 +521,10 @@ textarea { resize: vertical; line-height: 1.75; }
 }
 /* 제목/날짜 바 */
 .lp-title-bar {
-  background: var(--teal-800);
+  background: var(--cream-100);
   padding: 1.25rem 2rem 1rem;
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid var(--cream-200);
 }
 .letter-preview.mini .lp-title-bar { padding: 0.75rem 1rem 0.6rem; }
 
@@ -534,12 +532,12 @@ textarea { resize: vertical; line-height: 1.75; }
   font-family: var(--font-serif);
   font-size: 1.4em;
   font-weight: 500;
-  color: var(--text-on-dark);
+  color: var(--text-primary);
   margin-bottom: 4px;
   letter-spacing: 0.02em;
 }
 .lp-title.large { font-size: 2em; line-height: 1.2; }
-.lp-date { font-size: 0.85em; color: rgba(240,250,249,0.7); margin-top: 4px; }
+.lp-date { font-size: 0.85em; color: var(--text-secondary); margin-top: 4px; }
 
 .lp-body { padding: 1.5rem; }
 .letter-preview.full .lp-body { padding: 2rem 2.5rem; }

@@ -759,12 +759,10 @@ function syncPreview() {
   renderBodyBlocksPreview('fv-body-blocks', pvLang);
   renderPrayerBlock('fv-prayer', 'fv-prayer-items', 'fv-prayer-title', pvLang);
   const img = document.getElementById('fv-main-img');
-  const overlay = document.getElementById('fv-header-overlay');
   if (img) {
     img.src = mainPhoto || '';
     img.style.display = mainPhoto ? 'block' : 'none';
   }
-  if (overlay) overlay.style.display = mainPhoto ? 'block' : 'none';
 }
 
 function renderBodyBlocksPreview(containerId, lang) {
