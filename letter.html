@@ -567,8 +567,9 @@ function confirmAdminPW() {
   const pw = document.getElementById('admin-modal-pw').value;
   if (pw === '7922') {
     sessionStorage.setItem('pl_auth', '1');
+    const editSlug = pendingEditSlug; // closeAdminModal이 null로 리셋하기 전에 저장
     closeAdminModal();
-    window.location.href = `index.html?edit=${pendingEditSlug}`;
+    window.location.href = `index.html?edit=${editSlug}`;
   } else {
     const err = document.getElementById('admin-modal-err');
     err.textContent = '비밀번호가 틀렸어요';
