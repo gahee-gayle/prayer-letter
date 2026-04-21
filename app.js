@@ -389,6 +389,19 @@ async function callRefineAPI(text) {
   return data?.refined || null;
 }
 
+// ── Selection save/restore (컬러 피커가 포커스를 빼앗기 때문에 필요) ──
+let _savedRange = null;
+function saveBlockSelection() {
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount > 0) _savedRange = sel.getRangeAt(0).cloneRange();
+}
+function restoreBlockSelection() {
+  if (!_savedRange) return;
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(_savedRange);
+}
+
 function fmtBlock(idx, field, cmd) {
   const el = document.getElementById(`block-${field}-${idx}`);
   if (!el) return;
@@ -397,6 +410,23 @@ function fmtBlock(idx, field, cmd) {
   const key = field === 'ko' ? 'textKo' : 'textEn';
   bodyBlocks[idx][key] = el.innerHTML;
   syncAll();
+}
+
+function colorBlock(idx, field, color) {
+  const el = document.getElementById(`block-${field}-${idx}`);
+  if (!el) return;
+  restoreBlockSelection();
+  document.execCommand('foreColor', false, color);
+  const key = field === 'ko' ? 'textKo' : 'textEn';
+  bodyBlocks[idx][key] = el.innerHTML;
+  _savedRange = null;
+  syncAll();
+}
+
+function openColorPicker(idx, field) {
+  saveBlockSelection();
+  const input = document.getElementById(`cpick-${idx}-${field}`);
+  if (input) input.click();
 }
 
 async function refineBlock(idx) {
@@ -492,6 +522,52 @@ function removeBodyBlock(idx) {
   syncAll();
 }
 
+const PALETTE = [
+  { color: '#1a2e2c', title: '기본' },
+  { color: '#155c52', title: '딥틸' },
+  { color: '#2d9e8e', title: '틸' },
+  { color: '#e8a0a8', title: '핑크' },
+  { color: '#8aaba6', title: '뮤트' },
+  { color: '#c0696c', title: '레드' },
+];
+
+function makeBlockField(i, field, content, placeholder, actionBtn) {
+  const label = field === 'ko' ? '한국어' : 'English';
+  const swatches = PALETTE.map(s =>
+    `<button class="color-swatch" style="background:${s.color}"
+      onmousedown="saveBlockSelection();event.preventDefault()"
+      onclick="colorBlock(${i},'${field}','${s.color}')"
+      title="${s.title}"></button>`
+  ).join('');
+  return `
+    <div class="field" style="margin-bottom:8px;">
+      <label style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;">
+        <span>${label}</span>
+        <div style="display:flex;gap:5px;align-items:center;">
+          <div class="format-toolbar">
+            <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'${field}','bold')" title="굵게"><b>B</b></button>
+            <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'${field}','italic')" title="기울임"><i>I</i></button>
+            <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'${field}','underline')" title="밑줄"><u>U</u></button>
+            <span class="fmt-sep">|</span>
+            <div class="color-palette">${swatches}</div>
+            <span class="fmt-sep">|</span>
+            <button class="fmt-btn color-picker-btn" onmousedown="saveBlockSelection()" onclick="openColorPicker(${i},'${field}')" title="색 직접 선택">🎨
+              <input type="color" class="color-picker-input" id="cpick-${i}-${field}" value="#2d9e8e"
+                onchange="colorBlock(${i},'${field}',this.value)">
+            </button>
+          </div>
+          ${actionBtn}
+        </div>
+      </label>
+      <div class="block-editor"
+        id="block-${field}-${i}"
+        contenteditable="true"
+        placeholder="${placeholder}"
+        oninput="bodyBlocks[${i}].${field==='ko'?'textKo':'textEn'}=this.innerHTML; syncAll()"
+      >${content}</div>
+    </div>`;
+}
+
 function renderBlockEditor() {
   const wrap = document.getElementById('body-blocks');
   if (!wrap) return;
@@ -504,44 +580,8 @@ function renderBlockEditor() {
           ? `<button class="body-block-del" onclick="removeBodyBlock(${i})">삭제</button>`
           : ''}
       </div>
-      <div class="field" style="margin-bottom:8px;">
-        <label style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;">
-          <span>한국어</span>
-          <div style="display:flex;gap:5px;align-items:center;">
-            <div class="format-toolbar">
-              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'ko','bold')" title="굵게"><b>B</b></button>
-              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'ko','italic')" title="기울임"><i>I</i></button>
-              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'ko','underline')" title="밑줄"><u>U</u></button>
-            </div>
-            <button class="translate-btn" id="refine-btn-${i}" onclick="refineBlock(${i})">✏️ 다듬기</button>
-          </div>
-        </label>
-        <div class="block-editor"
-          id="block-ko-${i}"
-          contenteditable="true"
-          placeholder="사역 이야기 (한국어)..."
-          oninput="bodyBlocks[${i}].textKo=this.innerHTML; syncAll()"
-        >${block.textKo}</div>
-      </div>
-      <div class="field" style="margin-bottom:8px;">
-        <label style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;">
-          <span>English</span>
-          <div style="display:flex;gap:5px;align-items:center;">
-            <div class="format-toolbar">
-              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'en','bold')" title="Bold"><b>B</b></button>
-              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'en','italic')" title="Italic"><i>I</i></button>
-              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'en','underline')" title="Underline"><u>U</u></button>
-            </div>
-            <button class="translate-btn" onclick="translateBlock(${i})" id="trans-btn-${i}">🔤 번역</button>
-          </div>
-        </label>
-        <div class="block-editor"
-          id="block-en-${i}"
-          contenteditable="true"
-          placeholder="Ministry story (English)..."
-          oninput="bodyBlocks[${i}].textEn=this.innerHTML; syncAll()"
-        >${block.textEn}</div>
-      </div>
+      ${makeBlockField(i,'ko', block.textKo, '사역 이야기 (한국어)...', `<button class="translate-btn" id="refine-btn-${i}" onclick="refineBlock(${i})">✏️ 다듬기</button>`)}
+      ${makeBlockField(i,'en', block.textEn, 'Ministry story (English)...', `<button class="translate-btn" onclick="translateBlock(${i})" id="trans-btn-${i}">🔤 번역</button>`)}
       <div class="body-block-photos" id="block-photos-${i}">
         ${block.photos.map((src, j) => `
           <div class="block-photo-wrap">

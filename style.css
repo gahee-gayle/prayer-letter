@@ -858,6 +858,45 @@ textarea { resize: vertical; line-height: 1.75; }
 .fmt-btn i { font-style: italic; }
 .fmt-btn u { text-decoration: underline; }
 
+/* ── Color palette ── */
+.color-palette {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.fmt-sep {
+  color: rgba(255,255,255,0.2);
+  font-size: 13px;
+  padding: 0 1px;
+  user-select: none;
+}
+.color-swatch {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.22);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform 0.1s, border-color 0.1s;
+}
+.color-swatch:hover {
+  transform: scale(1.25);
+  border-color: rgba(255,255,255,0.65);
+}
+.color-picker-btn {
+  padding: 1px 6px;
+  font-size: 12px;
+  position: relative;
+}
+.color-picker-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
 /* ── Contenteditable block editor ── */
 .block-editor {
   min-height: 90px;
