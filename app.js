@@ -575,14 +575,61 @@ function makeBlockField(i, field, content, placeholder, actionBtn) {
     </div>`;
 }
 
+/* ── Drag & Drop reorder ── */
+let _dragIdx = null;
+
+function onDragStart(e, idx) {
+  _dragIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => {
+    const el = document.getElementById(`block-${idx}`);
+    if (el) el.classList.add('dragging');
+  }, 0);
+}
+
+function onDragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.body-block').forEach(b => b.classList.remove('drag-over'));
+  if (idx !== _dragIdx) {
+    const el = document.getElementById(`block-${idx}`);
+    if (el) el.classList.add('drag-over');
+  }
+}
+
+function onDragDrop(e, idx) {
+  e.preventDefault();
+  if (_dragIdx === null || _dragIdx === idx) return;
+  const moved = bodyBlocks.splice(_dragIdx, 1)[0];
+  bodyBlocks.splice(idx, 0, moved);
+  _dragIdx = null;
+  renderBlockEditor();
+  syncAll();
+}
+
+function onDragEnd() {
+  _dragIdx = null;
+  document.querySelectorAll('.body-block').forEach(b => {
+    b.classList.remove('dragging', 'drag-over');
+  });
+}
+
 function renderBlockEditor() {
   const wrap = document.getElementById('body-blocks');
   if (!wrap) return;
 
   wrap.innerHTML = bodyBlocks.map((block, i) => `
-    <div class="body-block" id="block-${i}">
+    <div class="body-block" id="block-${i}"
+      draggable="true"
+      ondragstart="onDragStart(event,${i})"
+      ondragover="onDragOver(event,${i})"
+      ondrop="onDragDrop(event,${i})"
+      ondragend="onDragEnd()">
       <div class="body-block-header">
-        <span class="body-block-num">블록 ${i + 1}</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="drag-handle" title="드래그해서 순서 변경">⠿</span>
+          <span class="body-block-num">블록 ${i + 1}</span>
+        </div>
         ${bodyBlocks.length > 1
           ? `<button class="body-block-del" onclick="removeBodyBlock(${i})">삭제</button>`
           : ''}
