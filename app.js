@@ -389,16 +389,26 @@ async function callRefineAPI(text) {
   return data?.refined || null;
 }
 
+function fmtBlock(idx, field, cmd) {
+  const el = document.getElementById(`block-${field}-${idx}`);
+  if (!el) return;
+  el.focus();
+  document.execCommand(cmd, false, null);
+  const key = field === 'ko' ? 'textKo' : 'textEn';
+  bodyBlocks[idx][key] = el.innerHTML;
+  syncAll();
+}
+
 async function refineBlock(idx) {
-  const ta = document.querySelector(`#block-${idx} textarea`);
+  const el = document.getElementById(`block-ko-${idx}`);
   const btn = document.getElementById(`refine-btn-${idx}`);
-  if (!ta?.value.trim()) { alert('한국어를 먼저 입력해 주세요.'); return; }
+  if (!el?.innerText.trim()) { alert('한국어를 먼저 입력해 주세요.'); return; }
   if (btn) { btn.textContent = '...'; btn.disabled = true; }
   try {
-    const refined = await callRefineAPI(ta.value);
+    const refined = await callRefineAPI(el.innerText);
     if (refined) {
       bodyBlocks[idx].textKo = refined;
-      ta.value = refined;
+      el.innerText = refined;
       syncAll();
     } else alert('다듬기 실패. 다시 시도해 주세요.');
   } catch { alert('오류가 발생했습니다.'); }
@@ -454,16 +464,17 @@ async function translatePrayer(idx) {
 }
 
 async function translateBlock(idx) {
-  const text = bodyBlocks[idx].textKo;
-  if (!text || !text.trim()) { alert('한국어 텍스트를 먼저 입력해 주세요.'); return; }
-  const btn = document.getElementById('trans-btn-' + idx);
-  const ta  = document.getElementById('block-en-' + idx);
+  const koEl = document.getElementById(`block-ko-${idx}`);
+  const plainText = koEl?.innerText?.trim();
+  if (!plainText) { alert('한국어 텍스트를 먼저 입력해 주세요.'); return; }
+  const btn  = document.getElementById('trans-btn-' + idx);
+  const enEl = document.getElementById('block-en-' + idx);
   if (btn) { btn.textContent = '번역 중...'; btn.disabled = true; }
   try {
-    const translated = await callTranslateAPI(text);
+    const translated = await callTranslateAPI(plainText);
     if (translated) {
       bodyBlocks[idx].textEn = translated;
-      if (ta) ta.value = translated;
+      if (enEl) enEl.innerText = translated;
       syncAll();
     } else {
       alert('번역 실패. 다시 시도해 주세요.');
@@ -494,24 +505,42 @@ function renderBlockEditor() {
           : ''}
       </div>
       <div class="field" style="margin-bottom:8px;">
-        <label style="display:flex;align-items:center;justify-content:space-between;">
+        <label style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;">
           <span>한국어</span>
-          <button class="translate-btn" id="refine-btn-${i}" onclick="refineBlock(${i})">✏️ 다듬기</button>
+          <div style="display:flex;gap:5px;align-items:center;">
+            <div class="format-toolbar">
+              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'ko','bold')" title="굵게"><b>B</b></button>
+              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'ko','italic')" title="기울임"><i>I</i></button>
+              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'ko','underline')" title="밑줄"><u>U</u></button>
+            </div>
+            <button class="translate-btn" id="refine-btn-${i}" onclick="refineBlock(${i})">✏️ 다듬기</button>
+          </div>
         </label>
-        <textarea rows="4"
+        <div class="block-editor"
+          id="block-ko-${i}"
+          contenteditable="true"
           placeholder="사역 이야기 (한국어)..."
-          oninput="bodyBlocks[${i}].textKo=this.value; syncAll()"
-        >${escHtml(block.textKo)}</textarea>
+          oninput="bodyBlocks[${i}].textKo=this.innerHTML; syncAll()"
+        >${block.textKo}</div>
       </div>
       <div class="field" style="margin-bottom:8px;">
-        <label style="display:flex;align-items:center;justify-content:space-between;">
+        <label style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;">
           <span>English</span>
-          <button class="translate-btn" onclick="translateBlock(${i})" id="trans-btn-${i}">🔤 번역</button>
+          <div style="display:flex;gap:5px;align-items:center;">
+            <div class="format-toolbar">
+              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'en','bold')" title="Bold"><b>B</b></button>
+              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'en','italic')" title="Italic"><i>I</i></button>
+              <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="fmtBlock(${i},'en','underline')" title="Underline"><u>U</u></button>
+            </div>
+            <button class="translate-btn" onclick="translateBlock(${i})" id="trans-btn-${i}">🔤 번역</button>
+          </div>
         </label>
-        <textarea rows="4" id="block-en-${i}"
+        <div class="block-editor"
+          id="block-en-${i}"
+          contenteditable="true"
           placeholder="Ministry story (English)..."
-          oninput="bodyBlocks[${i}].textEn=this.value; syncAll()"
-        >${escHtml(block.textEn)}</textarea>
+          oninput="bodyBlocks[${i}].textEn=this.innerHTML; syncAll()"
+        >${block.textEn}</div>
       </div>
       <div class="body-block-photos" id="block-photos-${i}">
         ${block.photos.map((src, j) => `
@@ -748,7 +777,7 @@ function renderBodyBlocksPreview(containerId, lang) {
     const photos = block.photos;
     const layout = block.photoLayout || 'full';
     return `<div class="pv-block">
-      ${text ? `<div class="pv-block-text">${escHtml(text)}</div>` : ''}
+      ${text ? `<div class="pv-block-text">${text}</div>` : ''}
       ${photos.length ? `<div class="pv-block-photos layout-${layout}">
         ${photos.map(src => `<img src="${src}" alt="">`).join('')}
       </div>` : ''}
