@@ -358,11 +358,17 @@ function renderLetters(letters) {
     </div>`).join('');
 }
 
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html || '';
+  return tmp.textContent || tmp.innerText || '';
+}
+
 function letterCard(l, isEn, t) {
   const blocks = l.body_blocks || [];
   const preview = isEn
-    ? blocks.map(b => b.textEn || b.textKo || '').filter(Boolean).join(' ').substring(0, 100)
-    : blocks.map(b => b.textKo || '').filter(Boolean).join(' ').substring(0, 100);
+    ? blocks.map(b => stripHtml(b.textEn || b.textKo || '')).filter(Boolean).join(' ').substring(0, 120)
+    : blocks.map(b => stripHtml(b.textKo || '')).filter(Boolean).join(' ').substring(0, 120);
   const title = isEn && l.title_en ? l.title_en : l.title;
   const locale = isEn ? 'en-US' : 'ko-KR';
   const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' }) : '';
