@@ -203,7 +203,6 @@
     </a>
     <div style="display:flex;gap:8px;align-items:center;">
       <a href="donate.html" id="donate-link" style="font-family:var(--font-sans);font-size:13px;color:var(--teal-900);background:var(--blush-300);padding:7px 16px;border-radius:999px;text-decoration:none;font-weight:600;transition:background 0.15s;" onmouseover="this.style.background='#e8a0a8'" onmouseout="this.style.background='#f0bec4'">♥ 후원하기</a>
-      <a href="index.html" id="write-btn-header" class="write-btn" style="display:none;">편지 쓰기</a>
     </div>
   </div>
 </header>
@@ -213,7 +212,8 @@
     <div>
       <h1 class="page-title">Abigail's Prayer Letters</h1>
     </div>
-    <div id="admin-bar" style="display:none;">
+    <div id="admin-bar" style="display:none;gap:8px;align-items:center;">
+      <a href="index.html" id="write-btn-header" class="write-btn" style="display:none;">편지 쓰기</a>
       <button id="admin-btn" onclick="toggleAdmin()" style="
         padding:8px 18px; border-radius:999px;
         font-family:var(--font-sans); font-size:13px;
@@ -401,9 +401,12 @@ function toggleAdmin() {
   const t = T[currentLang];
   if (isAdmin) {
     isAdmin = false;
+    sessionStorage.removeItem('pl_auth');
     document.getElementById('admin-btn').textContent = t.manage;
     document.getElementById('admin-btn').style.color = 'rgba(240,250,249,0.6)';
     document.getElementById('admin-pw-wrap').style.display = 'none';
+    const wb = document.getElementById('write-btn-header');
+    if (wb) wb.style.display = 'none';
     renderLetters(allLetters);
     return;
   }
@@ -416,10 +419,13 @@ function checkAdminPW() {
   const val = document.getElementById('admin-pw').value;
   if (val === '7922') {
     isAdmin = true;
+    sessionStorage.setItem('pl_auth', '1');
     document.getElementById('admin-pw-wrap').style.display = 'none';
     document.getElementById('admin-pw').value = '';
     document.getElementById('admin-btn').textContent = t.managing;
     document.getElementById('admin-btn').style.color = '#f0bec4';
+    const wb = document.getElementById('write-btn-header');
+    if (wb) { wb.style.display = 'inline-block'; wb.textContent = t.write; }
     renderLetters(allLetters);
   } else {
     const err = document.getElementById('admin-pw-err');
@@ -465,17 +471,6 @@ async function deleteLetter(slug, title) {
 
 loadLetters();
 
-if (sessionStorage.getItem('pl_auth') === '1') {
-  // 로그인: 편지쓰기 보이고, 후원 버튼 숨김
-  const wb = document.getElementById('write-btn-header');
-  if (wb) {
-    wb.style.display = 'inline-block';
-    wb.textContent = T[currentLang].write;
-  }
-  const donateLink = document.getElementById('donate-link');
-  if (donateLink) donateLink.style.display = 'none';
-  document.getElementById('admin-bar').style.display = 'block';
-}
 </script>
 </body>
 </html>
