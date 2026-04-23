@@ -638,7 +638,13 @@ function renderBlockEditor() {
       ${makeBlockField(i,'en', block.textEn, 'Ministry story (English)...', `<button class="translate-btn" onclick="translateBlock(${i})" id="trans-btn-${i}">🔤 번역</button>`)}
       <div class="body-block-photos" id="block-photos-${i}">
         ${block.photos.map((src, j) => `
-          <div class="block-photo-wrap">
+          <div class="block-photo-wrap"
+            draggable="true"
+            ondragstart="onPhotoDragStart(event,${i},${j})"
+            ondragover="onPhotoDragOver(event,${i},${j})"
+            ondrop="onPhotoDrop(event,${i},${j})"
+            ondragend="onPhotoDragEnd(event)">
+            <div class="photo-drag-hint">⠿</div>
             <img src="${src}" alt="">
             <button type="button" class="rm" onclick="removeBlockPhoto(${i},${j}); event.stopPropagation();">✕</button>
           </div>`).join('')}
@@ -720,6 +726,41 @@ function removeBlockPhoto(blockIdx, photoIdx) {
   bodyBlocks[blockIdx].photos.splice(photoIdx, 1);
   renderBlockEditor();
   syncAll();
+}
+
+/* ── Photo drag & drop reorder ── */
+let _photoDragBlock = null;
+let _photoDragIdx = null;
+
+function onPhotoDragStart(e, blockIdx, photoIdx) {
+  _photoDragBlock = blockIdx;
+  _photoDragIdx = photoIdx;
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.classList.add('dragging');
+}
+function onPhotoDragOver(e, blockIdx, photoIdx) {
+  if (_photoDragBlock !== blockIdx) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+function onPhotoDrop(e, blockIdx, photoIdx) {
+  e.preventDefault();
+  if (_photoDragBlock !== blockIdx || _photoDragIdx === null || _photoDragIdx === photoIdx) return;
+  const photos = bodyBlocks[blockIdx].photos;
+  const [moved] = photos.splice(_photoDragIdx, 1);
+  photos.splice(photoIdx, 0, moved);
+  _photoDragIdx = null;
+  _photoDragBlock = null;
+  renderBlockEditor();
+  syncAll();
+}
+function onPhotoDragEnd(e) {
+  _photoDragIdx = null;
+  _photoDragBlock = null;
+  document.querySelectorAll('.block-photo-wrap').forEach(el => {
+    el.classList.remove('dragging', 'drag-over');
+  });
 }
 
 /* ═══════════════════════════════════════

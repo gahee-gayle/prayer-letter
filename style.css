@@ -719,6 +719,18 @@ textarea { resize: vertical; line-height: 1.75; }
 }
 .block-photo-wrap {
   position: relative; width: 60px; height: 60px;
+  cursor: grab;
+}
+.block-photo-wrap:active { cursor: grabbing; }
+.block-photo-wrap.dragging { opacity: 0.4; }
+.block-photo-wrap.drag-over { outline: 2px solid var(--teal-400); border-radius: var(--radius-sm); }
+.photo-drag-hint {
+  position: absolute; bottom: 2px; left: 2px;
+  font-size: 10px; color: white;
+  background: rgba(0,0,0,0.45);
+  border-radius: 3px; padding: 0 2px;
+  z-index: 10; pointer-events: none;
+  line-height: 1.4;
 }
 .block-photo-wrap img {
   width: 100%; height: 100%;
