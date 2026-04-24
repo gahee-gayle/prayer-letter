@@ -584,7 +584,7 @@ function renderLetter() {
         ${blocksHtml}
         ${prayerHtml}
       </div>
-      <div class="letter-footer">${closing || ''}</div>
+      <div class="letter-footer">${closing || (isEn ? 'In His grace, Abigail' : '주님의 은혜안에서, Abigail 드림')}</div>
     </div>
     </div>
     ${sessionStorage.getItem('pl_auth') === '1' ? `

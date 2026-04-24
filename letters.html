@@ -162,6 +162,43 @@
       .header-inner { padding: 0 5%; }
       main { padding: 1.5rem 5% 5rem; }
     }
+    /* ── Admin Modal ── */
+    .admin-modal-bg {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .admin-modal-bg.open { display: flex; }
+    .admin-modal {
+      background: var(--teal-800);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px; padding: 2rem;
+      width: min(340px, 90vw);
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    .admin-modal-title { font-size: 15px; color: var(--text-on-dark); font-weight: 500; }
+    .admin-modal-input {
+      width: 100%; padding: 10px 16px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1); color: white;
+      font-family: var(--font-sans); font-size: 15px;
+      letter-spacing: 0.2em; outline: none; text-align: center;
+    }
+    .admin-modal-input::placeholder { letter-spacing: 0.05em; color: rgba(255,255,255,0.4); }
+    .admin-modal-btns { display: flex; gap: 8px; width: 100%; }
+    .admin-modal-ok {
+      flex: 1; padding: 9px; border-radius: 999px;
+      background: var(--blush-300); color: var(--teal-900);
+      border: none; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .admin-modal-ok:hover { background: #e8a0a8; }
+    .admin-modal-cancel {
+      flex: 1; padding: 9px; border-radius: 999px;
+      background: transparent; color: var(--text-muted-dark);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 14px; cursor: pointer;
+    }
+    .admin-modal-err { font-size: 13px; color: var(--blush-300); min-height: 18px; }
     /* ── Bottom Fixed Area ── */
     .bottom-fixed {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
@@ -191,6 +228,21 @@
 </head>
 <body>
 <div class="bg-pattern"></div>
+
+<!-- 관리자 비밀번호 모달 -->
+<div class="admin-modal-bg" id="admin-modal-bg" onclick="if(event.target===this)closeAdminModal()">
+  <div class="admin-modal">
+    <div class="admin-modal-title">🔒 관리자 로그인</div>
+    <input class="admin-modal-input" type="password" id="admin-pw"
+      placeholder="비밀번호 입력"
+      onkeydown="if(event.key==='Enter')checkAdminPW()">
+    <div class="admin-modal-err" id="admin-pw-err"></div>
+    <div class="admin-modal-btns">
+      <button class="admin-modal-ok" id="admin-pw-confirm" onclick="checkAdminPW()">확인</button>
+      <button class="admin-modal-cancel" onclick="closeAdminModal()">취소</button>
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="header-inner">
@@ -225,21 +277,6 @@
     </div>
   </div>
 
-  <!-- 관리자 비밀번호 입력 -->
-  <div id="admin-pw-wrap" style="display:none;margin-bottom:1.5rem;">
-    <div style="display:flex;gap:8px;align-items:center;">
-      <input id="admin-pw" type="password" placeholder="비밀번호"
-        style="padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);
-        background:rgba(255,255,255,0.1);color:white;font-family:var(--font-sans);
-        font-size:14px;outline:none;letter-spacing:0.15em;width:160px;"
-        onkeydown="if(event.key==='Enter')checkAdminPW()">
-      <button id="admin-pw-confirm" onclick="checkAdminPW()" style="
-        padding:8px 18px;border-radius:999px;background:var(--blush-300);
-        color:var(--teal-900);border:none;font-family:var(--font-sans);
-        font-size:13px;font-weight:600;cursor:pointer;">확인</button>
-      <span id="admin-pw-err" style="font-size:13px;color:#f0bec4;display:none;">틀렸어요</span>
-    </div>
-  </div>
 
   <div id="content">
     <div class="loading">
@@ -400,14 +437,23 @@ function toggleAdmin() {
     sessionStorage.removeItem('pl_auth');
     document.getElementById('admin-btn').textContent = t.manage;
     document.getElementById('admin-btn').style.color = 'rgba(240,250,249,0.6)';
-    document.getElementById('admin-pw-wrap').style.display = 'none';
     const wb = document.getElementById('write-btn-header');
     if (wb) wb.style.display = 'none';
     renderLetters(allLetters);
     return;
   }
-  const wrap = document.getElementById('admin-pw-wrap');
-  wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+  openAdminModal();
+}
+
+function openAdminModal() {
+  document.getElementById('admin-pw').value = '';
+  document.getElementById('admin-pw-err').textContent = '';
+  document.getElementById('admin-modal-bg').classList.add('open');
+  setTimeout(() => document.getElementById('admin-pw').focus(), 50);
+}
+
+function closeAdminModal() {
+  document.getElementById('admin-modal-bg').classList.remove('open');
 }
 
 function checkAdminPW() {
@@ -416,8 +462,7 @@ function checkAdminPW() {
   if (val === '7922') {
     isAdmin = true;
     sessionStorage.setItem('pl_auth', '1');
-    document.getElementById('admin-pw-wrap').style.display = 'none';
-    document.getElementById('admin-pw').value = '';
+    closeAdminModal();
     document.getElementById('admin-btn').textContent = t.managing;
     document.getElementById('admin-btn').style.color = '#f0bec4';
     const wb = document.getElementById('write-btn-header');
@@ -425,10 +470,9 @@ function checkAdminPW() {
     renderLetters(allLetters);
   } else {
     const err = document.getElementById('admin-pw-err');
-    err.style.display = 'inline';
     err.textContent = t.pwWrong;
     document.getElementById('admin-pw').value = '';
-    setTimeout(() => err.style.display = 'none', 2000);
+    setTimeout(() => { err.textContent = ''; }, 2000);
   }
 }
 
