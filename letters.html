@@ -47,17 +47,17 @@
       background: transparent; color: var(--text-muted-dark);
       transition: all 0.15s;
     }
-    .lang-btn.active { background: rgba(45,158,142,0.25); color: var(--text-on-dark); border-color: var(--teal-400); font-weight: 500; }
+    .lang-btn.active { background: var(--blush-300); color: var(--teal-900); border-color: var(--blush-300); font-weight: 500; }
     .lang-btn:hover:not(.active) { background: rgba(255,255,255,0.08); color: var(--text-on-dark); }
     .write-btn {
       padding: 8px 20px;
-      background: var(--blush-300); color: var(--teal-900);
+      background: #2d8a6e; color: var(--text-on-dark);
       border: none; border-radius: 999px;
       font-family: var(--font-sans); font-size: 13px; font-weight: 500;
       cursor: pointer; text-decoration: none;
       transition: background 0.18s;
     }
-    .write-btn:hover { background: var(--blush-200); }
+    .write-btn:hover { background: #236e58; }
 
     main { max-width: none; margin: 0 auto; padding: 3rem 15% 6rem; position: relative; z-index: 1; }
 
@@ -162,33 +162,31 @@
       .header-inner { padding: 0 5%; }
       main { padding: 1.5rem 5% 5rem; }
     }
-    /* ── Support Footer ── */
+    /* ── Bottom Fixed Area ── */
+    .bottom-fixed {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+    }
+    .donate-above-footer {
+      text-align: center;
+      padding: 0.7rem 0 1.6rem;
+    }
+    .donate-above-footer a {
+      display: inline-block; padding: 8px 24px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+      text-decoration: none;
+      background: var(--blush-300); color: var(--teal-900);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      transition: background 0.15s;
+    }
+    .donate-above-footer a:hover { background: #e8a0a8; }
     .support-footer {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      padding: 0.75rem 0;
+      padding: 0.6rem 0;
       border-top: 1px solid rgba(255,255,255,0.08);
       background: rgba(10,56,50,0.88);
       backdrop-filter: blur(16px);
-      text-align: center; z-index: 50;
+      text-align: center;
     }
-    .support-footer-copy { font-size: 13px; color: rgba(240,250,249,0.7); margin-bottom: 0.5rem; }
-    .support-footer-label {
-      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-      color: rgba(240,250,249,0.45); margin-bottom: 0.75rem;
-    }
-    .support-footer-links { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
-    .support-footer-btn {
-      display: inline-block; padding: 6px 16px; border-radius: 999px;
-      font-family: var(--font-sans); font-size: 12px; font-weight: 500;
-      text-decoration: none; cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.07); color: var(--text-on-dark);
-      transition: all 0.15s;
-    }
-    .support-footer-btn:hover { background: rgba(255,255,255,0.14); }
-    .support-footer-btn.paypal { background: var(--blush-300); color: var(--teal-900); border-color: var(--blush-300); }
-    .support-footer-btn.paypal:hover { background: var(--blush-400); }
-    .support-footer-divider { color: rgba(255,255,255,0.2); font-size: 12px; }
+    .support-footer-copy { font-size: 13px; color: rgba(240,250,249,0.7); }
   </style>
 </head>
 <body>
@@ -203,8 +201,9 @@
         <span style="font-size:9.5px;color:var(--text-muted-dark);letter-spacing:0.28em;text-transform:uppercase;">Prayer Letter</span>
       </div>
     </a>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <a href="donate.html" id="donate-link" style="font-family:var(--font-sans);font-size:13px;color:var(--teal-900);background:var(--blush-300);padding:7px 16px;border-radius:999px;text-decoration:none;font-weight:600;transition:background 0.15s;" onmouseover="this.style.background='#e8a0a8'" onmouseout="this.style.background='#f0bec4'">♥ 후원하기</a>
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="ko" onclick="setLang('ko')">한국어</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">English</button>
     </div>
   </div>
 </header>
@@ -248,11 +247,16 @@
       <p>불러오는 중...</p>
     </div>
   </div>
+</main>
+
+<div class="bottom-fixed">
+  <div class="donate-above-footer">
+    <a href="donate.html" id="donate-link"><span style="color:#2d8a6e;">♥</span> 후원하기</a>
+  </div>
   <div class="support-footer">
     <div class="support-footer-copy">© 2026 Abigail's Prayer Letter · All rights reserved</div>
-
   </div>
-</main>
+</div>
 
 <script>
 const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
@@ -263,8 +267,8 @@ let currentLang = sessionStorage.getItem('pl_lang') || 'ko';
 
 const T = {
   ko: {
-    donate: '♥ 후원하기', write: '편지 쓰기',
-    manage: '관리', managing: '관리 중 ✓',
+    donate: '<span style="color:#2d8a6e;">♥</span> 후원하기', write: '편지 쓰기',
+    manage: '관리', managing: '로그아웃',
     loading: '불러오는 중...', loadFail: '불러오기 실패. 잠시 후 다시 시도해 주세요.',
     empty: '아직 저장된 편지가 없어요.',
     noDate: '날짜 없음', noContent: '내용 없음',
@@ -274,8 +278,8 @@ const T = {
     delFail: '삭제 실패. 다시 시도해 주세요.',
   },
   en: {
-    donate: '♥ Support', write: 'Write Letter',
-    manage: 'Manage', managing: 'Managing ✓',
+    donate: '<span style="color:#2d8a6e;">♥</span> Support', write: 'Write Letter',
+    manage: 'Manage', managing: 'Log out',
     loading: 'Loading...', loadFail: 'Failed to load. Please try again.',
     empty: 'No letters yet.',
     noDate: 'No date', noContent: 'No content',
@@ -290,10 +294,14 @@ function setLang(lang) {
   currentLang = lang;
   sessionStorage.setItem('pl_lang', lang);
   const t = T[lang];
-  // update header texts
+  // 헤더 언어 버튼 active 동기화
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  // donate 링크 업데이트
   const donateLink = document.getElementById('donate-link');
   if (donateLink) {
-    donateLink.textContent = t.donate;
+    donateLink.innerHTML = t.donate;
     donateLink.href = lang === 'en' ? 'donate.html?lang=en' : 'donate.html';
   }
   const wb = document.getElementById('write-btn-header');
@@ -325,15 +333,7 @@ function renderLetters(letters) {
   const isEn = currentLang === 'en';
   const content = document.getElementById('content');
   if (!letters.length) {
-    content.innerHTML = `
-      <div class="year-label" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;">
-        <span></span>
-        <div class="lang-toggle">
-          <button class="lang-btn ${currentLang==='ko'?'active':''}" onclick="setLang('ko')">한국어</button>
-          <button class="lang-btn ${currentLang==='en'?'active':''}" onclick="setLang('en')">English</button>
-        </div>
-      </div>
-      <div class="empty"><div class="empty-icon">✉</div><p>${t.empty}</p></div>`;
+    content.innerHTML = `<div class="empty"><div class="empty-icon">✉</div><p>${t.empty}</p></div>`;
     return;
   }
   const byYear = {};
@@ -343,16 +343,10 @@ function renderLetters(letters) {
     byYear[year].push(l);
   });
   const years = Object.keys(byYear).sort((a,b) => b - a);
-  const langToggle = `
-    <div class="lang-toggle">
-      <button class="lang-btn ${currentLang==='ko'?'active':''}" onclick="setLang('ko')">한국어</button>
-      <button class="lang-btn ${currentLang==='en'?'active':''}" onclick="setLang('en')">English</button>
-    </div>`;
-  content.innerHTML = years.map((year, i) => `
+  content.innerHTML = years.map((year) => `
     <div class="year-group">
-      <div class="year-label" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="year-label">
         <span>${year}</span>
-        ${i === 0 ? langToggle : ''}
       </div>
       <div class="letter-grid">
         ${byYear[year].map(l => letterCard(l, isEn, t)).join('')}
@@ -464,10 +458,23 @@ async function deleteLetter(slug, title) {
 // apply initial lang state
 (function() {
   const t = T[currentLang];
+  // 헤더 언어 버튼 초기 active 상태
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === currentLang);
+  });
+  // donate 링크 초기값
   const donateLink = document.getElementById('donate-link');
   if (donateLink) {
-    donateLink.textContent = t.donate;
+    donateLink.innerHTML = t.donate;
     donateLink.href = currentLang === 'en' ? 'donate.html?lang=en' : 'donate.html';
+  }
+  // admin 세션 자동 복원
+  if (sessionStorage.getItem('pl_auth') === '1') {
+    isAdmin = true;
+    const adminBtn = document.getElementById('admin-btn');
+    if (adminBtn) { adminBtn.textContent = t.managing; adminBtn.style.color = '#f0bec4'; }
+    const wb = document.getElementById('write-btn-header');
+    if (wb) { wb.style.display = 'inline-block'; wb.textContent = t.write; }
   }
 })();
 

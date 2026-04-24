@@ -74,7 +74,7 @@ if (sessionStorage.getItem('pl_auth') === '1') {
 
 <header class="site-header">
   <div class="header-inner">
-    <div class="logo">
+    <a href="letters.html" class="logo" style="text-decoration:none;">
       <div class="cross-icon">
         <span class="cross-v"></span>
         <span class="cross-h"></span>
@@ -83,7 +83,7 @@ if (sessionStorage.getItem('pl_auth') === '1') {
         <span class="logo-ko">Abigail's</span>
         <span class="logo-en">Prayer Letter</span>
       </div>
-    </div>
+    </a>
     <nav class="tab-nav">
       <button class="tab-btn active" data-tab="edit">편집</button>
       <button class="tab-btn" data-tab="ai">AI 생성</button>
@@ -184,14 +184,14 @@ if (sessionStorage.getItem('pl_auth') === '1') {
           <div class="form-row two-col">
             <div class="field">
               <label>마무리 인사 (한국어)</label>
-              <input type="text" id="closing" placeholder="주님의 은혜 안에서, Abigail 드림" oninput="syncAll()">
+              <input type="text" id="closing" placeholder="주님의 은혜안에서, Abigail 드림" value="주님의 은혜안에서, Abigail 드림" oninput="syncAll()">
             </div>
             <div class="field">
               <label style="display:flex;align-items:center;justify-content:space-between;">
                 <span>Closing (English)</span>
                 <button class="translate-btn" onclick="translateField('closing','closing-en')">🔤 번역</button>
               </label>
-              <input type="text" id="closing-en" placeholder="In His grace, Abigail" oninput="syncAll()">
+              <input type="text" id="closing-en" placeholder="In His grace, Abigail" value="In His grace, Abigail" oninput="syncAll()">
             </div>
           </div>
           <div class="field" style="margin-top:0;">
@@ -212,10 +212,12 @@ if (sessionStorage.getItem('pl_auth') === '1') {
         <div class="letter-preview mini" id="live-preview">
           <div class="lp-header">
             <div class="lp-cross"><span></span><span></span></div>
+            <img id="lp-main-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          </div>
+          <div class="lp-title-bar">
             <div class="lp-title" id="lp-title">제목</div>
             <div class="lp-date" id="lp-date"></div>
           </div>
-          <img id="lp-main-img" src="" alt="" style="display:none;width:100%;max-height:120px;object-fit:cover;">
           <div class="lp-body">
             <div class="lp-greeting" id="lp-greeting"></div>
             <div id="lp-body-blocks"></div>

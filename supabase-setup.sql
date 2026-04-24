@@ -27,3 +27,19 @@ create policy "누구나 저장 가능" on letters
 
 create policy "누구나 수정 가능" on letters
   for update using (true);
+
+-- 구독자 테이블
+create table if not exists subscribers (
+  id uuid default gen_random_uuid() primary key,
+  email text unique not null,
+  lang text default 'ko',
+  subscribed_at timestamptz default now()
+);
+
+alter table subscribers enable row level security;
+
+create policy "누구나 구독 가능" on subscribers
+  for insert with check (true);
+
+create policy "중복 이메일 허용" on subscribers
+  for select using (true);
