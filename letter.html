@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>기도 편지</title>
+  <title>Abigail's Prayer Letter</title>
+  <meta name="description" content="선교사 Abigail의 기도 편지">
+  <meta property="og:title" content="Abigail's Prayer Letter">
+  <meta property="og:description" content="선교사 Abigail의 기도 편지 — 믿음과 사역 이야기를 나눕니다.">
+  <meta property="og:image" content="https://prayer-letter.vercel.app/letter_header.png">
+  <meta property="og:url" content="https://prayer-letter.vercel.app">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Abigail's Prayer Letter">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Abigail's Prayer Letter">
+  <meta name="twitter:image" content="https://prayer-letter.vercel.app/letter_header.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -672,7 +682,7 @@ async function subscribe(isEn) {
 }
 
 function copyLink(btn, isEn) {
-  const base = `${location.origin}${location.pathname}?id=${currentSlug}`;
+  const base = `${location.origin}/api/share?id=${currentSlug}`;
   const url = isEn ? `${base}&lang=en` : base;
   navigator.clipboard.writeText(url).then(() => {
     btn.textContent = isEn ? 'Link Copied!' : '링크 복사됨!';

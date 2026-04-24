@@ -5,6 +5,7 @@
     { "src": "/letters", "dest": "/letters.html" },
     { "src": "/letter", "dest": "/letter.html" },
     { "src": "/editor", "dest": "/index.html" },
+    { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
