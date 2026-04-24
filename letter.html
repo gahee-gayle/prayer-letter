@@ -672,7 +672,9 @@ async function subscribe(isEn) {
 }
 
 function copyLink(btn, isEn) {
-  navigator.clipboard.writeText(location.href).then(() => {
+  const base = `${location.origin}${location.pathname}?id=${currentSlug}`;
+  const url = isEn ? `${base}&lang=en` : base;
+  navigator.clipboard.writeText(url).then(() => {
     btn.textContent = isEn ? 'Link Copied!' : '링크 복사됨!';
     btn.classList.add('copied');
     setTimeout(() => {
