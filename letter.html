@@ -484,7 +484,7 @@
 <script>
 const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxZ3Jucmh0cXN4ZHJsbGp0c3JrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTY1NjUsImV4cCI6MjA5MTU3MjU2NX0.yeM2Biz1XWAfp9IRga3-SSiu2bokc3hpJT2QS86josk';
-let currentLang = 'ko';
+let currentLang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'ko';
 let currentSlug = null;
 let letterData = null;
 
@@ -521,7 +521,7 @@ function renderLetter() {
   const title = isEn && l.title_en ? l.title_en : l.title;
   const greeting = isEn && l.greeting_en ? l.greeting_en : l.greeting;
   const closing = isEn && l.closing_en ? l.closing_en : l.closing;
-  const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' }) : '';
+  const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString(isEn ? 'en-US' : 'ko-KR', { year:'numeric', month:'long', day:'numeric' }) : '';
   const blocks = l.body_blocks || [];
   const prayers = l.prayer_items || [];
 
@@ -748,6 +748,11 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeLightbox();
   if (e.key === 'ArrowLeft') lbMove(-1);
   if (e.key === 'ArrowRight') lbMove(1);
+});
+
+// 초기 언어 버튼 active 상태 동기화
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.classList.toggle('active', b.dataset.lang === currentLang);
 });
 
 loadLetter();
