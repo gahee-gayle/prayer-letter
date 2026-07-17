@@ -22,7 +22,7 @@ async function checkEditMode() {
   if (btn) btn.textContent = '업데이트';
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=slug,title,title_en,date,greeting,greeting_en,body_blocks,prayer_items,closing,closing_en,main_photo`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=*`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const data = await res.json();
@@ -34,6 +34,7 @@ async function checkEditMode() {
     setVal('title',       l.title);
     setVal('title-en',    l.title_en);
     setVal('date',        l.date);
+    setVal('category',    l.category || 'prayer');
     setVal('greeting',    l.greeting);
     setVal('greeting-en', l.greeting_en);
     setVal('closing',     l.closing);
@@ -72,10 +73,14 @@ async function saveToCloud() {
   btn.textContent = editSlug ? '업데이트 중...' : '저장 중...';
   btn.disabled = true;
 
+  // 목록 페이지를 빠르게 하기 위한 가벼운 미리보기 필드 (썸네일 + 발췌)
+  const thumb = await makeThumb(mainPhoto || firstBlockPhoto(bodyBlocks));
+
   const payload = {
     title:        d.title,
     title_en:     d.titleEn || null,
     date:         d.date || null,
+    category:     d.category || 'prayer',
     greeting:     d.greeting || null,
     greeting_en:  d.greetingEn || null,
     body_blocks:  bodyBlocks,
@@ -83,6 +88,9 @@ async function saveToCloud() {
     closing:      d.closing || null,
     closing_en:   d.closingEn || null,
     main_photo:   mainPhoto || null,
+    excerpt:      buildExcerpt(bodyBlocks, false),
+    excerpt_en:   buildExcerpt(bodyBlocks, true),
+    thumb:        thumb,
   };
 
   try {
@@ -292,6 +300,7 @@ function getHeaderData() {
     title:      val('title') || '제목 없음',
     titleEn:    val('title-en'),
     date:       val('date'),
+    category:   val('category') || 'prayer',
     greeting:   val('greeting'),
     greetingEn: val('greeting-en'),
     prayer:     prayerItems.filter(p => p.ko || p.en).map((p,i) => `${i+1}. ${p.ko}`).join('\n'),
@@ -701,6 +710,41 @@ function compressImage(file, maxWidth = 1200, quality = 0.82) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+// ── 목록용 가벼운 썸네일 생성 (base64 dataURL을 작게 다시 인코딩) ──
+function makeThumb(dataUrl, maxWidth = 480, quality = 0.55) {
+  return new Promise((resolve) => {
+    if (!dataUrl) return resolve(null);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let { width, height } = img;
+      if (width > maxWidth) { height = Math.round(height * maxWidth / width); width = maxWidth; }
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(null);
+    img.src = dataUrl;
+  });
+}
+
+// ── 목록 카드용 미리보기 텍스트 추출 ──
+function stripHtmlText(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html || '';
+  return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
+}
+function buildExcerpt(blocks, en) {
+  const parts = (blocks || [])
+    .map(b => stripHtmlText(en ? (b.textEn || b.textKo) : b.textKo))
+    .filter(Boolean);
+  return parts.join(' ').slice(0, 180) || null;
+}
+function firstBlockPhoto(blocks) {
+  const b = (blocks || []).find(b => b.photos && b.photos.length);
+  return b ? b.photos[0] : null;
 }
 
 async function loadBlockPhotos(e, idx) {

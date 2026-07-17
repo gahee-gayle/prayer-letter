@@ -3,40 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abigail의 기도 편지</title>
+  <title>Abigail & Missions · 선교 이야기 & 기도편지</title>
   <meta name="description" content="선교사 Abigail의 기도 편지 — 믿음과 사역 이야기를 나눕니다.">
   <meta property="og:title" content="Abigail의 기도 편지">
   <meta property="og:description" content="선교사 Abigail의 기도 편지 — 믿음과 사역 이야기를 나눕니다.">
   <meta property="og:image" content="https://prayer-letter.vercel.app/letter_header.png">
   <meta property="og:url" content="https://prayer-letter.vercel.app">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Abigail's Prayer Letter">
+  <meta property="og:site_name" content="Abigail & Missions">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Abigail의 기도 편지">
   <meta name="twitter:image" content="https://prayer-letter.vercel.app/letter_header.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --teal-900: #0a3832; --teal-800: #0f4a42; --teal-700: #155c52;
-      --teal-400: #2d9e8e; --teal-100: #c4eae6; --teal-50: #edf4f2;
-      --blush-300: #f0bec4; --blush-200: #f7d8db; --blush-100: #fceef0;
-      --cream-50: #f4f7f5; --cream-100: #e6ede9; --cream-200: #cdd9d2;
-      --text-on-dark: #f0faf9; --text-muted-dark: rgba(240,250,249,0.65);
-      --text-primary: #1a2e2c; --text-secondary: #4a6560; --text-tertiary: #8aaba6;
-      --font-serif: 'Noto Serif KR', Georgia, serif;
-      --font-sans: 'Noto Sans KR', sans-serif;
+      --paper:#ffffff; --cream:#faf7f1; --cream-2:#f3ece1;
+      --ink:#2c2925; --ink-soft:#736b60; --muted:#9a9186;
+      --terra:#bd7149; --terra-dark:#9c5732; --gold:#c99a4b;
+      --line:rgba(44,41,37,.12); --line-soft:rgba(44,41,37,.08);
+      /* 기존 변수명을 홈 팔레트로 매핑 (흰 배경 + 테라코타/골드 키컬러) */
+      --teal-900:#2c2925; --teal-800:#2c2925; --teal-700:#3f6f66;
+      --teal-400:#bd7149; --teal-200:#e7ddca; --teal-100:#f3ece1; --teal-50:#faf7f1;
+      --blush-300:#bd7149; --blush-200:#e7c7b6; --blush-100:#f6ece4;
+      --cream-50:#ffffff; --cream-100:#faf7f1; --cream-200:#efe7d8;
+      --text-on-dark:#2c2925; --text-muted-dark:#736b60;
+      --text-primary:#2c2925; --text-secondary:#736b60; --text-tertiary:#9a9186; --text-muted:#9a9186;
+      --font-serif:'Playfair Display','Noto Serif KR',serif;
+      --font-sans:'Mulish','Noto Sans KR',sans-serif;
     }
     html { font-size: clamp(14px, 1vw, 16px); }
-    body { font-family: var(--font-sans); background: var(--teal-800); color: var(--text-primary); min-height: 100vh; }
+    html[lang="en"] body{letter-spacing:.02em}
+    body { font-family: var(--font-sans); background: var(--paper); color: var(--ink); min-height: 100vh; -webkit-font-smoothing:antialiased; }
 
     .bg-pattern { display: none; }
 
     header {
-      background: rgba(10,56,50,0.88);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
       position: sticky; top: 0; z-index: 100;
     }
     .header-inner {
@@ -53,28 +59,28 @@
     .lang-btn {
       padding: 5px 13px; border-radius: 999px;
       font-family: var(--font-sans); font-size: 12px;
-      cursor: pointer; border: 1px solid rgba(255,255,255,0.18);
-      background: transparent; color: var(--text-muted-dark);
+      cursor: pointer; border: 1px solid var(--line);
+      background: transparent; color: var(--ink-soft);
       transition: all 0.15s;
     }
-    .lang-btn.active { background: var(--blush-300); color: var(--teal-900); border-color: var(--blush-300); font-weight: 500; }
-    .lang-btn:hover:not(.active) { background: rgba(255,255,255,0.08); color: var(--text-on-dark); }
+    .lang-btn.active { background: var(--ink); color: var(--cream); border-color: var(--ink); font-weight: 600; }
+    .lang-btn:hover:not(.active) { background: var(--cream); color: var(--ink); }
     .write-btn {
       padding: 8px 20px;
-      background: #2d8a6e; color: var(--text-on-dark);
+      background: var(--terra); color: #fff;
       border: none; border-radius: 999px;
-      font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600;
       cursor: pointer; text-decoration: none;
       transition: background 0.18s;
     }
-    .write-btn:hover { background: #236e58; }
+    .write-btn:hover { background: var(--terra-dark); }
 
-    main { max-width: none; margin: 0 auto; padding: 3rem 15% 6rem; position: relative; z-index: 1; }
+    main { max-width: none; margin: 0 auto; padding: 3rem 15% 3rem; position: relative; z-index: 1; }
 
     .page-title {
       font-family: var(--font-serif);
       font-size: clamp(24px, 3vw, 36px);
-      color: var(--text-on-dark);
+      color: var(--terra);
       margin-bottom: 0.5rem;
       font-weight: 400;
     }
@@ -82,36 +88,35 @@
 
     .year-group { margin-bottom: 2.5rem; }
     .year-label {
-      font-size: 12px; font-weight: 500;
-      color: var(--text-muted-dark);
-      text-transform: uppercase; letter-spacing: 0.1em;
+      font-size: 12px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.14em;
       margin-bottom: 1rem;
       padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid var(--gold);
     }
 
     .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px 20px; }
-    .letter-card { box-shadow: 0 2px 16px rgba(10,56,50,0.18); }
     .card-preview { font-size: 14px; line-height: 1.75; -webkit-line-clamp: 4; }
 
     .letter-card {
-      background: var(--cream-50);
-      border-radius: 10px;
+      background: var(--paper);
+      border: 1px solid var(--line-soft);
+      border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
       text-decoration: none;
       display: block;
-      transition: transform 0.18s, box-shadow 0.18s;
-      box-shadow: 0 2px 12px rgba(10,56,50,0.15);
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 10px 30px -22px rgba(44,41,37,0.5);
     }
-    .letter-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(10,56,50,0.25); }
+    .letter-card:hover { transform: translateY(-5px); box-shadow: 0 22px 50px -30px rgba(44,41,37,0.55); }
 
     .card-header {
-      background: var(--teal-800);
-      background-image: url('letter_header.png');
+      background: linear-gradient(150deg,#bd7149,#9c5732);
       background-size: cover;
-      background-position: center 60%;
-      height: 200px;
+      background-position: center;
+      height: 180px;
       position: relative;
       overflow: hidden;
     }
@@ -160,8 +165,8 @@
     .loading { text-align: center; padding: 4rem 0; color: var(--text-muted-dark); }
     .spinner {
       width: 32px; height: 32px; margin: 0 auto 1rem;
-      border: 2px solid rgba(255,255,255,0.15);
-      border-top-color: var(--blush-300);
+      border: 2px solid var(--line);
+      border-top-color: var(--terra);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
@@ -180,35 +185,36 @@
     }
     .admin-modal-bg.open { display: flex; }
     .admin-modal {
-      background: var(--teal-800);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--paper);
+      border: 1px solid var(--line);
       border-radius: 16px; padding: 2rem;
       width: min(340px, 90vw);
       display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      box-shadow: 0 30px 60px -30px rgba(44,41,37,0.5);
     }
-    .admin-modal-title { font-size: 15px; color: var(--text-on-dark); font-weight: 500; }
+    .admin-modal-title { font-size: 15px; color: var(--ink); font-weight: 600; }
     .admin-modal-input {
       width: 100%; padding: 10px 16px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.25);
-      background: rgba(255,255,255,0.1); color: white;
+      border: 1px solid var(--line);
+      background: var(--cream); color: var(--ink);
       font-family: var(--font-sans); font-size: 15px;
       letter-spacing: 0.2em; outline: none; text-align: center;
     }
-    .admin-modal-input::placeholder { letter-spacing: 0.05em; color: rgba(255,255,255,0.4); }
+    .admin-modal-input::placeholder { letter-spacing: 0.05em; color: var(--muted); }
     .admin-modal-btns { display: flex; gap: 8px; width: 100%; }
     .admin-modal-ok {
       flex: 1; padding: 9px; border-radius: 999px;
-      background: var(--blush-300); color: var(--teal-900);
+      background: var(--terra); color: #fff;
       border: none; font-size: 14px; font-weight: 600; cursor: pointer;
     }
-    .admin-modal-ok:hover { background: #e8a0a8; }
+    .admin-modal-ok:hover { background: var(--terra-dark); }
     .admin-modal-cancel {
       flex: 1; padding: 9px; border-radius: 999px;
-      background: transparent; color: var(--text-muted-dark);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent; color: var(--ink-soft);
+      border: 1px solid var(--line);
       font-size: 14px; cursor: pointer;
     }
-    .admin-modal-err { font-size: 13px; color: var(--blush-300); min-height: 18px; }
+    .admin-modal-err { font-size: 13px; color: var(--terra); min-height: 18px; }
     /* ── Bottom Fixed Area ── */
     .bottom-fixed {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
@@ -218,22 +224,139 @@
       padding: 0.7rem 0 1.6rem;
     }
     .donate-above-footer a {
-      display: inline-block; padding: 8px 24px; border-radius: 999px;
-      font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+      display: inline-block; padding: 9px 26px; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 700;
       text-decoration: none;
-      background: var(--blush-300); color: var(--teal-900);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      background: var(--terra); color: #fff;
+      box-shadow: 0 8px 20px -10px rgba(189,113,73,0.7);
       transition: background 0.15s;
     }
-    .donate-above-footer a:hover { background: #e8a0a8; }
+    .donate-above-footer a:hover { background: var(--terra-dark); }
     .support-footer {
       padding: 0.6rem 0;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      background: rgba(10,56,50,0.88);
-      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
       text-align: center;
     }
-    .support-footer-copy { font-size: 13px; color: rgba(240,250,249,0.7); }
+    .support-footer-copy { font-size: 13px; color: var(--muted); }
+    .cat-filter { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 2rem; }
+    .cat-tab {
+      padding:8px 18px; border-radius:999px; cursor:pointer;
+      font-family:var(--font-sans); font-size:13px; font-weight:500;
+      border:1px solid var(--line, rgba(0,0,0,0.12));
+      background:transparent; color:var(--text-muted, #6b7a78); transition:all 0.15s;
+    }
+    .cat-tab:hover { border-color:var(--blush-300, #e2a9b4); color:var(--teal-900, #1c3b38); }
+    .cat-tab.active { background:var(--terra); color:#fff; border-color:var(--terra); }
+    .card-cat {
+      display:inline-block; font-family:var(--font-sans); font-size:10.5px; font-weight:600;
+      letter-spacing:0.06em; padding:3px 9px; border-radius:999px; margin-bottom:8px;
+      background:rgba(189,113,73,0.12); color:#9c5732;
+    }
+    .card-cat.ministry, .card-cat.prayer, .card-cat.sharing { background:rgba(189,113,73,0.12); color:#9c5732; }
+
+    /* ===== 편지 읽기 뷰 (letter view) ===== */
+    .breadcrumb { margin-bottom: 1.25rem; }
+    .breadcrumb a { color: var(--ink-soft); text-decoration: none; font-size: 13px; transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--terra); }
+
+    .letter-wrap { background: var(--paper); border: 1px solid var(--line-soft); border-radius: 5px; overflow: hidden; box-shadow: 0 26px 60px -34px rgba(44,41,37,0.5); }
+    .letter-header { position: relative; overflow: hidden; height: 420px; background: linear-gradient(150deg,#bd7149,#9c5732); }
+    .lh-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lh-overlay { display: none; }
+    .letter-header.no-photo { background: #dfe7e6 url('letter_header.png') center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
+    .letter-header.no-photo::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg,rgba(0,0,0,.22),transparent 42%); z-index: 0; }
+    .letter-title-bar { background: var(--cream-100); padding: 1.5rem 2rem 1.25rem; text-align: center; border-bottom: 1px solid var(--cream-200); }
+    .lh-logo { position: absolute; top: 22px; right: 26px; display: flex; align-items: center; gap: 12px; z-index: 3; }
+    .lh-logo-cross { width: 26px; height: 42px; position: relative; flex-shrink: 0; }
+    .lh-logo-cross::before, .lh-logo-cross::after { content: ''; position: absolute; background: #fff; border-radius: 2px; }
+    .lh-logo-cross::before { width: 3px; height: 42px; left: 11.5px; top: 0; }
+    .lh-logo-cross::after { width: 26px; height: 3px; left: 0; top: 13px; }
+    .lh-logo-text { display: flex; flex-direction: column; line-height: 1.35; }
+    .lh-logo-name { font-family: var(--font-serif); font-size: 19px; font-weight: 600; color: #fff; letter-spacing: 0.03em; }
+    .lh-logo-sub { font-size: 11px; color: rgba(255,255,255,0.85); letter-spacing: 0.22em; text-transform: uppercase; }
+    .lh-title { font-family: var(--font-serif); font-size: clamp(22px, 3vw, 32px); font-weight: 600; color: var(--ink); line-height: 1.3; }
+    .lh-date { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+    .main-photo { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .letter-body { padding: 2rem 2.5rem; }
+    .letter-greeting { font-style: italic; font-size: 17px; color: var(--ink-soft); margin-bottom: 1rem; }
+    .pv-block { margin-bottom: 1.75rem; }
+    .pv-block-text { font-size: 17px; color: var(--ink); line-height: 1.9; white-space: pre-wrap; margin-bottom: 0.85rem; }
+    .pv-block-photos { display: grid; gap: 6px; margin-top: 0.75rem; }
+    .pv-block-photos img { width: 100%; border-radius: 4px; object-fit: cover; display: block; cursor: zoom-in; }
+    .pv-block-photos.layout-full { grid-template-columns: 1fr; }
+    .pv-block-photos.layout-full img { height: 400px !important; max-height: none !important; object-fit: cover; }
+    .pv-block-photos.layout-half { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pv-block-photos.layout-half img { width: calc(50% - 3px) !important; height: 260px !important; max-height: none !important; object-fit: cover; }
+    .pv-block-photos.layout-grid { grid-template-columns: 1fr 1fr; }
+    .pv-block-photos.layout-grid img { height: 220px !important; max-height: none !important; object-fit: cover; }
+    @media (max-width: 680px) {
+      .pv-block-photos.layout-half { display: grid !important; grid-template-columns: 1fr !important; }
+      .pv-block-photos.layout-half img { width: 100% !important; height: 280px !important; }
+      .pv-block-photos.layout-grid { grid-template-columns: 1fr !important; }
+      .pv-block-photos.layout-grid img { height: 280px !important; }
+    }
+    .prayer-box { margin-top: 1.5rem; background: var(--teal-50); border-left: 3px solid var(--teal-400); border-radius: 0 10px 10px 0; padding: 1rem 1.25rem; }
+    .prayer-title { font-size: 11px; font-weight: 700; color: var(--terra-dark); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+    .prayer-item { font-size: 14px; color: var(--ink); line-height: 2; }
+    .letter-footer { text-align: center; padding: 1.25rem 2rem; border-top: 1px solid var(--cream-200); font-size: 14px; color: var(--ink-soft); font-style: italic; }
+    .share-bar { margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .share-label { font-size: 13px; color: var(--ink-soft); }
+    .subscribe-wrap { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .subscribe-label { font-size: 13px; color: var(--ink-soft); }
+    .subscribe-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .subscribe-input { padding: 8px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--cream); color: var(--ink); font-family: var(--font-sans); font-size: 13px; outline: none; width: 220px; }
+    .subscribe-input::placeholder { color: var(--muted); }
+    .subscribe-btn { padding: 8px 20px; border-radius: 999px; background: var(--terra); color: #fff; border: none; font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+    .subscribe-btn:hover { background: var(--terra-dark); }
+    .subscribe-msg { font-size: 13px; min-height: 18px; }
+    .share-btn { padding: 8px 18px; border-radius: 999px; font-family: var(--font-sans); font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--line); background: var(--cream); color: var(--ink); transition: all 0.15s; }
+    .share-btn:hover { background: var(--cream-2); }
+    .share-btn.copied { background: var(--terra); border-color: var(--terra); color: #fff; }
+    .donate-btn-inline { display: inline-block; padding: 8px 20px; border-radius: 999px; font-family: var(--font-sans); font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; background: var(--terra); color: #fff; transition: background 0.15s; }
+    .donate-btn-inline:hover { background: var(--terra-dark); }
+    .lightbox-bg { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.88); backdrop-filter: blur(6px); align-items: center; justify-content: center; cursor: zoom-out; }
+    .lightbox-bg.open { display: flex; }
+    .lightbox-img { max-width: 88vw; max-height: 88vh; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 48px rgba(0,0,0,0.5); cursor: default; transition: opacity 0.15s; }
+    .lightbox-close { position: fixed; top: 20px; right: 24px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); color: white; font-size: 20px; line-height: 36px; text-align: center; cursor: pointer; border: none; transition: background 0.15s; }
+    .lightbox-close:hover { background: rgba(255,255,255,0.3); }
+    .lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.15); color: white; font-size: 22px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+    .lightbox-nav.prev { left: 20px; } .lightbox-nav.next { right: 20px; }
+    .lightbox-nav[hidden] { display: none; }
+    .lightbox-dots { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; }
+    .lightbox-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.35); transition: background 0.15s; }
+    .lightbox-dot.active { background: white; }
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      header, .bottom-fixed, .site-footer, #cat-filter, #list-head, .breadcrumb, .share-bar, .subscribe-wrap { display: none !important; }
+      body { background: white !important; margin: 0; }
+      main { padding: 0.25rem 2% !important; }
+      .lightbox-bg { display: none !important; }
+      .lh-logo { display: none !important; }
+      .letter-wrap { box-shadow: none !important; border: none !important; border-radius: 0 !important; }
+      .letter-header { height: 280px !important; }
+    }
+
+    /* ===== 메인 네비 (홈과 동일) ===== */
+    .main-nav { background:rgba(255,255,255,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); position:sticky; top:64px; z-index:60; }
+    .main-nav .nav-inner { display:flex; align-items:center; justify-content:center; gap:44px; height:52px; max-width:1200px; margin:0 auto; padding:0 34px; }
+    .main-nav a { font-family:var(--font-serif); font-size:1.02rem; color:var(--ink); text-decoration:none; transition:color .2s; white-space:nowrap; }
+    .main-nav a:hover, .main-nav a.active { color:var(--terra); }
+    @media (max-width:940px){ .main-nav .nav-inner{ gap:22px; overflow-x:auto; justify-content:flex-start; height:48px; padding:0 5%; } .main-nav a{ font-size:.95rem; } }
+
+    /* ===== 사이트 푸터 (홈과 동일) ===== */
+    .site-footer { background:#211e1a; color:rgba(250,247,241,.72); padding:60px 0 34px; margin-top:3.5rem; }
+    .site-footer .foot-inner { max-width:1200px; margin:0 auto; padding:0 34px; }
+    .site-footer .foot-top { text-align:center; padding-bottom:34px; border-bottom:1px solid rgba(250,247,241,.12); }
+    .site-footer .flogo { font-family:var(--font-serif); font-size:2.1rem; color:var(--cream); display:inline-block; text-decoration:none; }
+    .site-footer .flogo .amp { color:var(--terra); font-style:italic; }
+    .site-footer .fsub { font-size:.62rem; letter-spacing:.4em; text-transform:uppercase; color:var(--muted); margin-top:2px; }
+    .site-footer .fnav { display:flex; gap:30px; justify-content:center; flex-wrap:wrap; margin-top:22px; }
+    .site-footer .fnav a { font-family:var(--font-serif); font-size:1rem; color:rgba(250,247,241,.8); text-decoration:none; }
+    .site-footer .fnav a:hover { color:var(--terra); }
+    .site-footer .copyright { text-align:center; margin-top:30px; font-family:var(--font-sans); font-size:.78rem; color:var(--muted); }
   </style>
 </head>
 <body>
@@ -256,37 +379,51 @@
 
 <header>
   <div class="header-inner">
-    <a href="letters.html" class="logo">
-      <div class="cross"></div>
-      <div style="display:flex;flex-direction:column;line-height:1.25;align-items:center;">
-        <span style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--text-on-dark);letter-spacing:0.18em;text-transform:uppercase;">Abigail's</span>
-        <span style="font-size:9.5px;color:var(--text-muted-dark);letter-spacing:0.28em;text-transform:uppercase;">Prayer Letter</span>
-      </div>
+    <a href="home.html" class="logo" style="text-decoration:none;">
+      <span style="font-family:var(--font-serif);font-size:1.5rem;font-weight:600;color:var(--ink);letter-spacing:0.01em;line-height:1;">Abigail <span style="color:var(--terra);font-style:italic;font-weight:500;">&amp;</span> Missions</span>
     </a>
-    <div class="lang-toggle">
-      <button class="lang-btn" data-lang="ko" onclick="setLang('ko')">한국어</button>
-      <button class="lang-btn" data-lang="en" onclick="setLang('en')">English</button>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="ko" onclick="setLang('ko')">한국어</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">English</button>
+      </div>
     </div>
   </div>
 </header>
 
+<nav class="main-nav">
+  <div class="nav-inner">
+    <a href="home.html">홈</a>
+    <a href="letters.html" class="active">소식/기도편지</a>
+    <a href="home.html#about">선교사 소개</a>
+    <a href="home.html#ministry">사역</a>
+    <a href="donate.html">후원</a>
+  </div>
+</nav>
+
 <main>
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2rem;">
+  <div class="breadcrumb" id="breadcrumb" style="display:none;">
+    <a href="letters.html" id="breadcrumb-link">← All Stories</a>
+  </div>
+  <div id="list-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2rem;">
     <div>
-      <h1 class="page-title">Abigail's Prayer Letters</h1>
+      <h1 class="page-title">All Stories</h1>
     </div>
     <div id="admin-bar" style="display:flex;gap:8px;align-items:center;">
       <a href="index.html" id="write-btn-header" class="write-btn" style="display:none;">편지 쓰기</a>
       <button id="admin-btn" onclick="toggleAdmin()" style="
+        display:none;
         padding:8px 18px; border-radius:999px;
         font-family:var(--font-sans); font-size:13px;
-        cursor:pointer; border:1px solid rgba(255,255,255,0.2);
-        background:transparent; color:rgba(240,250,249,0.6);
+        cursor:pointer; border:1px solid var(--line);
+        background:transparent; color:var(--ink-soft);
         transition:all 0.15s;
       ">관리</button>
     </div>
   </div>
 
+
+  <div id="cat-filter" class="cat-filter"></div>
 
   <div id="content">
     <div class="loading">
@@ -296,14 +433,32 @@
   </div>
 </main>
 
-<div class="bottom-fixed">
-  <div class="donate-above-footer">
-    <a href="donate.html" id="donate-link"><span style="color:#2d8a6e;">♥</span> 후원하기</a>
-  </div>
-  <div class="support-footer">
-    <div class="support-footer-copy">© 2026 Abigail's Prayer Letter · All rights reserved</div>
-  </div>
+<!-- 라이트박스 (편지 사진 확대) -->
+<div class="lightbox-bg" id="lightbox-bg" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav prev" id="lb-prev" onclick="event.stopPropagation(); lbMove(-1)">‹</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+  <button class="lightbox-nav next" id="lb-next" onclick="event.stopPropagation(); lbMove(1)">›</button>
+  <div class="lightbox-dots" id="lb-dots"></div>
 </div>
+
+<footer class="site-footer" id="bottom-fixed">
+  <div class="foot-inner">
+    <div class="foot-top">
+      <a class="flogo" href="home.html">Abigail <span class="amp">&amp;</span> Missions</a>
+      <div class="fsub">Mission Journey · Prayer</div>
+      <div class="fnav">
+        <a href="home.html#about">About</a>
+        <a href="home.html#ministry">Ministry</a>
+        <a href="https://gahee-gayle.github.io/beebly/" target="_blank" rel="noopener">Beebly</a>
+        <a href="letters.html">Stories</a>
+        <a href="donate.html">Support</a>
+        <a href="mailto:gahee.kuk@gmail.com">Contact</a>
+      </div>
+    </div>
+    <div class="copyright">© 2026 Abigail &amp; Missions · One step, walked by faith.</div>
+  </div>
+</footer>
 
 <script>
 const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
@@ -311,10 +466,17 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 let isAdmin = false;
 let allLetters = [];
 let currentLang = sessionStorage.getItem('pl_lang') || 'ko';
+// 공유 링크(?lang=)로 들어오면 그 언어 우선
+(function(){ const ul = new URLSearchParams(location.search).get('lang'); if (ul === 'en' || ul === 'ko') currentLang = ul; })();
+
+// 한 페이지에서 목록/편지보기 전환: ?id= 있으면 letter, 없으면 list
+let viewMode = new URLSearchParams(location.search).get('id') ? 'letter' : 'list';
+let currentSlug = null;
+let letterData = null;
 
 const T = {
   ko: {
-    donate: '<span style="color:#2d8a6e;">♥</span> 후원하기', write: '편지 쓰기',
+    donate: '<span style="color:#fff;">♥</span> 후원하기', write: '편지 쓰기',
     manage: '관리', managing: '로그아웃',
     loading: '불러오는 중...', loadFail: '불러오기 실패. 잠시 후 다시 시도해 주세요.',
     empty: '아직 저장된 편지가 없어요.',
@@ -325,7 +487,7 @@ const T = {
     delFail: '삭제 실패. 다시 시도해 주세요.',
   },
   en: {
-    donate: '<span style="color:#2d8a6e;">♥</span> Support', write: 'Write Letter',
+    donate: '<span style="color:#fff;">♥</span> Support', write: 'Write Letter',
     manage: 'Manage', managing: 'Log out',
     loading: 'Loading...', loadFail: 'Failed to load. Please try again.',
     empty: 'No letters yet.',
@@ -340,6 +502,7 @@ const T = {
 function setLang(lang) {
   currentLang = lang;
   sessionStorage.setItem('pl_lang', lang);
+  document.documentElement.lang = lang;
   const t = T[lang];
   // 헤더 언어 버튼 active 동기화
   document.querySelectorAll('.lang-btn').forEach(b => {
@@ -359,20 +522,77 @@ function setLang(lang) {
   if (pwInput) pwInput.placeholder = t.pwPlaceholder;
   const pwConfirmBtn = document.getElementById('admin-pw-confirm');
   if (pwConfirmBtn) pwConfirmBtn.textContent = t.pwConfirm;
-  renderLetters(allLetters);
+  if (viewMode === 'letter') { renderLetter(); }
+  else { renderCatFilter(); applyFilterAndRender(); }
 }
+
+// 분류 라벨
+const CAT_LABELS = {
+  ministry: { ko:'사역 소식', en:'Ministry News' },
+  prayer:   { ko:'기도편지', en:'Prayer Letters' },
+  sharing:  { ko:'나눔', en:'Sharing' }
+};
+let activeCat = new URLSearchParams(location.search).get('cat');
+if (!CAT_LABELS[activeCat]) activeCat = null; // null = 전체
+
+function catOf(l) { return CAT_LABELS[l.category] ? l.category : 'prayer'; }
 
 async function loadLetters() {
   const t = T[currentLang];
+  const base = `${SUPABASE_URL}/rest/v1/letters?`;
+  const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` };
+  // 새 칼럼(category/excerpt/thumb)이 있으면 가벼운 쿼리, 없으면 예전 방식으로 자동 폴백
+  const richQ  = 'select=id,slug,title,title_en,date,category,excerpt,excerpt_en,thumb&order=date.desc';
+  const basicQ = 'select=id,slug,title,title_en,date,body_blocks,main_photo&order=date.desc';
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?select=id,slug,title,title_en,date,body_blocks,main_photo&order=date.desc`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-    });
+    let res = await fetch(base + richQ, { headers });
+    if (!res.ok) res = await fetch(base + basicQ, { headers });
     allLetters = await res.json();
-    renderLetters(allLetters);
+    if (!Array.isArray(allLetters)) allLetters = [];
+    renderCatFilter();
+    applyFilterAndRender();
   } catch(e) {
     document.getElementById('content').innerHTML = `<p class="empty">${t.loadFail}</p>`;
   }
+}
+
+function renderCatFilter() {
+  const isEn = currentLang === 'en';
+  const bar = document.getElementById('cat-filter');
+  if (!bar) return;
+  const counts = { ministry:0, prayer:0, sharing:0 };
+  allLetters.forEach(l => { counts[catOf(l)]++; });
+  const tabs = [
+    { key:null,       label: 'All' },
+    { key:'ministry', label: CAT_LABELS.ministry.en },
+    { key:'prayer',   label: CAT_LABELS.prayer.en },
+    { key:'sharing',  label: CAT_LABELS.sharing.en },
+  ];
+  bar.innerHTML = tabs.map(tb => {
+    const active = (activeCat||null) === tb.key ? ' active' : '';
+    const n = tb.key ? ` (${counts[tb.key]||0})` : '';
+    const arg = tb.key ? `'${tb.key}'` : 'null';
+    return `<button class="cat-tab${active}" onclick="setCat(${arg})">${tb.label}${n}</button>`;
+  }).join('');
+}
+
+function setCat(key) {
+  activeCat = key;
+  const url = new URL(location.href);
+  if (key) url.searchParams.set('cat', key); else url.searchParams.delete('cat');
+  history.replaceState(null, '', url);
+  renderCatFilter();
+  applyFilterAndRender();
+}
+
+function applyFilterAndRender() {
+  const isEn = currentLang === 'en';
+  const list = activeCat ? allLetters.filter(l => catOf(l) === activeCat) : allLetters;
+  const titleEl = document.querySelector('.page-title');
+  if (titleEl) {
+    titleEl.textContent = activeCat ? CAT_LABELS[activeCat].en : 'All Stories';
+  }
+  renderLetters(list);
 }
 
 function renderLetters(letters) {
@@ -408,30 +628,37 @@ function stripHtml(html) {
 }
 
 function letterCard(l, isEn, t) {
-  const blocks = l.body_blocks || [];
-  const preview = isEn
-    ? blocks.map(b => stripHtml(b.textEn || b.textKo || '')).filter(Boolean).join(' ').substring(0, 120)
-    : blocks.map(b => stripHtml(b.textKo || '')).filter(Boolean).join(' ').substring(0, 120);
+  // 가벼운 필드(excerpt/thumb) 우선, 없으면 예전 데이터(body_blocks/main_photo)에서 추출
+  let preview = isEn ? (l.excerpt_en || l.excerpt || '') : (l.excerpt || '');
+  if (!preview && l.body_blocks) {
+    const blocks = l.body_blocks || [];
+    preview = (isEn
+      ? blocks.map(b => stripHtml(b.textEn || b.textKo || ''))
+      : blocks.map(b => stripHtml(b.textKo || ''))
+    ).filter(Boolean).join(' ').substring(0, 120);
+  }
   const title = isEn && l.title_en ? l.title_en : l.title;
   const locale = isEn ? 'en-US' : 'ko-KR';
   const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' }) : '';
   const langParam = isEn ? '&lang=en' : '';
+  const cat = catOf(l);
+  const catTag = `<span class="card-cat ${cat}">${CAT_LABELS[cat].en}</span>`;
   const adminBtns = isAdmin ? `
     <div class="admin-btns" onclick="event.preventDefault()">
       <button class="admin-edit-btn" onclick="editLetter('${l.slug}')">${t.edit}</button>
       <button class="admin-del-btn" onclick="deleteLetter('${l.slug}', '${l.title}')">${t.del}</button>
     </div>` : '';
-  const photoStyle = l.main_photo
-    ? `background-image: url('${l.main_photo}'); background-size: cover; background-position: center;`
-    : '';
+  const img = l.thumb || l.main_photo || 'letter_header.png';
+  const photoStyle = `background-image: url('${img}'); background-size: cover; background-position: center;`;
   return `
-    <a href="letter.html?id=${l.slug}${langParam}" class="letter-card">
+    <a href="letters.html?id=${l.slug}${langParam}" class="letter-card">
       <div class="card-header" style="${photoStyle}"></div>
       <div class="card-title-bar">
         <div class="card-title">${title}</div>
         <div class="card-date">${dateStr}</div>
       </div>
       <div class="card-body">
+        ${catTag}
         <div class="card-preview">${preview || t.noContent}</div>
         <div class="card-footer">
           ${adminBtns}
@@ -446,7 +673,7 @@ function toggleAdmin() {
     isAdmin = false;
     sessionStorage.removeItem('pl_auth');
     document.getElementById('admin-btn').textContent = t.manage;
-    document.getElementById('admin-btn').style.color = 'rgba(240,250,249,0.6)';
+    document.getElementById('admin-btn').style.color = '#736b60';
     const wb = document.getElementById('write-btn-header');
     if (wb) wb.style.display = 'none';
     renderLetters(allLetters);
@@ -474,7 +701,7 @@ function checkAdminPW() {
     sessionStorage.setItem('pl_auth', '1');
     closeAdminModal();
     document.getElementById('admin-btn').textContent = t.managing;
-    document.getElementById('admin-btn').style.color = '#f0bec4';
+    document.getElementById('admin-btn').style.color = '#bd7149';
     const wb = document.getElementById('write-btn-header');
     if (wb) { wb.style.display = 'inline-block'; wb.textContent = t.write; }
     renderLetters(allLetters);
@@ -509,9 +736,175 @@ async function deleteLetter(slug, title) {
   }
 }
 
+/* ===== 편지 읽기 뷰 (한 페이지 내) ===== */
+async function loadLetter() {
+  const slug = new URLSearchParams(location.search).get('id');
+  currentSlug = slug;
+  ['list-head','cat-filter'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+  const bc = document.getElementById('breadcrumb'); if (bc) bc.style.display = 'block';
+  const content = document.getElementById('content');
+  if (!slug) { content.innerHTML = '<p style="color:#2c2925;text-align:center;padding:4rem">편지를 찾을 수 없어요.</p>'; return; }
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/letters?slug=eq.${slug}&select=slug,title,title_en,date,greeting,greeting_en,body_blocks,prayer_items,closing,closing_en,main_photo`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const data = await res.json();
+    if (!Array.isArray(data) || !data.length) { content.innerHTML = '<p style="color:#2c2925;text-align:center;padding:4rem">편지를 찾을 수 없어요.</p>'; return; }
+    letterData = data[0];
+    renderLetter();
+  } catch(e) {
+    content.innerHTML = '<p style="color:#2c2925;text-align:center;padding:4rem">불러오기 실패.</p>';
+  }
+}
+
+function renderLetter() {
+  if (!letterData) return;
+  const l = letterData;
+  const isEn = currentLang === 'en';
+  const admin = sessionStorage.getItem('pl_auth') === '1';
+  const title = isEn && l.title_en ? l.title_en : l.title;
+  const greeting = isEn && l.greeting_en ? l.greeting_en : l.greeting;
+  const closing = isEn && l.closing_en ? l.closing_en : l.closing;
+  const dateStr = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString(isEn ? 'en-US' : 'ko-KR', { year:'numeric', month:'long', day:'numeric' }) : '';
+  const blocks = l.body_blocks || [];
+  const prayers = l.prayer_items || [];
+  const blocksHtml = blocks.map(b => {
+    const text = isEn ? (b.textEn || b.textKo) : b.textKo;
+    const photos = b.photos || [];
+    const layout = b.photoLayout || 'full';
+    return `<div class="pv-block">
+      ${text ? `<div class="pv-block-text">${text}</div>` : ''}
+      ${photos.length ? `<div class="pv-block-photos layout-${layout}" data-photos='${JSON.stringify(photos).replace(/'/g,"&#39;")}'>${photos.map((src, i) => `<img src="${src}" alt="" onclick="openLightbox(JSON.parse(this.closest('[data-photos]').dataset.photos),${i})">`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+  const filledPrayers = prayers.filter(p => p.ko || p.en);
+  const prayerHtml = filledPrayers.length ? `
+    <div class="prayer-box">
+      <div class="prayer-title">${isEn ? 'Prayer Requests' : '기도 제목'}</div>
+      ${filledPrayers.map((p,i) => { const txt = isEn ? (p.en || p.ko) : p.ko; return txt ? `<div class="prayer-item">${i+1}. ${txt}</div>` : ''; }).filter(Boolean).join('')}
+    </div>` : '';
+  const bcLink = document.getElementById('breadcrumb-link');
+  if (bcLink) bcLink.textContent = '← All Stories';
+  document.getElementById('content').innerHTML = `
+    <div class="letter-wrap">
+      <div class="letter-header ${l.main_photo ? '' : 'no-photo'}">
+        ${l.main_photo ? `<img class="lh-photo" src="${l.main_photo}" alt="">` : ''}
+      </div>
+      <div class="letter-title-bar">
+        <div class="lh-title">${title}</div>
+        <div class="lh-date">${dateStr}</div>
+      </div>
+      <div class="letter-body">
+        ${greeting ? `<div class="letter-greeting">${greeting}</div>` : ''}
+        ${blocksHtml}
+        ${prayerHtml}
+      </div>
+      <div class="letter-footer">${closing || (isEn ? 'In His grace, Abigail' : '주님의 은혜안에서, Abigail 드림')}</div>
+    </div>
+    ${admin ? `
+    <div class="share-bar">
+      <button class="share-btn" onclick="copyLink(this, ${isEn})">${isEn ? 'Share Letter' : '편지 공유'}</button>
+      <button class="share-btn" onclick="sendToSubscribers(this, ${isEn})">${isEn ? 'Send to Subscribers' : '구독자에게 보내기'}</button>
+      <button class="share-btn" onclick="downloadPDF()">${isEn ? 'Save as PDF' : 'PDF 저장'}</button>
+      <button class="share-btn" onclick="editLetter('${l.slug || currentSlug}')">${isEn ? 'Edit' : '편집'}</button>
+    </div>` : `
+    <div class="share-bar">
+      <button class="share-btn" onclick="copyLink(this, ${isEn})">${isEn ? 'Share Letter' : '편지 공유'}</button>
+      <a href="donate.html${isEn ? '?lang=en' : ''}" class="donate-btn-inline"><span style="color:#fff;">♥</span> ${isEn ? 'Support' : '후원하기'}</a>
+    </div>
+    <div class="subscribe-wrap">
+      <div class="subscribe-label">${isEn ? 'Get notified when a new letter is posted' : '새 편지가 올라오면 알림을 받으세요'}</div>
+      <div class="subscribe-row">
+        <input class="subscribe-input" id="sub-email" type="email" placeholder="${isEn ? 'your@email.com' : '이메일 주소'}">
+        <button class="subscribe-btn" onclick="subscribe(${isEn})">${isEn ? 'Subscribe' : '구독하기'}</button>
+      </div>
+      <div class="subscribe-msg" id="sub-msg"></div>
+    </div>`}
+  `;
+}
+
+function downloadPDF() { window.print(); }
+
+async function sendToSubscribers(btn, isEn) {
+  if (!confirm(isEn ? 'Send this letter to all subscribers?' : '모든 구독자에게 이 편지를 보낼까요?')) return;
+  const original = btn.textContent;
+  btn.textContent = isEn ? 'Sending...' : '발송 중...';
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/send-newsletter`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: currentSlug, title: letterData.title, title_en: letterData.title_en })
+    });
+    const data = await res.json();
+    btn.textContent = isEn ? `✓ Sent to ${data.sent}` : `✓ ${data.sent}명에게 발송 완료`;
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 3000);
+  } catch {
+    btn.textContent = isEn ? 'Failed' : '발송 실패';
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2000);
+  }
+}
+
+async function subscribe(isEn) {
+  const email = document.getElementById('sub-email')?.value?.trim();
+  const msg = document.getElementById('sub-msg');
+  if (!email || !email.includes('@')) {
+    msg.style.color = '#bd7149';
+    msg.textContent = isEn ? 'Please enter a valid email.' : '올바른 이메일을 입력해 주세요.';
+    return;
+  }
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/subscribers`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ email, lang: isEn ? 'en' : 'ko', subscribed_at: new Date().toISOString() })
+    });
+    if (res.ok || res.status === 409) {
+      msg.style.color = '#2d8a6e';
+      msg.textContent = isEn ? '✓ Subscribed! Thank you.' : '✓ 구독 완료! 감사합니다.';
+      document.getElementById('sub-email').value = '';
+    } else { throw new Error(); }
+  } catch {
+    msg.style.color = '#bd7149';
+    msg.textContent = isEn ? 'Something went wrong. Please try again.' : '오류가 발생했어요. 다시 시도해 주세요.';
+  }
+}
+
+function copyLink(btn, isEn) {
+  const base = `${location.origin}/api/share?id=${currentSlug}`;
+  const url = isEn ? `${base}&lang=en` : base;
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = isEn ? 'Link Copied!' : '링크 복사됨!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = isEn ? 'Share Letter' : '편지 공유'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* 라이트박스 */
+let lbPhotos = [], lbIndex = 0;
+function openLightbox(photos, idx) { lbPhotos = photos; lbIndex = idx; lbRender(); document.getElementById('lightbox-bg').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeLightbox() { document.getElementById('lightbox-bg').classList.remove('open'); document.body.style.overflow = ''; }
+function lbMove(dir) { lbIndex = (lbIndex + dir + lbPhotos.length) % lbPhotos.length; lbRender(); }
+function lbRender() {
+  const img = document.getElementById('lightbox-img');
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = lbPhotos[lbIndex]; img.style.opacity = '1'; }, 80);
+  const multi = lbPhotos.length > 1;
+  document.getElementById('lb-prev').hidden = !multi;
+  document.getElementById('lb-next').hidden = !multi;
+  document.getElementById('lb-dots').innerHTML = multi ? lbPhotos.map((_, i) => `<div class="lightbox-dot ${i === lbIndex ? 'active' : ''}"></div>`).join('') : '';
+}
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox-bg').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lbMove(-1);
+  if (e.key === 'ArrowRight') lbMove(1);
+});
+
 // apply initial lang state
 (function() {
   const t = T[currentLang];
+  document.documentElement.lang = currentLang;
   // 헤더 언어 버튼 초기 active 상태
   document.querySelectorAll('.lang-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === currentLang);
@@ -522,17 +915,23 @@ async function deleteLetter(slug, title) {
     donateLink.innerHTML = t.donate;
     donateLink.href = currentLang === 'en' ? 'donate.html?lang=en' : 'donate.html';
   }
+  // "관리" 버튼은 ?admin 으로 접속했거나 이미 로그인된 경우에만 노출
+  const wantsAdmin = new URLSearchParams(location.search).has('admin');
+  const authed = sessionStorage.getItem('pl_auth') === '1';
+  const adminBtn = document.getElementById('admin-btn');
+  if (adminBtn && (wantsAdmin || authed)) adminBtn.style.display = 'inline-block';
   // admin 세션 자동 복원
-  if (sessionStorage.getItem('pl_auth') === '1') {
+  if (authed) {
     isAdmin = true;
-    const adminBtn = document.getElementById('admin-btn');
-    if (adminBtn) { adminBtn.textContent = t.managing; adminBtn.style.color = '#f0bec4'; }
+    if (adminBtn) { adminBtn.textContent = t.managing; adminBtn.style.color = '#bd7149'; }
     const wb = document.getElementById('write-btn-header');
     if (wb) { wb.style.display = 'inline-block'; wb.textContent = t.write; }
   }
 })();
 
-loadLetters();
+// 라우터: ?id= 있으면 편지 보기, 없으면 목록
+if (viewMode === 'letter') { loadLetter(); }
+else { loadLetters(); }
 
 </script>
 </body>

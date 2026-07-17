@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abigail & Missions · 선교 이야기 & 기도편지</title>
+<meta name="description" content="영어교육으로 섬기는 선교 이야기. 사역 소식과 기도편지를 나눕니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#faf7f1;
+    --cream-2:#f3ece1;
+    --paper:#ffffff;
+    --ink:#2c2925;
+    --ink-soft:#736b60;
+    --muted:#9a9186;
+    --terra:#bd7149;
+    --terra-dark:#9c5732;
+    --gold:#c99a4b;
+    --line:rgba(44,41,37,.12);
+    --line-soft:rgba(44,41,37,.08);
+    --maxw:1200px;
+    --serif:'Playfair Display','Noto Serif KR',serif;
+    --sans:'Mulish','Noto Sans KR',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.2}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 34px}
+  .serif{font-family:var(--serif)}
+
+  /* ===== HEADER ===== */
+  header.top{background:var(--paper);border-bottom:1px solid var(--line-soft)}
+  .top-inner{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:27px 0 12px;gap:20px}
+  .social{display:flex;gap:18px;align-items:center}
+  .social a{color:var(--muted);transition:color .2s;display:inline-flex}
+  .social a:hover{color:var(--terra)}
+  .social svg{width:17px;height:17px}
+  .logo{text-align:center}
+  .logo a{font-family:var(--serif);font-size:2.7rem;font-weight:600;letter-spacing:.01em;display:inline-block;line-height:1}
+  .logo .amp{color:var(--terra);font-style:italic;font-weight:500}
+  .logo small{display:block;font-family:var(--sans);font-size:.92rem;letter-spacing:.22em;color:var(--muted);margin-top:3px;font-weight:600}
+  .top-right{display:flex;align-items:center;justify-content:flex-end;gap:16px}
+  .langtoggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-size:.72rem;font-weight:700}
+  .langtoggle button{border:0;background:transparent;padding:6px 11px;cursor:pointer;color:var(--muted);font-family:var(--sans);font-weight:700;transition:.2s}
+  .langtoggle button.active{background:var(--ink);color:var(--cream)}
+
+  /* ===== NAV ===== */
+  nav.main{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:60;backdrop-filter:blur(8px);background:rgba(255,255,255,.9)}
+  .nav-inner{display:flex;align-items:center;justify-content:center;gap:52px;height:62px}
+  nav.main a{font-family:var(--serif);font-size:1.06rem;color:var(--ink);transition:color .2s;position:relative}
+  nav.main a:hover{color:var(--terra)}
+  nav.main a.active{color:var(--terra)}
+
+  /* ===== FEATURED ===== */
+  .featured{background:var(--cream);padding:54px 0 60px;margin:0}
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+  .feat{display:block;transition:transform .3s}
+  .feat:hover{transform:translateY(-5px)}
+  .feat .img{aspect-ratio:3/4.1;border-radius:6px;overflow:hidden;position:relative;box-shadow:0 14px 40px -22px rgba(44,41,37,.6)}
+  .feat .img>div{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:24px}
+  .feat .img .ic{width:46px;height:46px;margin-bottom:14px;opacity:.92}
+  .feat .img .cat{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;opacity:.9}
+  .f1 .img>div{background:linear-gradient(150deg,#3f6f66,#274b45)}
+  .f2 .img>div{background:linear-gradient(150deg,#bd7149,#9c5732)}
+  .f3 .img>div{background:linear-gradient(150deg,#a98a54,#7d6636)}
+  .feat .img img{width:100%;height:100%;object-fit:cover;display:block}
+  /* 오리지널 사진 위에 카드색을 옅게 (호버 시 더 옅게) */
+  .feat .img::before{content:"";position:absolute;inset:0;z-index:1;mix-blend-mode:color;opacity:.6;transition:opacity .35s}
+  .feat:hover .img::before{opacity:0}
+  .f1 .img::before,.f2 .img::before,.f3 .img::before{background:#bd7149}
+  .feat h3{font-size:1.5rem;text-align:center;margin-top:22px;color:var(--terra);transition:color .2s}
+  .feat:hover h3{color:var(--terra)}
+  .feat .date{display:block;text-align:center;font-family:var(--sans);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:8px}
+
+  /* ===== SECTION ===== */
+  section{padding:78px 0}
+  .kicker{font-family:var(--sans);font-size:.95rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--terra);text-align:center}
+  .sec-title{font-size:clamp(1.8rem,3.5vw,2.5rem);text-align:center;margin-top:10px;color:var(--terra)}
+  .sec-sub{text-align:center;color:var(--ink-soft);max-width:600px;margin:14px auto 0}
+  .divider{width:46px;height:2px;background:var(--gold);margin:20px auto 0}
+
+  /* ===== BODY: FEED + SIDEBAR ===== */
+  .body-grid{display:grid;grid-template-columns:1fr 340px;gap:52px;margin-top:52px}
+  .feed-head{font-family:var(--serif);font-size:1.7rem;padding-bottom:16px;border-bottom:1px solid var(--gold);margin-bottom:36px;display:block}
+  .post-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px 30px}
+  .post{display:block}
+  .post .thumb{aspect-ratio:3/2;border-radius:6px;overflow:hidden;margin-bottom:7px}
+  .post .thumb>div{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;opacity:.85}
+  .post .thumb.photo>div{opacity:0}
+  .pc1>div{background:linear-gradient(140deg,#3f6f66,#274b45)}
+  .pc2>div{background:linear-gradient(140deg,#bd7149,#9c5732)}
+  .pc3>div{background:linear-gradient(140deg,#a98a54,#7d6636)}
+  .post h3{font-size:1.28rem;text-align:center;margin:0;line-height:1.35;transition:color .2s}
+  .post:hover h3{color:var(--terra)}
+  .post .date{display:block;text-align:center;font-family:var(--sans);font-size:.9rem;letter-spacing:.08em;color:var(--muted);margin-top:5px}
+  .post .cat-wrap{text-align:right;margin:0 0 16px}
+  .post-cat{display:inline-block;font-family:var(--sans);font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);background:rgba(189,113,73,.1);padding:3px 11px;border-radius:999px}
+  .feed-loading{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px 0;font-size:.9rem}
+  .more-btn{display:inline-block;margin-top:8px;font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);border-bottom:2px solid var(--gold);padding-bottom:3px}
+  .more-btn:hover{color:var(--terra)}
+
+  /* sidebar */
+  aside .widget{margin-bottom:40px}
+  aside .wtitle{font-family:var(--serif);font-size:1.15rem;text-align:center;margin-bottom:18px;position:relative;padding-bottom:12px}
+  aside .wtitle::after{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:30px;height:2px;background:var(--gold)}
+  .about-w{background:#e8efec;border:0;border-radius:6px;padding:32px 28px 34px;text-align:center}
+  .about-w .wtitle{margin-bottom:24px;font-size:1.5rem;color:var(--ink)}
+  .about-w .wtitle::after{display:none}
+  .about-photo{width:100%;aspect-ratio:3/4;border-radius:6px;margin:0 auto 24px;overflow:hidden;border:1px solid rgba(63,111,102,.35)}
+  .about-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .about-photo>div{width:100%;height:100%;background:linear-gradient(140deg,var(--cream-2),#e2d6c1);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:4.5rem;color:var(--gold)}
+  .about-w p{font-family:var(--serif);color:var(--ink);font-size:1.05rem;line-height:1.8;text-align:left}
+  .about-w .link{display:inline-flex;align-items:center;gap:9px;margin-top:20px;font-family:var(--serif);font-size:1.08rem;color:var(--ink)}
+  .about-w .link:hover{color:var(--ink-soft)}
+  .about-w .link svg{width:17px;height:17px}
+  .subscribe{background:var(--cream);border:1px solid var(--line-soft);border-radius:6px;padding:28px 24px;text-align:center}
+  .subscribe p{font-size:.88rem;color:var(--ink-soft);margin:6px 0 16px}
+  .subscribe input{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:6px;font-family:var(--sans);font-size:.88rem;margin-bottom:10px;background:var(--paper)}
+  .btn{display:inline-block;width:100%;text-align:center;padding:12px;border-radius:6px;background:var(--ink);color:var(--cream);font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;border:0;cursor:pointer;transition:.2s}
+  .btn:hover{background:var(--terra-dark)}
+  .btn.terra{background:var(--terra)}.btn.terra:hover{background:var(--terra-dark)}
+  .quicklinks a{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border:1px solid var(--line-soft);border-radius:6px;margin-bottom:10px;font-family:var(--sans);font-weight:600;font-size:.9rem;transition:.2s}
+  .quicklinks a:hover{background:var(--cream);color:var(--terra);border-color:var(--line)}
+  .quicklinks .ext{font-size:.72rem;color:var(--muted)}
+  .cats{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+  .cats a{font-family:var(--sans);font-size:.82rem;padding:6px 15px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);transition:.2s}
+  .cats a:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+
+  /* ===== MINISTRIES ===== */
+  #ministry{background:var(--cream)}
+  .min-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:52px}
+  .mcard{background:var(--paper);border:1px solid var(--line-soft);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;transition:.25s}
+  .mcard:hover{transform:translateY(-5px);box-shadow:0 22px 50px -30px rgba(44,41,37,.5)}
+  .mcard .banner{height:92px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--serif);font-weight:600;font-size:1.7rem;letter-spacing:.01em}
+  .mcard .banner .lat{font-size:1.07em}
+  .mcard.beebly .banner{background:linear-gradient(135deg,#bd7149,#9c5732)}
+  .mcard.eti .banner{background:linear-gradient(135deg,#3f6f66,#274b45)}
+  .mcard.refugee .banner{background:linear-gradient(135deg,#c99a4b,#a87f2f)}
+  .mcard .body{padding:28px 30px;flex:1;display:flex;flex-direction:column}
+  .mcard .tag{font-family:var(--sans);font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--terra)}
+  .mcard h3{font-size:1.55rem;margin:8px 0 10px}
+  .mcard p{color:var(--ink-soft);font-size:.94rem;flex:1}
+  .mcard .go{margin-top:18px;font-family:var(--sans);font-weight:700;font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
+  .mcard .go:hover{color:var(--terra)}
+
+  /* ===== JOURNEY CTA ===== */
+  .cta-band{background:var(--ink);color:var(--cream);text-align:center}
+  .cta-band h2{font-size:clamp(1.9rem,4vw,2.7rem);color:#fff}
+  .cta-band p{color:rgba(250,247,241,.75);max-width:560px;margin:16px auto 26px;font-size:1.02rem}
+  .cta-band .kicker{color:var(--gold)}
+  .cta-band .divider{background:var(--gold)}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+  .cta-row a{display:inline-block;padding:13px 30px;border-radius:999px;font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;transition:.2s}
+  .cta-row .fill{background:var(--terra);color:#fff}.cta-row .fill:hover{background:var(--terra-dark)}
+  .cta-row .out{border:1px solid rgba(250,247,241,.4);color:var(--cream)}.cta-row .out:hover{background:rgba(250,247,241,.1)}
+
+  /* ===== FOOTER ===== */
+  footer{background:#211e1a;color:rgba(250,247,241,.72);padding:60px 0 34px}
+  .foot-top{text-align:center;padding-bottom:34px;border-bottom:1px solid rgba(250,247,241,.12)}
+  .foot-top .flogo{font-family:var(--serif);font-size:2.1rem;color:var(--cream);display:inline-block}
+  .foot-top .flogo .amp{color:var(--terra);font-style:italic}
+  .foot-top .fsub{font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .fnav{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .fnav a{font-family:var(--serif);font-size:1rem;color:rgba(250,247,241,.8)}
+  .fnav a:hover{color:var(--terra)}
+  .copyright{text-align:center;margin-top:30px;font-family:var(--sans);font-size:.78rem;color:var(--muted)}
+
+  html[lang="en"] body{letter-spacing:.02em}
+  [data-en]{display:none}
+  html[lang="en"] [data-ko]{display:none}
+  html[lang="en"] [data-en]{display:inline}
+  html[lang="en"] p[data-en],html[lang="en"] div[data-en],html[lang="en"] h1[data-en],html[lang="en"] h2[data-en],html[lang="en"] h3[data-en],html[lang="en"] span.block[data-en]{display:block}
+  html[lang="en"] .feat .date[data-en],html[lang="en"] .feat .cat[data-en]{display:block}
+  /* CTA 버튼: 언어 숨김이 버튼 스타일에 밀리지 않도록 (한 언어만 표시) */
+  .cta-row a[data-en]{display:none}
+  html[lang="en"] .cta-row a[data-ko]{display:none}
+  html[lang="en"] .cta-row a[data-en]{display:inline-block}
+
+  @media(max-width:940px){
+    .feat-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;gap:40px}
+    .body-grid,.min-grid{grid-template-columns:1fr}
+    .top-inner{grid-template-columns:auto 1fr auto;height:auto;padding:16px 0;gap:14px}
+    .logo a{font-size:2rem}
+    .nav-inner{gap:22px;overflow-x:auto;justify-content:flex-start;padding:0 34px}
+    nav.main a{white-space:nowrap;font-size:.98rem}
+    .post-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:560px){
+    .social{display:none}
+    .top-inner{grid-template-columns:1fr auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="social"></div>
+    <div class="logo">
+      <a href="home.html">Abigail <span class="amp">&amp;</span> Missions</a>
+      <small><span data-ko>선교 이야기 · 기도편지</span><span data-en>Mission Journey · Prayer</span></small>
+    </div>
+    <div class="top-right">
+      <div class="langtoggle">
+        <button id="ko-btn" class="active" onclick="setLang('ko')">KO</button>
+        <button id="en-btn" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="main">
+  <div class="nav-inner" id="navlinks">
+    <a href="home.html" class="active" data-ko>홈</a><a href="home.html" class="active" data-en>Home</a>
+    <a href="letters.html" data-ko>소식/기도편지</a><a href="letters.html" data-en>Stories</a>
+    <a href="#about" data-ko>선교사 소개</a><a href="#about" data-en>About</a>
+    <a href="#ministry" data-ko>사역</a><a href="#ministry" data-en>Ministry</a>
+    <a href="donate.html" data-ko>후원</a><a href="donate.html" data-en>Support</a>
+  </div>
+</nav>
+<a id="top"></a>
+
+<!-- FEATURED -->
+<section class="featured">
+  <div class="wrap">
+    <div class="feat-grid">
+      <a class="feat f1" href="letters.html?cat=ministry">
+        <div class="img"><img src="img/card-classroom.jpg" alt="사역 소식"></div>
+        <h3 data-ko>사역 소식</h3><h3 data-en>Ministry News</h3>
+        <span class="date" data-ko>하나님의 이야기</span><span class="date" data-en>God's story</span>
+      </a>
+      <a class="feat f2" href="letters.html?cat=prayer">
+        <div class="img"><img src="img/card-ministry.jpg" alt="기도편지"></div>
+        <h3 data-ko>기도편지</h3><h3 data-en>Prayer Letters</h3>
+        <span class="date" data-ko>함께 기도해요</span><span class="date" data-en>Pray with me</span>
+      </a>
+      <a class="feat f3" href="letters.html?cat=sharing">
+        <div class="img"><img src="img/card-prayer.jpg" alt="나눔"></div>
+        <h3 data-ko>나눔</h3><h3 data-en>Sharing</h3>
+        <span class="date" data-ko>기록들</span><span class="date" data-en>Life & reflections</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- RECENT + SIDEBAR -->
+<section id="updates">
+  <div class="wrap">
+    <div class="body-grid" style="margin-top:0">
+      <!-- FEED (live from Supabase) -->
+      <div>
+        <div style="text-align:center;margin-bottom:48px">
+          <h2 class="sec-title" data-ko>새소식</h2><h2 class="sec-title" data-en>Latest</h2>
+          <p class="sec-sub" data-ko>사역 소식과 기도편지, 일상의 나눔을 전합니다.</p>
+          <p class="sec-sub" data-en>Ministry news, prayer letters, and everyday reflections.</p>
+          <div class="divider"></div>
+        </div>
+        <div class="post-grid" id="recentLetters">
+          <div class="feed-loading"><span data-ko>편지를 불러오는 중…</span><span data-en>Loading letters…</span></div>
+        </div>
+        <div style="text-align:center;margin-top:44px">
+          <a class="more-btn" href="letters.html"><span data-ko>전체 글 보기</span><span data-en>See all posts</span></a>
+        </div>
+        <div style="text-align:center;max-width:660px;margin:56px auto 0">
+          <p style="font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--terra);line-height:1.65;word-break:keep-all;margin:0" data-ko>“주 여호와의 영이 내게 내리셨으니, 이는 가난한 자에게 아름다운 소식을 전하게 하려 하심이라.”</p>
+          <p style="font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--terra);line-height:1.65;word-break:keep-all;margin:0" data-en>“The Spirit of the Sovereign Lord is on me, because the Lord has anointed me to proclaim good news to the poor.”</p>
+          <div style="margin-top:12px;font-family:var(--sans);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:700" data-ko>이사야 61:1</div><div style="margin-top:12px;font-family:var(--sans);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:700" data-en>Isaiah 61:1</div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside id="about">
+        <div class="widget about-w">
+          <div class="wtitle"><span data-ko>선교사 소개</span><span data-en>About Me</span></div>
+          <div class="about-photo"><img src="img/about.jpg" alt="Abigail"></div>
+          <p data-ko>안녕하세요, 선교사 <b>Abigail</b>입니다. 미국을 떠나 말레이시아로 향하는 여정 위에 서 있습니다. 미술과 디자인을 전공하고 하나님의 창조의 아름다움을 사랑하는 마음으로, 미술과 영어 교육을 도구 삼아 선교의 길을 걷습니다. 아버지께서 부르신 곳에서 영혼들과 아이들을 만나 하나님의 이야기를 나누는 복된 삶을 주심에, 날마다 감사를 올립니다.</p>
+          <p data-en>Hello, I'm <b>Abigail</b>, a missionary on the journey from the U.S. to Malaysia. With a background in fine art and design and a love for the beauty of God's creation, I walk the path of mission using art and English education as my tools. Each day I give thanks that, in the place my Father has called me, I get to meet souls and children and share God's story — a blessed life.</p>
+        </div>
+        <div class="widget">
+          <div class="subscribe">
+            <div class="wtitle" data-ko>기도편지 받기</div><div class="wtitle" data-en>Get Prayer Letters</div>
+            <p data-ko>사역 소식과 기도제목을 정기적으로 받아보세요.</p>
+            <p data-en>Receive ministry updates and prayer requests.</p>
+            <input type="email" placeholder="you@email.com" aria-label="email">
+            <a class="btn terra" href="mailto:gahee.kuk@gmail.com?subject=기도편지%20구독" data-ko>구독하기</a>
+            <a class="btn terra" href="mailto:gahee.kuk@gmail.com?subject=Subscribe" data-en>Subscribe</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- MINISTRIES -->
+<section id="ministry">
+  <div class="wrap">
+    <h2 class="sec-title" data-ko>함께하는 사역</h2><h2 class="sec-title" data-en>The Ministries</h2>
+    <p class="sec-sub" data-ko>영어교육을 도구로 아이들과 이웃을 만나며 섬깁니다.</p>
+    <p class="sec-sub" data-en>Serving children and neighbors, with English education as the tool.</p>
+    <div class="divider"></div>
+    <div class="min-grid">
+      <div class="mcard refugee">
+        <div class="banner"><span data-ko>말레이시아 난민학교</span><span data-en>Refugee School</span></div>
+        <div class="body">
+          <span class="tag" data-ko>비전 · 교육</span><span class="tag" data-en>Vision</span>
+          <p data-ko>말레이시아의 난민 아이들에게 배움의 문을 여는 꿈입니다. 영어교육을 통해 교육의 기회를 나누며, 아이들이 존엄과 희망 안에서 자라도록 준비하고 있어요.</p>
+          <p data-en>A dream to open the door of learning for refugee children in Malaysia. Through English education we hope to share the chance to learn, so children may grow in dignity and hope.</p>
+        </div>
+      </div>
+      <div class="mcard eti">
+        <div class="banner"><span data-ko><span class="lat">ETI</span> 훈련</span><span data-en>ETI Training</span></div>
+        <div class="body">
+          <span class="tag" data-ko>훈련 · 영어 교수법</span><span class="tag" data-en>Training</span>
+          <p data-ko>영어 교수법을 기반으로 한 훈련 사역. 언어라는 자연스러운 접점을 통해 사람을 세우고 현장으로 파송하는 뿌리가 됩니다.<br>(전용 사이트는 준비 중이에요.)</p>
+          <p data-en>A training ministry rooted in English teaching methodology — building people through the natural bridge of language and sending them to the field.<br>(A dedicated site is in the works.)</p>
+        </div>
+      </div>
+      <div class="mcard beebly">
+        <div class="banner"><span data-ko><span class="lat">Beebly</span> 영어</span><span data-en>Beebly English</span></div>
+        <div class="body">
+          <span class="tag" data-ko>영어교육</span><span class="tag" data-en>English education</span>
+          <p data-ko>제가 섬기는 영어교육 사역. 탁월한 교수법으로 아이들이 언어를 배우며 자라는 자리입니다. 자체 사이트에서 자세히 만나보세요.</p>
+          <p data-en>The English-education ministry I serve — where children grow as they learn language through excellent methods. Visit the dedicated site to learn more.</p>
+          <a class="go" href="https://gahee-gayle.github.io/beebly/" target="_blank" rel="noopener"><span data-ko>Beebly 사이트 방문</span><span data-en>Visit Beebly</span> ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="flogo" href="home.html">Abigail <span class="amp">&amp;</span> Missions</a>
+      <div class="fsub"><span data-ko>선교 이야기 · 기도편지</span><span data-en>Mission Journey · Prayer</span></div>
+      <div class="fnav">
+        <a href="#about" data-ko>선교사 소개</a><a href="#about" data-en>About</a>
+        <a href="#ministry" data-ko>사역</a><a href="#ministry" data-en>Ministry</a>
+        <a href="https://gahee-gayle.github.io/beebly/" target="_blank" rel="noopener">Beebly</a>
+        <a href="letters.html" data-ko>기도편지</a><a href="letters.html" data-en>Prayer</a>
+        <a href="donate.html" data-ko>후원</a><a href="donate.html" data-en>Support</a>
+        <a href="mailto:gahee.kuk@gmail.com" data-ko>연락처</a><a href="mailto:gahee.kuk@gmail.com" data-en>Contact</a>
+      </div>
+    </div>
+    <div class="copyright">© 2026 Abigail. <span data-ko>믿음으로 걷는 한 걸음.</span><span data-en>One step, walked by faith.</span></div>
+  </div>
+</footer>
+
+<script>
+  // === Supabase (같은 백엔드, 공개 anon key — 다른 페이지와 동일) ===
+  const SUPABASE_URL = 'https://aqgrnrhtqsxdrlljtsrk.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxZ3Jucmh0cXN4ZHJsbGp0c3JrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTY1NjUsImV4cCI6MjA5MTU3MjU2NX0.yeM2Biz1XWAfp9IRga3-SSiu2bokc3hpJT2QS86josk';
+
+  let _letters = [];
+
+  function fmtDate(d, en){
+    if(!d) return '';
+    try{ return new Date(d+'T00:00:00').toLocaleDateString(en?'en-US':'ko-KR',{year:'numeric',month:'long',day:'numeric'}); }
+    catch(e){ return d; }
+  }
+
+  const CAT = {
+    ministry: { ko:'사역 소식', en:'Ministry News', pc:'pc2' },
+    prayer:   { ko:'기도편지', en:'Prayer Letters', pc:'pc2' },
+    sharing:  { ko:'나눔', en:'Sharing', pc:'pc2' }
+  };
+  function catOf(l){ return CAT[l.category] ? l.category : 'prayer'; }
+
+  function renderLetters(){
+    const box = document.getElementById('recentLetters');
+    const en = document.documentElement.lang === 'en';
+    if(!_letters.length){
+      box.innerHTML = '<div class="feed-loading">'+(en?'No letters yet.':'아직 편지가 없어요.')+'</div>';
+      return;
+    }
+    box.innerHTML = _letters.map((l)=>{
+      const title = en && l.title_en ? l.title_en : l.title;
+      const langParam = en ? '&lang=en' : '';
+      const c = catOf(l);
+      const label = CAT[c][en?'en':'ko'];
+      const bg = l.thumb || 'letter_header.png';
+      const thumbHtml = '<div class="thumb photo" style="background-image:url(\''+bg+'\');background-size:cover;background-position:center;"><div></div></div>';
+      return '<a class="post" href="letters.html?id='+l.slug+langParam+'">'
+        + thumbHtml
+        + '<div class="cat-wrap"><span class="post-cat">'+label+'</span></div>'
+        + '<h3>'+title+'</h3>'
+        + '<span class="date">'+fmtDate(l.date, en)+'</span>'
+        + '</a>';
+    }).join('');
+  }
+
+  async function loadRecentLetters(){
+    const box = document.getElementById('recentLetters');
+    const headers = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
+    const base = SUPABASE_URL + '/rest/v1/letters?';
+    try{
+      // 가벼운 쿼리 — 제목·날짜·분류만 (빠른 로딩). category 칼럼 없으면 자동 폴백.
+      let res = await fetch(base + 'select=id,slug,title,title_en,date,category,thumb&order=date.desc&limit=4', { headers });
+      if(!res.ok) res = await fetch(base + 'select=id,slug,title,title_en,date&order=date.desc&limit=4', { headers });
+      const rows = await res.json();
+      _letters = Array.isArray(rows) ? rows : [];
+      renderLetters();
+    }catch(e){
+      const en = document.documentElement.lang === 'en';
+      box.innerHTML = '<div class="feed-loading">'+(en?'Could not load letters.':'편지를 불러오지 못했어요.')+'</div>';
+    }
+  }
+
+  function setLang(l){
+    document.documentElement.lang = l;
+    document.getElementById('ko-btn').classList.toggle('active', l==='ko');
+    document.getElementById('en-btn').classList.toggle('active', l==='en');
+    try{ sessionStorage.setItem('pl_lang', l); }catch(e){}
+    renderLetters();
+  }
+
+  // 다른 페이지(letters/letter)와 언어 설정 공유
+  (function initLang(){
+    let l = 'ko';
+    try{ l = sessionStorage.getItem('pl_lang') || 'ko'; }catch(e){}
+    if(l === 'en') setLang('en');
+  })();
+
+  loadRecentLetters();
+</script>
+</body>
+</html>

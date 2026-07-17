@@ -1,7 +1,8 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/", "dest": "/letters.html" },
+    { "src": "/", "dest": "/home.html" },
+    { "src": "/home", "dest": "/home.html" },
     { "src": "/letters", "dest": "/letters.html" },
     { "src": "/letter", "dest": "/letter.html" },
     { "src": "/editor", "dest": "/index.html" },

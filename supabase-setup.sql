@@ -12,9 +12,19 @@ create table if not exists letters (
   closing text,
   closing_en text,
   main_photo text,
+  excerpt text,       -- 목록 카드용 짧은 미리보기 (한국어)
+  excerpt_en text,    -- 목록 카드용 짧은 미리보기 (영어)
+  thumb text,         -- 목록 카드용 작은 썸네일 (base64, 원본보다 훨씬 가벼움)
+  category text default 'prayer',  -- 분류: ministry(사역소식) / prayer(기도편지) / sharing(나눔)
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+-- 이미 만들어진 테이블에 새 칼럼 추가 (한 번만 실행)
+alter table letters add column if not exists excerpt text;
+alter table letters add column if not exists excerpt_en text;
+alter table letters add column if not exists thumb text;
+alter table letters add column if not exists category text default 'prayer';
 
 -- 공개 읽기 허용 (링크로 누구나 볼 수 있도록)
 alter table letters enable row level security;

@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     ? 'A missionary prayer letter sharing faith and ministry stories.'
     : '선교사 기도 편지 — 믿음과 사역 이야기를 나눕니다.';
   let image = `${siteUrl}/letter_header.png`;
-  const letterUrl = `${siteUrl}/letter.html?id=${id}${isEn ? '&lang=en' : ''}`;
+  const letterUrl = `${siteUrl}/letters.html?id=${id}${isEn ? '&lang=en' : ''}`;
 
   if (id) {
     try {
@@ -22,6 +22,7 @@ export default async function handler(req, res) {
       const [letter] = await response.json();
       if (letter) {
         title = isEn && letter.title_en ? letter.title_en : letter.title;
+        title = String(title).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
         if (letter.main_photo) image = letter.main_photo;
       }
     } catch (e) {}
@@ -37,7 +38,7 @@ export default async function handler(req, res) {
   <meta property="og:image" content="${image}">
   <meta property="og:url" content="${letterUrl}">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Abigail's Prayer Letter">
+  <meta property="og:site_name" content="Abigail & Missions">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
