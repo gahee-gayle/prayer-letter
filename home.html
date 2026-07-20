@@ -413,6 +413,7 @@
       const rows = await res.json();
       _letters = Array.isArray(rows) ? rows : [];
       renderLetters();
+      scrollToHashTarget();
     }catch(e){
       const en = document.documentElement.lang === 'en';
       box.innerHTML = '<div class="feed-loading">'+(en?'Could not load letters.':'편지를 불러오지 못했어요.')+'</div>';
@@ -475,6 +476,14 @@
     try{ l = sessionStorage.getItem('pl_lang') || 'ko'; }catch(e){}
     if(l === 'en') setLang('en');
   })();
+
+  // 해시(#subscribe)로 도착하면, 이미지·피드 로딩 후 정확히 이동 (모바일 스크롤 튐 방지)
+  function scrollToHashTarget(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(el) el.scrollIntoView({ behavior:'auto', block:'start' });
+  }
+  window.addEventListener('load', function(){ setTimeout(scrollToHashTarget, 300); });
 
   loadRecentLetters();
 </script>
