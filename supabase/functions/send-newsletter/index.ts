@@ -29,11 +29,34 @@ async function sendEmail(to: string, subject: string, html: string) {
 }
 
 function shell(inner: string, en: boolean) {
-  const font = en ? "Georgia,serif" : "'Noto Serif KR',serif";
-  return `<div style="font-family:${font};max-width:520px;margin:0 auto;color:#2c2925;line-height:1.8">
-    ${inner}
-    <p style="font-size:12px;color:#9a9186;margin-top:26px">Abigail &amp; Missions · <a href="${SITE}" style="color:#9a9186">${SITE}</a></p>
-  </div>`;
+  const font = en ? "Georgia,serif" : "'Noto Serif KR',Georgia,serif";
+  const sub = en ? "Mission Journey &middot; Prayer" : "선교 여정 &middot; 기도";
+  return `<!DOCTYPE html><html lang="${en ? "en" : "ko"}"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+</head>
+<body style="margin:0;padding:0;background:#ffffff;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background:#ffffff;padding:30px 0;">
+    <tr><td align="center">
+      <table role="presentation" width="540" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="width:540px;max-width:92%;background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid rgba(44,41,37,.1);">
+        <tr><td align="center" style="padding:32px 34px 22px;text-align:center;border-bottom:1px solid rgba(44,41,37,.08);">
+          <img src="${SITE}/img/email-logo.png" width="230" alt="Abigail &amp; Missions" style="display:block;width:230px;max-width:72%;height:auto;margin:0 auto;">
+          <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#b3a996;margin-top:14px;">${sub}</div>
+          <div style="width:42px;height:2px;background:#c99a4b;margin:16px auto 0;"></div>
+        </td></tr>
+        <tr><td style="font-family:${font};color:#2c2925;line-height:1.75;font-size:17px;padding:28px 34px 32px;">
+          ${inner}
+        </td></tr>
+        <tr><td style="padding:20px 34px;text-align:center;border-top:1px solid rgba(44,41,37,.08);">
+          <div style="font-family:Arial,sans-serif;font-size:12px;color:#9a9186;margin-bottom:3px;">Abigail &amp; Missions</div>
+          <a href="${SITE}" style="font-family:Arial,sans-serif;font-size:12px;color:#bd7149;text-decoration:none;">abigailmissions.com</a>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
 }
 
 Deno.serve(async (req) => {
@@ -53,12 +76,12 @@ Deno.serve(async (req) => {
         ? `<p>Dear ${name},</p>
            <p>Thank you for subscribing to <strong>Abigail &amp; Missions</strong>. 💛</p>
            <p>You'll receive our prayer letters and ministry news as they're shared. We're so grateful to walk this journey together.</p>
-           <p><a href="${SITE}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:14px">Visit the site →</a></p>
+           <p><a href="${SITE}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:16px">Visit the site →</a></p>
            <p style="margin-top:22px;color:#736b60">With gratitude,<br>Abigail</p>`
         : `<p>${name}님, 안녕하세요.</p>
            <p><strong>Abigail &amp; Missions</strong> 구독을 신청해 주셔서 진심으로 감사드립니다. 💛</p>
            <p>앞으로 새 기도편지와 사역 소식을 이메일로 전해드릴게요. 이 여정에 함께해 주셔서 감사해요.</p>
-           <p><a href="${SITE}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:14px">사이트 둘러보기 →</a></p>
+           <p><a href="${SITE}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:16px">사이트 둘러보기 →</a></p>
            <p style="margin-top:22px;color:#736b60">감사한 마음으로,<br>Abigail 드림</p>`;
       const ok = await sendEmail(body.email, subject, shell(inner, en));
       return json({ ok });
@@ -84,13 +107,13 @@ Deno.serve(async (req) => {
       const inner = en
         ? `<p>Dear ${name},</p>
            <p>A new prayer letter has been posted:</p>
-           <p style="font-size:20px;font-weight:600;color:#bd7149;margin:18px 0">${t}</p>
-           <p><a href="${link}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:14px">Read the letter →</a></p>
+           <p style="font-size:23px;font-weight:600;color:#bd7149;margin:18px 0">${t}</p>
+           <p><a href="${link}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:16px">Read the letter →</a></p>
            <p style="margin-top:22px;color:#736b60">With gratitude,<br>Abigail</p>`
         : `<p>${name}님께,</p>
            <p>새 기도편지가 올라왔어요.</p>
-           <p style="font-size:20px;font-weight:600;color:#bd7149;margin:18px 0">${t}</p>
-           <p><a href="${link}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:14px">편지 읽기 →</a></p>
+           <p style="font-size:23px;font-weight:600;color:#bd7149;margin:18px 0">${t}</p>
+           <p><a href="${link}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:16px">편지 읽기 →</a></p>
            <p style="margin-top:22px;color:#736b60">감사한 마음으로,<br>Abigail 드림</p>`;
       if (await sendEmail(s.email, subject, shell(inner, en))) sent++;
     }
