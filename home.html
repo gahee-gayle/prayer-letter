@@ -445,9 +445,21 @@
         headers:{ apikey:SUPABASE_KEY, Authorization:'Bearer '+SUPABASE_KEY, 'Content-Type':'application/json', Prefer:'return=minimal' },
         body: JSON.stringify({ name: name || null, email, lang: en ? 'en' : 'ko', subscribed_at: new Date().toISOString() })
       });
-      if(res.ok || res.status === 409){
+      if(res.ok){
+        // 새 구독 → 환영 메일 발송
+        try{
+          await fetch(SUPABASE_URL + '/functions/v1/send-newsletter', {
+            method:'POST',
+            headers:{ apikey:SUPABASE_KEY, Authorization:'Bearer '+SUPABASE_KEY, 'Content-Type':'application/json' },
+            body: JSON.stringify({ type:'welcome', name: name || null, email, lang: en ? 'en' : 'ko' })
+          });
+        }catch(_){}
         msg.style.color = '#2d8a6e';
-        msg.textContent = en ? '✓ Subscribed! Thank you.' : '✓ 구독 완료! 감사합니다.';
+        msg.textContent = en ? '✓ Subscribed! A welcome email is on the way.' : '✓ 구독 완료! 환영 메일을 보내드렸어요.';
+        nameEl.value=''; emailEl.value='';
+      } else if(res.status === 409){
+        msg.style.color = '#2d8a6e';
+        msg.textContent = en ? 'You are already subscribed. Thank you!' : '이미 구독 중이에요. 감사합니다!';
         nameEl.value=''; emailEl.value='';
       } else { throw new Error(); }
     }catch(e){
