@@ -121,6 +121,7 @@
   .subscribe{background:var(--cream);border:1px solid var(--line-soft);border-radius:6px;padding:28px 24px;text-align:center}
   .subscribe p{font-size:.88rem;color:var(--ink-soft);margin:6px 0 16px}
   .subscribe input{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:6px;font-family:var(--sans);font-size:.88rem;margin-bottom:10px;background:var(--paper)}
+  .subscribe-msg{font-size:.82rem;min-height:18px;margin-top:9px}
   .btn{display:inline-block;width:100%;text-align:center;padding:12px;border-radius:6px;background:var(--ink);color:var(--cream);font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;border:0;cursor:pointer;transition:.2s}
   .btn:hover{background:var(--terra-dark)}
   .btn.terra{background:var(--terra)}.btn.terra:hover{background:var(--terra-dark)}
@@ -288,9 +289,11 @@
             <div class="wtitle" data-ko>기도편지 받기</div><div class="wtitle" data-en>Get Prayer Letters</div>
             <p data-ko>사역 소식과 기도제목을 정기적으로 받아보세요.</p>
             <p data-en>Receive ministry updates and prayer requests.</p>
-            <input type="email" placeholder="you@email.com" aria-label="email">
-            <a class="btn terra" href="mailto:gahee.kuk@gmail.com?subject=기도편지%20구독" data-ko>구독하기</a>
-            <a class="btn terra" href="mailto:gahee.kuk@gmail.com?subject=Subscribe" data-en>Subscribe</a>
+            <input type="text" id="home-sub-name" placeholder="이름 / Name" aria-label="name">
+            <input type="email" id="home-sub-email" placeholder="you@email.com" aria-label="email">
+            <button class="btn terra" onclick="subscribeHome()" data-ko>구독하기</button>
+            <button class="btn terra" onclick="subscribeHome()" data-en>Subscribe</button>
+            <div class="subscribe-msg" id="home-sub-msg"></div>
           </div>
         </div>
       </aside>
@@ -421,6 +424,36 @@
     document.getElementById('en-btn').classList.toggle('active', l==='en');
     try{ sessionStorage.setItem('pl_lang', l); }catch(e){}
     renderLetters();
+  }
+
+  // 홈 "기도편지 받기" — 이름+이메일을 subscribers 테이블에 저장
+  async function subscribeHome(){
+    const en = document.documentElement.lang === 'en';
+    const nameEl = document.getElementById('home-sub-name');
+    const emailEl = document.getElementById('home-sub-email');
+    const msg = document.getElementById('home-sub-msg');
+    const name = (nameEl.value || '').trim();
+    const email = (emailEl.value || '').trim();
+    if(!email || !email.includes('@')){
+      msg.style.color = '#bd7149';
+      msg.textContent = en ? 'Please enter a valid email.' : '올바른 이메일을 입력해 주세요.';
+      return;
+    }
+    try{
+      const res = await fetch(SUPABASE_URL + '/rest/v1/subscribers', {
+        method:'POST',
+        headers:{ apikey:SUPABASE_KEY, Authorization:'Bearer '+SUPABASE_KEY, 'Content-Type':'application/json', Prefer:'return=minimal' },
+        body: JSON.stringify({ name: name || null, email, lang: en ? 'en' : 'ko', subscribed_at: new Date().toISOString() })
+      });
+      if(res.ok || res.status === 409){
+        msg.style.color = '#2d8a6e';
+        msg.textContent = en ? '✓ Subscribed! Thank you.' : '✓ 구독 완료! 감사합니다.';
+        nameEl.value=''; emailEl.value='';
+      } else { throw new Error(); }
+    }catch(e){
+      msg.style.color = '#bd7149';
+      msg.textContent = en ? 'Something went wrong. Please try again.' : '오류가 발생했어요. 다시 시도해 주세요.';
+    }
   }
 
   // 다른 페이지(letters/letter)와 언어 설정 공유

@@ -41,10 +41,14 @@ create policy "누구나 수정 가능" on letters
 -- 구독자 테이블
 create table if not exists subscribers (
   id uuid default gen_random_uuid() primary key,
+  name text,
   email text unique not null,
   lang text default 'ko',
   subscribed_at timestamptz default now()
 );
+
+-- 이미 만들어진 subscribers 테이블에 이름 칼럼 추가 (한 번만 실행)
+alter table subscribers add column if not exists name text;
 
 alter table subscribers enable row level security;
 
