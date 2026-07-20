@@ -413,9 +413,11 @@
       const rows = await res.json();
       _letters = Array.isArray(rows) ? rows : [];
       renderLetters();
+      fed = true; maybeScroll();
     }catch(e){
       const en = document.documentElement.lang === 'en';
       box.innerHTML = '<div class="feed-loading">'+(en?'Could not load letters.':'편지를 불러오지 못했어요.')+'</div>';
+      fed = true; maybeScroll();
     }
   }
 
@@ -476,19 +478,27 @@
     if(l === 'en') setLang('en');
   })();
 
-  // 해시(#subscribe)로 도착하면: 브라우저 기본 이동을 막고, 로딩이 끝난 뒤 딱 한 번만 이동 (모바일 스크롤 튐 방지)
-  (function(){
-    var target = location.hash;
-    if(!target) return;
-    history.replaceState(null, '', location.pathname + location.search);
-    var done = false;
-    function go(){
-      if(done) return;
-      var el = document.querySelector(target);
-      if(el){ done = true; el.scrollIntoView({ behavior:'auto', block:'start' }); }
-    }
-    window.addEventListener('load', function(){ setTimeout(go, 350); });
-  })();
+  // 해시(#subscribe)로 도착: 브라우저 기본 이동을 막고, 이미지·피드·폰트가 모두 끝난 뒤 애니메이션 없이 이동 + 잠깐 고정(밀림 방지)
+  var hashTarget = location.hash;
+  var loaded = false, fed = false, fontsReady = false, scrolled = false;
+  function maybeScroll(){
+    if(scrolled || !hashTarget || !(loaded && fed && fontsReady)) return;
+    var el = document.querySelector(hashTarget);
+    if(!el) return;
+    scrolled = true;
+    var html = document.documentElement, prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';            // smooth 애니메이션 끄기
+    var end = Date.now() + 600;
+    (function pin(){                                // 600ms 동안 위치 고정 → 늦은 밀림도 흡수
+      el.scrollIntoView({ block: 'start' });
+      if(Date.now() < end) requestAnimationFrame(pin);
+      else html.style.scrollBehavior = prev;
+    })();
+  }
+  if(hashTarget) history.replaceState(null, '', location.pathname + location.search);
+  window.addEventListener('load', function(){ loaded = true; maybeScroll(); });
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ fontsReady = true; maybeScroll(); }); }
+  else { fontsReady = true; }
 
   loadRecentLetters();
 </script>
