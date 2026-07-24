@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>기도 편지 · Prayer Letter Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+KR:wght@300;400;500;600&family=Mulish:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,7 +34,7 @@
     >
     <button onclick="checkPW()" style="
       padding:11px 32px; border-radius:999px;
-      background:#f0bec4; color:#0a3832;
+      background:#bd7149; color:#fff;
       border:none; font-family:'Noto Sans KR',sans-serif;
       font-size:14px; font-weight:600; cursor:pointer;
       transition:background 0.15s;
@@ -70,7 +70,7 @@ if (sessionStorage.getItem('pl_auth') === '1') {
 
 <header class="site-header">
   <div class="header-inner">
-    <a href="index.html" class="logo" style="text-decoration:none;font-family:'Playfair Display','Noto Serif KR',serif;font-size:19px;font-weight:600;color:#f0faf9;letter-spacing:0.01em;white-space:nowrap;">Abigail <span style="color:#e8a97e;font-style:italic;font-weight:500;">&amp;</span> Missions</a>
+    <a href="index.html" class="logo" style="text-decoration:none;font-family:'Playfair Display','Noto Serif KR',serif;font-size:19px;font-weight:600;color:#2c2925;letter-spacing:0.01em;white-space:nowrap;">Abigail <span style="color:#bd7149;font-style:italic;font-weight:500;">&amp;</span> Missions</a>
     <nav class="tab-nav">
       <button class="tab-btn active" data-tab="edit">편집</button>
       <button class="tab-btn" data-tab="ai">AI 생성</button>
@@ -78,9 +78,9 @@ if (sessionStorage.getItem('pl_auth') === '1') {
       <button class="tab-btn" data-tab="templates">템플릿</button>
     </nav>
     <div style="display:flex;gap:8px;align-items:center;">
-      <span id="autosave-indicator" style="font-family:var(--font-sans);font-size:12px;color:rgba(240,250,249,0.5);"></span>
-      <a href="index.html" style="font-family:var(--font-sans);font-size:13px;color:rgba(240,250,249,0.65);text-decoration:none;padding:7px 16px;border:1px solid rgba(255,255,255,0.15);border-radius:999px;transition:all 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">홈</a>
-      <a href="letters.html" style="font-family:var(--font-sans);font-size:13px;color:rgba(240,250,249,0.65);text-decoration:none;padding:7px 16px;border:1px solid rgba(255,255,255,0.15);border-radius:999px;transition:all 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">편지 목록</a>
+      <span id="autosave-indicator" style="font-family:var(--font-sans);font-size:12px;color:rgba(44,41,37,0.4);"></span>
+      <a href="index.html" style="font-family:var(--font-sans);font-size:13px;color:#736b60;text-decoration:none;padding:7px 16px;border:1px solid rgba(44,41,37,0.15);border-radius:999px;transition:all 0.15s;" onmouseover="this.style.background='#f3ece1'" onmouseout="this.style.background='transparent'">홈</a>
+      <a href="letters.html" style="font-family:var(--font-sans);font-size:13px;color:#736b60;text-decoration:none;padding:7px 16px;border:1px solid rgba(44,41,37,0.15);border-radius:999px;transition:all 0.15s;" onmouseover="this.style.background='#f3ece1'" onmouseout="this.style.background='transparent'">편지 목록</a>
       <button class="save-btn" id="save-btn">저장 & 공유</button>
     </div>
   </div>
