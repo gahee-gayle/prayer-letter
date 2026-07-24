@@ -676,11 +676,36 @@ function renderBlockEditor() {
         <button class="layout-btn ${(block.photoLayout||'full')==='half'?'active':''}" onclick="setBlockLayout(${i},'half')">1/2</button>
         <button class="layout-btn ${(block.photoLayout||'full')==='grid'?'active':''}" onclick="setBlockLayout(${i},'grid')">그리드</button>
       </div>` : ''}
+      <div class="body-block-video" style="margin-top:12px;">
+        <label style="display:block;font-size:12px;color:#736b60;margin-bottom:5px;font-family:var(--font-sans);">🎬 유튜브 링크 <span style="color:#9a9186;">(선택 — 붙여넣으면 편지에 영상이 재생돼요)</span></label>
+        <input type="text" value="${escHtml(block.video||'')}" placeholder="https://youtu.be/... 또는 https://www.youtube.com/watch?v=..."
+          oninput="setBlockVideo(${i}, this.value)"
+          style="width:100%;padding:9px 12px;border:1px solid #e0d9cc;border-radius:6px;font-family:var(--font-sans);font-size:13px;box-sizing:border-box;">
+        <div id="block-video-embed-${i}">${ytEmbedHtml(ytId(block.video))}</div>
+      </div>
     </div>`).join('');
 }
 
 function escHtml(str) {
   return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// 유튜브 URL에서 영상 ID 추출 (youtu.be / watch?v= / embed / shorts / live 지원)
+function ytId(url){
+  if(!url) return '';
+  const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|watch\?.*[&?]v=)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+function ytEmbedHtml(id){
+  if(!id) return '';
+  return '<div class="pv-video" style="margin:12px 0;position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;background:#000;">'
+    + '<iframe src="https://www.youtube.com/embed/'+id+'" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe></div>';
+}
+function setBlockVideo(idx, val){
+  bodyBlocks[idx].video = (val||'').trim();
+  const box = document.getElementById('block-video-embed-'+idx);
+  if(box) box.innerHTML = ytEmbedHtml(ytId(bodyBlocks[idx].video));
+  syncAll();
 }
 
 function triggerBlockPhoto(idx) {
@@ -871,7 +896,7 @@ function saveToLocalStorage() {
       greetingEn: val('greeting-en'),
       closing:    val('closing'),
       closingEn:  val('closing-en'),
-      bodyBlocks: bodyBlocks.map(b => ({ textKo: b.textKo, textEn: b.textEn, photoLayout: b.photoLayout })),
+      bodyBlocks: bodyBlocks.map(b => ({ textKo: b.textKo, textEn: b.textEn, photoLayout: b.photoLayout, video: b.video })),
       prayerItems: prayerItems,
       savedAt: new Date().toISOString()
     };
@@ -901,7 +926,7 @@ function restoreFromLocalStorage() {
     setVal('closing',     data.closing);
     setVal('closing-en',  data.closingEn);
     if (data.bodyBlocks?.length) {
-      bodyBlocks = data.bodyBlocks.map(b => ({ textKo: b.textKo||'', textEn: b.textEn||'', photos: [], photoLayout: b.photoLayout||'full' }));
+      bodyBlocks = data.bodyBlocks.map(b => ({ textKo: b.textKo||'', textEn: b.textEn||'', photos: [], photoLayout: b.photoLayout||'full', video: b.video||'' }));
     }
     if (data.prayerItems?.length) prayerItems = data.prayerItems;
     renderBlockEditor();
@@ -955,6 +980,7 @@ function renderBodyBlocksPreview(containerId, lang) {
     const layout = block.photoLayout || 'full';
     return `<div class="pv-block">
       ${text ? `<div class="pv-block-text">${text}</div>` : ''}
+      ${ytEmbedHtml(ytId(block.video))}
       ${photos.length ? `<div class="pv-block-photos layout-${layout}">
         ${photos.map(src => `<img src="${src}" alt="">`).join('')}
       </div>` : ''}
