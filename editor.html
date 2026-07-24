@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>기도 편지 · Prayer Letter Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,12 +17,8 @@
   flex-direction:column; gap:1.5rem;
 ">
   <div style="text-align:center;position:relative;z-index:1;">
-    <div style="width:28px;height:44px;position:relative;margin:0 auto 16px;">
-      <span style="position:absolute;width:3px;height:44px;background:#f0bec4;border-radius:2px;left:12.5px;top:0;"></span>
-      <span style="position:absolute;width:28px;height:3px;background:#f0bec4;border-radius:2px;left:0;top:12px;"></span>
-    </div>
-    <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:500;color:#f0faf9;letter-spacing:0.18em;text-transform:uppercase;">Abigail's</div>
-    <div style="font-size:10px;color:rgba(240,250,249,0.6);letter-spacing:0.3em;text-transform:uppercase;margin-top:2px;">Prayer Letter</div>
+    <div style="font-family:'Playfair Display','Noto Serif KR',serif;font-size:30px;font-weight:600;color:#f0faf9;letter-spacing:0.01em;">Abigail <span style="color:#e8a97e;font-style:italic;font-weight:500;">&amp;</span> Missions</div>
+    <div style="font-size:10px;color:rgba(240,250,249,0.6);letter-spacing:0.3em;text-transform:uppercase;margin-top:8px;">Prayer Letter Builder</div>
   </div>
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;">
     <input id="pw-input" type="password" placeholder="비밀번호 입력"
@@ -74,16 +70,7 @@ if (sessionStorage.getItem('pl_auth') === '1') {
 
 <header class="site-header">
   <div class="header-inner">
-    <a href="letters.html" class="logo" style="text-decoration:none;">
-      <div class="cross-icon">
-        <span class="cross-v"></span>
-        <span class="cross-h"></span>
-      </div>
-      <div class="logo-text">
-        <span class="logo-ko">Abigail's</span>
-        <span class="logo-en">Prayer Letter</span>
-      </div>
-    </a>
+    <a href="index.html" class="logo" style="text-decoration:none;font-family:'Playfair Display','Noto Serif KR',serif;font-size:19px;font-weight:600;color:#f0faf9;letter-spacing:0.01em;white-space:nowrap;">Abigail <span style="color:#e8a97e;font-style:italic;font-weight:500;">&amp;</span> Missions</a>
     <nav class="tab-nav">
       <button class="tab-btn active" data-tab="edit">편집</button>
       <button class="tab-btn" data-tab="ai">AI 생성</button>
@@ -309,10 +296,8 @@ if (sessionStorage.getItem('pl_auth') === '1') {
     <div class="letter-preview full" id="full-preview">
       <div class="lp-header" id="fv-header">
         <div class="lp-logo">
-          <div class="lp-logo-cross"></div>
           <div class="lp-logo-text">
-            <span class="lp-logo-name">Abigail's</span>
-            <span class="lp-logo-sub">Prayer Letter</span>
+            <span class="lp-logo-name" style="font-family:'Playfair Display','Noto Serif KR',serif;">Abigail <span style="font-style:italic;">&amp;</span> Missions</span>
           </div>
         </div>
         <img id="fv-main-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
