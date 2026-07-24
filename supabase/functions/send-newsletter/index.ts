@@ -87,6 +87,31 @@ Deno.serve(async (req) => {
       return json({ ok });
     }
 
+    // ── 1.5) 새 홈페이지 안내 메일 ──
+    if (body?.type === "announce") {
+      const en = body.lang === "en";
+      const name = body.name ? String(body.name) : (en ? "friend" : "동역자");
+      if (!body.email) return json({ error: "missing email" }, 400);
+      const subject = en
+        ? "Our new website is live · Abigail & Missions"
+        : "새 홈페이지가 열렸어요 · Abigail & Missions";
+      const inner = en
+        ? `<p>Dear ${name},</p>
+           <p>We're glad to share some news &mdash; <strong>Abigail &amp; Missions</strong> now has a new home online:</p>
+           <p style="font-size:21px;font-weight:600;color:#bd7149;margin:16px 0">abigailmissions.com</p>
+           <p>It brings together our prayer letters, ministry updates, and ways to walk alongside us &mdash; all in one place. We'd love for you to take a look.</p>
+           <p><a href="${SITE}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:16px">Visit the site &rarr;</a></p>
+           <p style="margin-top:22px;color:#736b60">With gratitude,<br>Abigail</p>`
+        : `<p>${name}님, 안녕하세요.</p>
+           <p>반가운 소식을 전해요 &mdash; <strong>Abigail &amp; Missions</strong> 홈페이지가 새롭게 문을 열었어요:</p>
+           <p style="font-size:21px;font-weight:600;color:#bd7149;margin:16px 0">abigailmissions.com</p>
+           <p>기도편지와 사역 소식, 함께할 수 있는 방법을 한곳에 모았어요. 한번 둘러봐 주시면 기뻐요.</p>
+           <p><a href="${SITE}" style="display:inline-block;background:#bd7149;color:#fff;text-decoration:none;padding:11px 26px;border-radius:6px;font-family:sans-serif;font-size:16px">사이트 둘러보기 &rarr;</a></p>
+           <p style="margin-top:22px;color:#736b60">감사한 마음으로,<br>Abigail 드림</p>`;
+      const ok = await sendEmail(body.email, subject, shell(inner, en));
+      return json({ ok });
+    }
+
     // ── 2) 새 편지 알림 (구독자 전체) ──
     const { slug, title, title_en } = body || {};
     if (!slug) return json({ error: "missing slug" }, 400);

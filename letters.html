@@ -379,7 +379,7 @@
 
 <header>
   <div class="header-inner">
-    <a href="home.html" class="logo" style="text-decoration:none;">
+    <a href="index.html" class="logo" style="text-decoration:none;">
       <span style="font-family:var(--font-serif);font-size:1.5rem;font-weight:600;color:var(--ink);letter-spacing:0.01em;line-height:1;">Abigail <span style="color:var(--terra);font-style:italic;font-weight:500;">&amp;</span> Missions</span>
     </a>
     <div style="display:flex;align-items:center;gap:16px;">
@@ -393,10 +393,10 @@
 
 <nav class="main-nav">
   <div class="nav-inner">
-    <a href="home.html">홈</a>
+    <a href="index.html">홈</a>
     <a href="letters.html" class="active">소식/기도편지</a>
-    <a href="home.html#about">선교사 소개</a>
-    <a href="home.html#ministry">사역</a>
+    <a href="index.html#about">선교사 소개</a>
+    <a href="index.html#ministry">사역</a>
     <a href="donate.html">후원</a>
   </div>
 </nav>
@@ -410,7 +410,7 @@
       <h1 class="page-title">All Stories</h1>
     </div>
     <div id="admin-bar" style="display:flex;gap:8px;align-items:center;">
-      <a href="index.html" id="write-btn-header" class="write-btn" style="display:none;">편지 쓰기</a>
+      <a href="editor.html" id="write-btn-header" class="write-btn" style="display:none;">편지 쓰기</a>
       <button id="admin-btn" onclick="toggleAdmin()" style="
         display:none;
         padding:8px 18px; border-radius:999px;
@@ -445,15 +445,16 @@
 <footer class="site-footer" id="bottom-fixed">
   <div class="foot-inner">
     <div class="foot-top">
-      <a class="flogo" href="home.html">Abigail <span class="amp">&amp;</span> Missions</a>
+      <a class="flogo" href="index.html">Abigail <span class="amp">&amp;</span> Missions</a>
       <div class="fsub">Mission Journey · Prayer</div>
       <div class="fnav">
-        <a href="home.html#about">About</a>
-        <a href="home.html#ministry">Ministry</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#ministry">Ministry</a>
         <a href="https://gahee-gayle.github.io/beebly/" target="_blank" rel="noopener">Beebly</a>
         <a href="letters.html">Stories</a>
         <a href="donate.html">Support</a>
         <a href="mailto:gahee.kuk@gmail.com">Contact</a>
+        <a href="letters.html?admin" style="opacity:.5">admin</a>
       </div>
     </div>
     <div class="copyright">© 2026 Abigail &amp; Missions · One step, walked by faith.</div>
@@ -714,7 +715,7 @@ function checkAdminPW() {
 }
 
 function editLetter(slug) {
-  window.location.href = `index.html?edit=${slug}`;
+  window.location.href = `editor.html?edit=${slug}`;
 }
 
 async function deleteLetter(slug, title) {
@@ -927,6 +928,8 @@ document.addEventListener('keydown', e => {
     const wb = document.getElementById('write-btn-header');
     if (wb) { wb.style.display = 'inline-block'; wb.textContent = t.write; }
   }
+  // ?admin 으로 접속했는데 아직 로그인 전이면, 비밀번호 입력창을 바로 띄움
+  if (wantsAdmin && !authed) { setTimeout(openAdminModal, 300); }
 })();
 
 // 라우터: ?id= 있으면 편지 보기, 없으면 목록

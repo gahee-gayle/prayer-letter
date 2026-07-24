@@ -1,11 +1,11 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/", "dest": "/home.html" },
-    { "src": "/home", "dest": "/home.html" },
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/home", "dest": "/index.html" },
     { "src": "/letters", "dest": "/letters.html" },
     { "src": "/letter", "dest": "/letter.html" },
-    { "src": "/editor", "dest": "/index.html" },
+    { "src": "/editor", "dest": "/editor.html" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/$1" }
   ]

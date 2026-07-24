@@ -125,7 +125,7 @@ async function saveToCloud() {
     }
 
     if (res.ok) {
-      const shareUrl = `${location.origin}${location.pathname.replace('index.html','').replace(/\/$/, '')}/letter.html?id=${slug}`;
+      const shareUrl = `${location.origin}${location.pathname.replace('editor.html','').replace(/\/$/, '')}/letter.html?id=${slug}`;
       showSaveSuccess(shareUrl);
       if (!editSlug) saveToLocalTemplates(d, slug);
     } else {
