@@ -491,7 +491,7 @@ textarea { resize: vertical; line-height: 1.75; }
 .letter-preview.full { width: 100%; font-size: 15px; }
 
 .lp-header {
-  background: var(--teal-800);
+  background: #efe7d8 url('letter_header.jpg') center center / cover no-repeat;
   position: relative;
   overflow: hidden;
   height: 420px;

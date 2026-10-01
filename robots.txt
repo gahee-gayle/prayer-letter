@@ -1,0 +1,7 @@
+# 검색 노출은 각 페이지의 noindex 메타/헤더로 차단합니다.
+# 크롤러가 noindex를 읽을 수 있도록 크롤링 자체는 허용합니다.
+User-agent: *
+Allow: /
+Disallow: /editor.html
+Disallow: /index.html?edit=
+Disallow: /api/

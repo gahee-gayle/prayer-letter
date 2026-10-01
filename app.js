@@ -126,8 +126,12 @@ async function saveToCloud() {
 
     if (res.ok) {
       const shareUrl = `${location.origin}${location.pathname.replace('editor.html','').replace(/\/$/, '')}/letter.html?id=${slug}`;
+      const wasNew = !editSlug;
+      if (wasNew) saveToLocalTemplates(d, slug);
       showSaveSuccess(shareUrl);
-      if (!editSlug) saveToLocalTemplates(d, slug);
+      // 새 편지를 저장하면 → 초안 비우고 새 편지로 초기화 (저장 안 한 글은 자동 임시저장 유지)
+      if (wasNew) resetEditor();
+      else { try { localStorage.removeItem('prayerLetterDraft'); } catch(e) {} }
     } else {
       const err = await res.json();
       console.error(err);
@@ -157,7 +161,7 @@ function showSaveSuccess(shareUrl) {
     display: flex; align-items: center; gap: 12px;
     box-shadow: 0 8px 32px rgba(10,56,50,0.4);
     z-index: 999; font-family: var(--font-sans); font-size: 14px;
-    color: var(--text-on-dark); max-width: 90vw;
+    color: #fff; max-width: 90vw;
   `;
   toast.innerHTML = `
     <span>✓ 저장됐어요!</span>
@@ -166,7 +170,7 @@ function showSaveSuccess(shareUrl) {
       border-radius:8px; padding:6px 10px; color:white; font-size:13px;
       width: 280px; font-family:var(--font-sans);">
     <button onclick="copyShareUrl()" style="
-      padding:7px 16px; background:var(--blush-300); color:var(--teal-900);
+      padding:7px 16px; background:var(--blush-300); color:#fff;
       border:none; border-radius:999px; font-size:13px; font-weight:500;
       cursor:pointer; white-space:nowrap; font-family:var(--font-sans);">링크 복사</button>
     <button onclick="document.getElementById('share-toast').remove()" style="
@@ -875,6 +879,33 @@ function removeMainPhoto(e) {
   if (badge) badge.style.display = 'none';
   if (input) { input.value = ''; input.style.pointerEvents = 'auto'; }
   syncAll();
+}
+
+// 저장(발행) 후 편집기를 새 편지로 초기화 + 임시저장 초안 비우기
+function resetEditor() {
+  ['title','title-en','date','greeting','greeting-en','closing','closing-en'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const cat = document.getElementById('category'); if (cat) cat.value = 'prayer';
+  bodyBlocks  = [{ textKo:'', textEn:'', photos:[], photoLayout:'full', video:'' }];
+  prayerItems = [{ko:'',en:''},{ko:'',en:''},{ko:'',en:''}];
+  mainPhoto = null;
+  editSlug = null;
+  const thumb = document.getElementById('main-photo-thumb');
+  const ph    = document.getElementById('main-photo-placeholder');
+  const pv    = document.getElementById('main-photo-preview');
+  const badge = document.getElementById('main-photo-badge');
+  const input = document.getElementById('main-photo-input');
+  if (thumb) thumb.src = '';
+  if (ph)    ph.style.display = 'flex';
+  if (pv)    pv.style.display = 'none';
+  if (badge) badge.style.display = 'none';
+  if (input) { input.value = ''; input.style.pointerEvents = 'auto'; }
+  renderBlockEditor();
+  if (typeof renderPrayerEditor === 'function') renderPrayerEditor();
+  syncAll();
+  try { localStorage.removeItem('prayerLetterDraft'); } catch(e) {}
+  window.scrollTo(0, 0);
 }
 
 /* ═══════════════════════════════════════

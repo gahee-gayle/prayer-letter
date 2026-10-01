@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   let description = isEn
     ? 'A missionary prayer letter sharing faith and ministry stories.'
     : '선교사 기도 편지 — 믿음과 사역 이야기를 나눕니다.';
-  let image = `${siteUrl}/letter_header.png`;
+  let image = `${siteUrl}/letter_header.jpg`;
   const letterUrl = `${siteUrl}/letters.html?id=${id}${isEn ? '&lang=en' : ''}`;
 
   if (id) {
