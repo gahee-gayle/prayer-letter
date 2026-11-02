@@ -141,6 +141,18 @@
       </div>
       <a href="https://www.gpusa.org/give" target="_blank" rel="noopener" class="donate-row-btn" id="btn2">후원하기 →</a>
     </div>
+
+    <div class="donate-row">
+      <div class="donate-row-info">
+        <div class="donate-row-name" id="card3-name">GP 한국</div>
+        <div class="donate-row-tag" id="card3-tag">Korea Mission · 원화 후원</div>
+        <div class="donate-row-desc" id="desc3">한국에서 후원하시는 분들을 위한 방법입니다.<br>
+          입금 계좌: <strong>하나은행 210-942228-66737</strong> (예금주: GP(국가희)) · 원화 입금<br>
+          후원 전 아래 버튼에서 <strong>후원자 정보</strong>를 등록해 주시고, 첫 입금 후 <strong>02-443-0883</strong>(최은서 간사)로 연락 부탁드립니다.<br>
+          <span style="color:var(--muted);">※ 기부금영수증은 입금자명으로 발급되니 입금자명에 유의해 주세요.</span></div>
+      </div>
+      <a href="https://gpinternational.org/gp_donation2" target="_blank" rel="noopener" class="donate-row-btn" id="btn3">후원자 등록 →</a>
+    </div>
   </div>
 </main>
 
@@ -190,6 +202,14 @@
     document.getElementById('desc2').innerHTML =
       'Give through GPUSA, the official mission channel.<br>Please write <strong>Gahee (Gayle) Kuk</strong> in the note field.';
     document.getElementById('btn2').textContent = 'Give →';
+    document.getElementById('card3-name').textContent = 'GP Korea';
+    document.getElementById('card3-tag').textContent = 'Korea Mission · KRW';
+    document.getElementById('desc3').innerHTML =
+      'For supporters giving from within Korea (KRW).<br>' +
+      'Bank: <strong>Hana Bank 210-942228-66737</strong> (holder: GP(Gahee Kuk)) · KRW only<br>' +
+      'Please register your donor info below, then after your first gift call <strong>+82-2-443-0883</strong> (Ms. Choi).<br>' +
+      '<span style="color:var(--muted);">Note: tax receipts are issued under the depositor’s name.</span>';
+    document.getElementById('btn3').textContent = 'Register →';
   }
 </script>
 
